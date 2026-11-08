@@ -15,7 +15,7 @@ import java.util.Locale
  * | app_cpu_pct | `/proc/<pid>/stat` 第 14、15 列差分（jiffies） | 与 Emmagee `CpuInfo` 同源 |
  * | app_pss_mb  | `/proc/<pid>/smaps_rollup` 的 `Pss:` | 与 GT/Emmagee 取 PSS 一致 |
  * | fps / jank  | `dumpsys gfxinfo <pkg>` 的累计帧数与 Janky 帧数差分 | 与 PerfDog 类工具的 FPS/卡顿口径同源 |
- * | net_rx/tx   | `/sys/class/net/*/statistics` 累计字节差分 | 整机口径，绕过已废弃的 `uid_stat` |
+ * | net_rx/tx   | `/sys/class/net/<iface>/statistics` 累计字节差分 | 整机口径，绕过已废弃的 `uid_stat` |
  * | cpu_max_mhz | 各核 `scaling_cur_freq` 的最大值 | 用于识别热降频 |
  *
  * **差分而非瞬时**：所有计数都是累计值，必须两次读取相减才是区间均值。

@@ -24,6 +24,9 @@
 |---|---|---|
 | `Root.ensure()` | `id` | 只读 |
 | `Sampler.collect()` | 批量脚本：`cat` 电池/CPU/GPU/热区节点、`dumpsys activity`、`dumpsys power`、`grep` | 只读 |
+| `Metrics.probe()` | 批量脚本：`pidof`、`awk /proc/<pid>/stat`、`grep Pss: /proc/<pid>/smaps_rollup`、`dumpsys gfxinfo`、`cat /sys/class/net/*/statistics` | 只读 |
+| `Metrics.resetBaseline()` | `dumpsys gfxinfo <包名> reset` | 仅清空该应用的帧统计计数，不动任何用户数据 |
+| `Automator.startNavigation()` | `am start -a VIEW -d amapuri://route/plan/?…` | 仅向高德投一个深链，未安装则报错退出 |
 | `Automator.launch()` | `am start -W -n <组件>` 或 `monkey -p <包名> … 1` | 仅启动应用 |
 | `Automator.swipeUp()` / `screenOff()` / `screenOn()` | `input swipe` / `input keyevent 223` / `224` | 仅注入 UI 事件 |
 | `Automator.forceStop()` / `startVideoCapture()` | `am force-stop <包名>` / `am start -a …VIDEO_CAPTURE` + `input keyevent 27` | 仅作用于应用 |
@@ -43,6 +46,11 @@ setprop chmod chown mv cp ln shred truncate tee install flash persist
 
 命中即返回 `__REFUSED_BY_GUARD__`，子进程都不创建。即使将来有人在源码里手滑加了破坏性命令，
 运行时也执行不了。这是「纵深防御」，不是替代代码审查。
+
+**一个已修的真实缺陷**：旧版把「输出重定向」整体拦掉，结果 `2>/dev/null` 也被判为危险重定向，
+所有带它的批量只读脚本（电池、热区、gfxinfo）全部被拒，root 通道静默降级成公共 API。
+现在 `HARMLESS_REDIRECT` 先剥掉 `2>/dev/null`、`2>&1`、`&>/dev/null` 这三种「丢弃输出」写法，
+再跑黑名单；`> /sdcard/x`、`>>` 这类真正写文件的仍然拦。
 
 ## 4. 为什么不可能格机
 

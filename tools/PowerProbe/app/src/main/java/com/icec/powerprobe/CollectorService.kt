@@ -531,6 +531,36 @@ class CollectorService : Service() {
         }
     }
 
+    // ---------------- 归档 ----------------
+
+    /**
+     * 归档当前工况：CSV + 设备端 Markdown 报告，并复制一份到 Download/PowerProbe/。
+     *
+     * 全程在 handler 线程执行（调用方保证），不做任何 shell 调用——
+     * 上一版就是在主线程里同步写文件 + `su cp`，su 弹窗一没响应就整个卡死。
+     */
+    private fun saveArtifacts(scenario: String) {
+        val samples = CollectorState.snapshot()
+        if (samples.isEmpty()) {
+            CollectorState.log("没有采样数据，跳过导出")
+            return
+        }
+        try {
+            val csv = Exporter.writeCsv(this, scenario, samples)
+            val md = Exporter.writeReport(this, scenario, samples)
+            CollectorState.lastCsvPath = csv.absolutePath
+            CollectorState.lastReportPath = md.absolutePath
+            CollectorState.log("CSV  → " + csv.name + "（" + samples.size + " 行）")
+            CollectorState.log("报告 → " + md.name)
+            val n = Exporter.publishToDownloads(this, listOf(csv, md))
+            if (n > 0) {
+                CollectorState.log("已导出 " + n + " 个文件到 Download/PowerProbe/")
+            }
+        } catch (e: Exception) {
+            CollectorState.log("导出失败: " + e.message)
+        }
+    }
+
     // ---------------- 系统资源 ----------------
 
     private fun acquireWake() {

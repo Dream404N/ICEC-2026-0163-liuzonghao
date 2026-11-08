@@ -95,7 +95,7 @@ echo "@@END@@"
         val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
 
         // ---------- 进程级指标（先做：内部有 0.9 秒差分窗口，与电流读取互不干扰） ----------
-        val m: AppMetrics = if (targetPkg.isNotEmpty() && !isFinal) {
+        val appM: AppMetrics = if (targetPkg.isNotEmpty() && !isFinal) {
             try {
                 Metrics.probe(targetPkg)
             } catch (e: Exception) {
@@ -302,7 +302,7 @@ echo "@@END@@"
         src.append(";gpu=").append(if (gpuMhz.isNaN()) "none" else "sysfs")
         src.append(";fg=").append(fgSrc)
         src.append(";ch=").append(if (rootOk) "root" else "api")
-        src.append(";app=").append(if (m.usable) "proc" else "none")
+        src.append(";app=").append(if (appM.usable) "proc" else "none")
 
         val ts = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US).format(Date())
 
@@ -329,15 +329,15 @@ echo "@@END@@"
             charging = charging,
             dataSource = src.toString(),
             thermalStatus = thermalStatusName(thStatus),
-            appPid = m.pid,
-            appCpuPct = m.appCpuPct,
-            appPssMb = m.appPssMb,
-            fps = m.fps,
-            jankPct = m.jankPct,
-            frameP99Ms = m.frameP99Ms,
-            netRxKb = m.netRxKb,
-            netTxKb = m.netTxKb,
-            cpuMaxMhz = m.cpuMaxMhz,
+            appPid = appM.pid,
+            appCpuPct = appM.appCpuPct,
+            appPssMb = appM.appPssMb,
+            fps = appM.fps,
+            jankPct = appM.jankPct,
+            frameP99Ms = appM.frameP99Ms,
+            netRxKb = appM.netRxKb,
+            netTxKb = appM.netTxKb,
+            cpuMaxMhz = appM.cpuMaxMhz,
             // 冷启动耗时只挂在工况首个点上，其余点写 0，避免下游把它当连续量求平均
             launchMs = if (seq == 0 && !isFinal) Metrics.lastLaunchMs else 0L,
             isFinal = isFinal
