@@ -298,25 +298,45 @@ class CollectorService : Service() {
         stopSelf()
     }
 
+    /**
+     * 停止一律走这里。
+     *
+     * 两个关键点：
+     * 1. 先把所有定时任务摘掉再归档，否则归档期间还会落新的采样点。
+     * 2. 归档放到 handler 线程，不在主线程做文件 IO。上一版在主线程里同步写文件 +
+     *    起子进程复制，一旦 su 弹窗没响应，onStartCommand 会卡十几秒，
+     *    表现就是「点了停止没反应」——这是必须修掉的体验事故。
+     */
     private fun abortAll() {
         if (stopped) return
         stopped = true
         running = false
-        // 先把所有定时任务摘掉，再归档：否则归档期间可能又落一个新点
-        handler?.removeCallbacksAndMessages(null)
-        val sc = currentScenario.ifEmpty { CollectorState.scenario }
-        if (sc.isNotEmpty()) {
-            CollectorState.log("停止指令已确认，归档当前工况已采数据")
-            saveArtifacts(sc)
-        }
         queue.clear()
-        CollectorState.phase = CollectorState.PHASE_DONE
-        releaseWake()
-        try {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        } catch (e: Exception) {
+
+        val sc = currentScenario.ifEmpty { CollectorState.scenario }
+        val h = handler
+        if (h == null) {
+            stopSelf()
+            return
         }
-        stopSelf()
+        h.removeCallbacksAndMessages(null)
+        h.post {
+            try {
+                if (sc.isNotEmpty() && CollectorState.snapshot().isNotEmpty()) {
+                    CollectorState.log("停止指令已确认，归档当前工况已采数据")
+                    saveArtifacts(sc)
+                }
+            } catch (e: Exception) {
+                CollectorState.log("停止归档异常: " + e.message)
+            }
+            CollectorState.phase = CollectorState.PHASE_DONE
+            releaseWake()
+            try {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+            } catch (e: Exception) {
+            }
+            stopSelf()
+        }
     }
 
     // ---------------- 归档 ----------------
