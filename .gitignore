@@ -1,0 +1,19 @@
+# 个人资料与临时文件不入库
+inbox/
+archive/
+*.local
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 隐私：含个人信息的文件默认排除，需要入库时手动 git add -f
+*身份证*
+*准考证*
+*手机号*
