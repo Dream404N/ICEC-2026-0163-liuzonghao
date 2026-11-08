@@ -13,7 +13,7 @@ import java.util.Locale
  * 单次采样器。
  *
  * 设计取舍：
- * 1. 电源指标优先走 root 直读 /sys/class/power_supply/battery/*，因为系统的
+ * 1. 电源指标优先走 root 直读 battery 电源节点的 sysfs 文件，因为系统的
  *    BATTERY_CHANGED 广播只在电量整数变化时刷新，30 分钟内可能只触发几次，
  *    无法反映真实放电曲线。
  * 2. 一次 su 调用批量读取全部节点（约 200ms），避免每个字段起一次 su 进程。

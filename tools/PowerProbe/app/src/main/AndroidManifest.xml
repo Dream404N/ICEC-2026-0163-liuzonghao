@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:icon="@android:drawable/sym_def_app_icon"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        android:theme="@style/Theme.PowerProbe">
 
         <activity
             android:name=".MainActivity"

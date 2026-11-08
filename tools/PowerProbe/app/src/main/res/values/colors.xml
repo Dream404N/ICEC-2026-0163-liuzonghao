@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 中性色板：刻意避开 Material 默认的淡紫调，向系统设置页的观感靠 -->
+    <color name="page_bg">#F4F5F7</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="icon_bg">#F0F1F4</color>
+    <color name="divider">#EBEDF0</color>
+</resources>

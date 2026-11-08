@@ -1,32 +1,43 @@
 package com.icec.powerprobe
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.ViewGroup
-import android.widget.Button
+import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.color.DynamicColors
 import java.util.Locale
 
 /**
- * 唯一界面。四个工况按钮各启动一次 30 分钟采集，进度与日志实时刷新。
- * 不引入任何 UI 框架（AppCompat / Compose），减少依赖面，CI 编译更稳。
+ * 主界面。
+ *
+ * 布局语言：大标题 + 圆角卡片 + 行内「图标 / 标题 / 副标题 / 右侧值」，
+ * 与 KernelSU 一类系统工具页保持一致（Material3 + 动态取色）。
+ * 注意这里是「同一套设计语言的自实现」，不是搬运 KernelSU 源码——
+ * 其仓库为 GPL-3.0，直接复制会把整个项目传染成 GPL。
  */
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var statusView: TextView
+    private lateinit var statusContainer: LinearLayout
+    private lateinit var scenarioContainer: LinearLayout
+    private lateinit var artifactContainer: LinearLayout
     private lateinit var logView: TextView
-    private lateinit var scroll: ScrollView
+
+    private lateinit var vStatus: TextView
+    private lateinit var vProgress: TextView
+    private lateinit var vElapsed: TextView
+    private lateinit var vBattery: TextView
+    private lateinit var vCsv: TextView
+    private lateinit var vReport: TextView
+
     private val ui = Handler(Looper.getMainLooper())
 
     private val ticker = object : Runnable {
@@ -36,9 +47,24 @@ class MainActivity : Activity() {
         }
     }
 
+    private class Row(val title: TextView, val subtitle: TextView, val value: TextView)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(buildUi())
+        // 动态取色：Android 12+ 跟随系统壁纸配色，与系统设置页观感一致。
+        // 必须在 super.onCreate 之后、setContentView 之前应用，否则不会生效。
+        DynamicColors.applyToActivityIfAvailable(this)
+        setContentView(R.layout.activity_main)
+
+        statusContainer = findViewById(R.id.statusContainer)
+        scenarioContainer = findViewById(R.id.scenarioContainer)
+        artifactContainer = findViewById(R.id.artifactContainer)
+        logView = findViewById(R.id.logView)
+
+        buildStatusRows()
+        buildScenarioRows()
+        buildArtifactRows()
+
         requestNotificationPermission()
         render()
     }
@@ -54,151 +80,108 @@ class MainActivity : Activity() {
         ui.removeCallbacks(ticker)
     }
 
-    // ---------------- UI ----------------
+    // ---------------- 行的构建 ----------------
 
     private fun dp(v: Int): Int = (v * resources.displayMetrics.density + 0.5f).toInt()
 
-    private fun tv(text: String, sizeSp: Float, color: Int, bold: Boolean): TextView {
-        val t = TextView(this)
-        t.text = text
-        t.setTextSize(sizeSp)
-        t.setTextColor(color)
-        if (bold) t.setTypeface(t.typeface, Typeface.BOLD)
-        return t
+    private fun addRow(
+        container: LinearLayout,
+        iconRes: Int,
+        title: String,
+        subtitle: String,
+        value: String,
+        withDivider: Boolean,
+        onClick: (() -> Unit)?
+    ): Row {
+        val rowView = layoutInflater.inflate(R.layout.item_row, container, false)
+        val icon = rowView.findViewById<ImageView>(R.id.rowIcon)
+        val t = rowView.findViewById<TextView>(R.id.rowTitle)
+        val s = rowView.findViewById<TextView>(R.id.rowSubtitle)
+        val v = rowView.findViewById<TextView>(R.id.rowValue)
+
+        icon.setImageResource(iconRes)
+        t.text = title
+        if (subtitle.isEmpty()) {
+            s.visibility = View.GONE
+        } else {
+            s.visibility = View.VISIBLE
+            s.text = subtitle
+        }
+        if (value.isEmpty()) {
+            v.visibility = View.GONE
+        } else {
+            v.visibility = View.VISIBLE
+            v.text = value
+        }
+
+        if (onClick != null) {
+            rowView.setOnClickListener { onClick() }
+        } else {
+            rowView.isClickable = false
+            rowView.background = null
+        }
+
+        container.addView(rowView)
+
+        if (withDivider) {
+            val d = View(this)
+            d.setBackgroundColor(getColor(R.color.divider))
+            val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1))
+            lp.setMarginStart(dp(64))
+            container.addView(d, lp)
+        }
+
+        return Row(t, s, v)
     }
 
-    private fun buildUi(): ScrollView {
-        val root = LinearLayout(this)
-        root.orientation = LinearLayout.VERTICAL
-        root.setBackgroundColor(Color.parseColor("#FFFFFF"))
-        root.setPadding(dp(18), dp(24), dp(18), dp(40))
+    private fun buildStatusRows() {
+        addRow(statusContainer, R.drawable.ic_timer, "当前状态", "空闲时可直接选择下方工况", "空闲", true, null)
+            .let { vStatus = it.value }
 
-        root.addView(tv("PowerProbe", 26f, Color.parseColor("#111827"), true))
-        val sub = tv("课题 02 · 4 工况 × 30 分钟 × 每 5 分钟 1 个采样点", 12f, Color.parseColor("#6B7280"), false)
-        sub.setPadding(0, dp(4), 0, 0)
-        root.addView(sub)
+        addRow(statusContainer, R.drawable.ic_battery, "采样进度", "每 5 分钟一个点，共 6 点", "0 / 6", true, null)
+            .let { vProgress = it.value }
 
-        // 状态卡
-        val card = LinearLayout(this)
-        card.orientation = LinearLayout.VERTICAL
-        card.setBackgroundColor(Color.parseColor("#F3F4F6"))
-        card.setPadding(dp(14), dp(12), dp(14), dp(12))
-        statusView = tv("", 13f, Color.parseColor("#111827"), false)
-        statusView.setLineSpacing(dp(3), 1.0f)
-        card.addView(statusView)
-        val cardLp = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        cardLp.topMargin = dp(18)
-        root.addView(card, cardLp)
+        addRow(statusContainer, R.drawable.ic_timer, "已用时长", "", "0 分 00 秒", true, null)
+            .let { vElapsed = it.value }
 
-        // 工况标题
-        val sec1 = tv("① 选择工况并开始采集", 13f, Color.parseColor("#374151"), true)
-        sec1.setPadding(0, dp(22), 0, dp(8))
-        root.addView(sec1)
+        addRow(statusContainer, R.drawable.ic_thermal, "最新读数", "电量 · 电流 · 温度", "-", false, null)
+            .let { vBattery = it.value }
+    }
 
-        root.addView(buttonRow(
-            scenarioButton("待机 30min", "IDLE"),
-            scenarioButton("短视频 30min", "SVIDEO")
-        ))
-        root.addView(buttonRow(
-            scenarioButton("导航/拍摄", "NAVCAM"),
-            scenarioButton("高帧率游戏", "GAME")
-        ))
+    private fun buildScenarioRows() {
+        addRow(scenarioContainer, R.drawable.ic_battery, "待机", "灭屏静置，系统基线", "30 分钟", true) {
+            startScenario("IDLE")
+        }
+        addRow(scenarioContainer, R.drawable.ic_game, "短视频", "连续滚动播放", "30 分钟", true) {
+            startScenario("SVIDEO")
+        }
+        addRow(scenarioContainer, R.drawable.ic_file, "导航 / 拍摄", "前半导航，后半录 4K", "30 分钟", true) {
+            startScenario("NAVCAM")
+        }
+        addRow(scenarioContainer, R.drawable.ic_game, "高帧率游戏", "画质与帧率最高档", "30 分钟", false) {
+            startScenario("GAME")
+        }
+    }
 
-        // 控制
-        val sec2 = tv("② 控制与归档", 13f, Color.parseColor("#374151"), true)
-        sec2.setPadding(0, dp(20), 0, dp(8))
-        root.addView(sec2)
+    private fun buildArtifactRows() {
+        addRow(artifactContainer, R.drawable.ic_file, "最近 CSV", "raw_data 目录", "-", true, null)
+            .let { vCsv = it.value }
 
-        val stop = Button(this)
-        stop.text = "提前结束（自动归档已采数据）"
-        stop.isAllCaps = false
-        stop.setTextColor(Color.parseColor("#B91C1C"))
-        stop.setBackgroundColor(Color.parseColor("#FEE2E2"))
-        stop.setOnClickListener { stopScenario() }
-        root.addView(stop, fullWidth(dp(8)))
+        addRow(artifactContainer, R.drawable.ic_file, "最近报告", "设备端自动生成", "-", true, null)
+            .let { vReport = it.value }
 
-        val publish = Button(this)
-        publish.text = "再次复制产物到 /sdcard/Download/PowerProbe"
-        publish.isAllCaps = false
-        publish.setTextColor(Color.parseColor("#1F2937"))
-        publish.setBackgroundColor(Color.parseColor("#E5E7EB"))
-        publish.setOnClickListener {
+        addRow(artifactContainer, R.drawable.ic_file, "复制到 Download", "/sdcard/Download/PowerProbe", "", true) {
             val out = Exporter.publishToDownloads(this)
             Toast.makeText(
                 this,
-                if (out.isNotEmpty()) "已复制" else "未找到产物文件",
+                if (out.isNotEmpty()) "已复制" else "还没有产物文件",
                 Toast.LENGTH_SHORT
             ).show()
         }
-        root.addView(publish, fullWidth(dp(4)))
 
-        // 日志
-        val sec3 = tv("③ 运行日志", 13f, Color.parseColor("#374151"), true)
-        sec3.setPadding(0, dp(20), 0, dp(8))
-        root.addView(sec3)
-
-        logView = tv("", 11f, Color.parseColor("#4B5563"), false)
-        logView.setLineSpacing(dp(2), 1.0f)
-        logView.setPadding(dp(10), dp(10), dp(10), dp(10))
-        logView.setBackgroundColor(Color.parseColor("#0B1020"))
-        logView.setTextColor(Color.parseColor("#D1D5DB"))
-        logView.setTypeface(Typeface.MONOSPACE)
-        root.addView(logView, fullWidth(dp(12)))
-
-        // 说明
-        val note = tv(
-            "数据落点：\n" +
-                "/sdcard/Android/data/com.icec.powerprobe/files/PowerProbe/ （原始目录）\n" +
-                "/sdcard/Download/PowerProbe/ （root 复制，便于用文件管理器取出）\n\n" +
-                "采集期间请保持本应用在前台服务运行状态，不要手动清理后台；\n" +
-                "「待机」工况请灭屏放置，「游戏」工况请保持游戏在前台，\n" +
-                "前台包名会写入 CSV，作为工况真实性的客观证据。",
-            11f, Color.parseColor("#6B7280"), false
-        )
-        note.setLineSpacing(dp(3), 1.0f)
-        note.setPadding(0, dp(20), 0, 0)
-        root.addView(note)
-
-        scroll = ScrollView(this)
-        scroll.addView(root)
-        return scroll
-    }
-
-    private fun fullWidth(topMarginDp: Int): LinearLayout.LayoutParams {
-        val lp = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        lp.topMargin = dp(topMarginDp)
-        return lp
-    }
-
-    private fun buttonRow(vararg buttons: Button): LinearLayout {
-        val row = LinearLayout(this)
-        row.orientation = LinearLayout.HORIZONTAL
-        val rowLp = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        rowLp.topMargin = dp(6)
-        row.layoutParams = rowLp
-        for (b in buttons) {
-            val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-            lp.rightMargin = dp(6)
-            row.addView(b, lp)
+        addRow(artifactContainer, R.drawable.ic_thermal, "提前结束", "保留已采数据并归档", "", false) {
+            stopScenario()
         }
-        return row
-    }
-
-    private fun scenarioButton(label: String, code: String): Button {
-        val b = Button(this)
-        b.text = label
-        b.isAllCaps = false
-        b.setTextSize(13f)
-        b.setTextColor(Color.WHITE)
-        b.setBackgroundColor(Color.parseColor("#1F2937"))
-        b.setOnClickListener { startScenario(code) }
-        return b
     }
 
     // ---------------- 行为 ----------------
@@ -213,7 +196,7 @@ class MainActivity : Activity() {
             startForegroundService(i)
             Toast.makeText(
                 this,
-                "已开始：" + Exporter.scenarioName(code) + "，30 分钟 6 个采样点",
+                "已开始：" + Exporter.scenarioName(code) + " · 30 分钟 6 个点",
                 Toast.LENGTH_SHORT
             ).show()
         } catch (e: Exception) {
@@ -244,60 +227,37 @@ class MainActivity : Activity() {
     // ---------------- 渲染 ----------------
 
     private fun render() {
-        if (!::statusView.isInitialized) return
+        if (!::vStatus.isInitialized) return
 
         val phase = when (CollectorState.phase) {
-            CollectorState.PHASE_RUNNING -> "采集中"
+            CollectorState.PHASE_RUNNING -> "采集中 · " + Exporter.scenarioName(CollectorState.scenario)
             CollectorState.PHASE_DONE -> "已完成"
             else -> "空闲"
         }
+        vStatus.text = phase
+        vProgress.text = CollectorState.donePoints.toString() + " / " + CollectorState.totalPoints
 
-        val sb = StringBuilder()
-        sb.append("阶段　").append(phase)
-        if (CollectorState.scenario.isNotEmpty()) {
-            sb.append("　·　").append(Exporter.scenarioName(CollectorState.scenario))
-        }
-        sb.append("\n")
-
-        if (CollectorState.phase == CollectorState.PHASE_RUNNING) {
-            sb.append("进度　").append(CollectorState.donePoints)
-                .append(" / ").append(CollectorState.totalPoints).append(" 个采样点\n")
-            val m = CollectorState.elapsedSec / 60
-            val s = CollectorState.elapsedSec % 60
-            sb.append("已用　").append(String.format(Locale.US, "%d 分 %02d 秒", m, s))
-            if (CollectorState.nextSampleInSec > 0) {
-                val nm = CollectorState.nextSampleInSec / 60
-                val ns = CollectorState.nextSampleInSec % 60
-                sb.append("　下一个点 ").append(String.format(Locale.US, "%d:%02d", nm, ns))
-            }
-            sb.append("\n")
-        }
+        val m = CollectorState.elapsedSec / 60
+        val s = CollectorState.elapsedSec % 60
+        vElapsed.text = String.format(Locale.US, "%d 分 %02d 秒", m, s)
 
         val latest = CollectorState.latest
         if (latest != null) {
-            sb.append("最新　").append(latest.batteryPct).append("%")
-                .append("　").append(String.format(Locale.US, "%.0f mA", latest.currentMa))
-                .append("　").append(String.format(Locale.US, "%.1f ℃", latest.battTempC))
-                .append("　").append(String.format(Locale.US, "%.2f W", latest.powerW))
-                .append("\n")
-            sb.append("前台　").append(if (latest.foregroundPkg.isEmpty()) "未捕获" else latest.foregroundPkg)
-                .append("　root ").append(if (latest.rootOk) "OK" else "不可用")
-                .append("\n")
+            vBattery.text = String.format(
+                Locale.US, "%d%% · %.0f mA · %.1f℃", latest.batteryPct, latest.currentMa, latest.battTempC
+            )
         }
 
-        if (CollectorState.lastCsvPath.isNotEmpty()) {
-            sb.append("\nCSV：").append(shortPath(CollectorState.lastCsvPath)).append("\n")
-            sb.append("报告：").append(shortPath(CollectorState.lastReportPath))
-        }
-
-        statusView.text = sb.toString()
+        vCsv.text = fileNameOf(CollectorState.lastCsvPath)
+        vReport.text = fileNameOf(CollectorState.lastReportPath)
 
         val t = CollectorState.logText()
         logView.text = if (t.length > 6000) t.substring(t.length - 6000) else t
     }
 
-    private fun shortPath(p: String): String {
-        val name = p.substringAfterLast('/')
-        return name.ifEmpty { p }
+    private fun fileNameOf(p: String): String {
+        if (p.isEmpty()) return "-"
+        val n = p.substringAfterLast('/')
+        return if (n.length > 26) n.substring(0, 24) + "…" else n
     }
 }
