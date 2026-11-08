@@ -34,11 +34,32 @@ data class Sample(
     val dataSource: String,
     /** PowerManager 热状态等级 NONE/LIGHT/MODERATE/SEVERE/CRITICAL/EMERGENCY/SHUTDOWN/NA */
     val thermalStatus: String,
+    /** 被测应用 pid，-1 表示该工况没有目标应用或进程已退出 */
+    val appPid: Int,
+    /** 被测应用进程 CPU，相对单核百分比（多线程可 > 100） */
+    val appCpuPct: Double,
+    /** 被测应用 PSS 内存（MB） */
+    val appPssMb: Double,
+    /** 区间平均帧率（gfxinfo 帧数差分 / 采样间隔），-1 = 窗口不足未计算 */
+    val fps: Double,
+    /** 区间卡顿帧占比（%） */
+    val jankPct: Double,
+    /** 自工况开始以来的 99 分位帧耗时（ms） */
+    val frameP99Ms: Double,
+    /** 区间整机下行流量（KB） */
+    val netRxKb: Double,
+    /** 区间整机上行流量（KB） */
+    val netTxKb: Double,
+    /** 大核当前最高频率（MHz），用于识别热降频 */
+    val cpuMaxMhz: Double,
+    /** 冷启动耗时（ms），仅工况首个采样点有值，其余为 0 */
+    val launchMs: Long,
     val isFinal: Boolean
 ) {
     fun toCsvLine(): String = String.format(
         Locale.US,
-        "%s,%d,%s,%d,%d,%d,%.1f,%.1f,%d,%s,%.3f,%.0f,%.1f,%.0f,%.1f,%s,%.1f,%s,%d,%d,%s,%s,%d",
+        "%s,%d,%s,%d,%d,%d,%.1f,%.1f,%d,%s,%.3f,%.0f,%.1f,%.0f,%.1f,%s,%.1f,%s,%d,%d,%s,%s," +
+            "%d,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%.1f,%d,%d",
         tsIso,
         elapsedSec,
         scenario,
@@ -61,6 +82,16 @@ data class Sample(
         if (charging) 1 else 0,
         dataSource,
         thermalStatus,
+        appPid,
+        appCpuPct,
+        appPssMb,
+        fps,
+        jankPct,
+        frameP99Ms,
+        netRxKb,
+        netTxKb,
+        cpuMaxMhz,
+        launchMs,
         if (isFinal) 1 else 0
     )
 
@@ -69,7 +100,8 @@ data class Sample(
             "timestamp_iso,elapsed_s,scenario,seq,battery_pct,voltage_mv,current_ma,batt_temp_c," +
                 "charge_uah,status,power_w,cpu_avg_mhz,cpu_load_pct,gpu_mhz,thermal_max_c," +
                 "thermal_max_type,soc_thermal_c,foreground_pkg,screen_on,charging,data_source," +
-                "thermal_status,is_final"
+                "thermal_status,app_pid,app_cpu_pct,app_pss_mb,fps,jank_pct,frame_p99_ms," +
+                "net_rx_kb,net_tx_kb,cpu_max_mhz,launch_ms,is_final"
     }
 }
 
@@ -97,6 +129,16 @@ object CollectorState {
     @Volatile var chainIndex: Int = 0
     @Volatile var chainTotal: Int = 0
     @Volatile var gapRemainSec: Long = 0L
+
+    /** 当前工况的被测应用包名，供采样器取进程级指标 */
+    @Volatile var targetPkg: String = ""
+
+    /** 本工况剩余秒数与全程剩余秒数，服务每次采样后刷新，供界面与通知倒计时 */
+    @Volatile var remainSec: Long = 0L
+    @Volatile var totalRemainSec: Long = 0L
+
+    /** 最近一次进程级指标，界面直接展示 */
+    @Volatile var latestMetrics: AppMetrics? = null
 
     private val logBuffer = StringBuilder()
     private val samples = ArrayList<Sample>()
@@ -144,6 +186,10 @@ object CollectorState {
         chainIndex = 0
         chainTotal = 0
         gapRemainSec = 0L
+        targetPkg = ""
+        remainSec = 0L
+        totalRemainSec = 0L
+        latestMetrics = null
     }
 }
 

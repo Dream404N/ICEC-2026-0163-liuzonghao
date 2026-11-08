@@ -47,6 +47,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:gravity="end"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="2"
+        android:maxWidth="140dp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="13sp" />
 </LinearLayout>

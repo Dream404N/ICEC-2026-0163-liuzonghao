@@ -79,9 +79,31 @@ echo "@@END@@"
         return Pair(ma, tc)
     }
 
-    fun collect(ctx: Context, scenario: String, seq: Int, elapsedSec: Long, isFinal: Boolean): Sample {
+    /**
+     * @param targetPkg 本工况的被测应用；非空时额外取进程级指标（CPU/PSS/FPS/卡顿/流量）。
+     *   收尾样本（isFinal）不取，避免把「归档时的瞬时状态」混进区间均值。
+     */
+    fun collect(
+        ctx: Context,
+        scenario: String,
+        seq: Int,
+        elapsedSec: Long,
+        isFinal: Boolean,
+        targetPkg: String = ""
+    ): Sample {
         val bm = ctx.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
         val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
+
+        // ---------- 进程级指标（先做：内部有 0.9 秒差分窗口，与电流读取互不干扰） ----------
+        val m: AppMetrics = if (targetPkg.isNotEmpty() && !isFinal) {
+            try {
+                Metrics.probe(targetPkg)
+            } catch (e: Exception) {
+                AppMetrics.NONE
+            }
+        } else {
+            AppMetrics.NONE
+        }
 
         // ---------- 通道 A：root 批量直读 ----------
         val rootOk = Root.ensure()
@@ -280,6 +302,7 @@ echo "@@END@@"
         src.append(";gpu=").append(if (gpuMhz.isNaN()) "none" else "sysfs")
         src.append(";fg=").append(fgSrc)
         src.append(";ch=").append(if (rootOk) "root" else "api")
+        src.append(";app=").append(if (m.usable) "proc" else "none")
 
         val ts = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US).format(Date())
 
@@ -306,6 +329,17 @@ echo "@@END@@"
             charging = charging,
             dataSource = src.toString(),
             thermalStatus = thermalStatusName(thStatus),
+            appPid = m.pid,
+            appCpuPct = m.appCpuPct,
+            appPssMb = m.appPssMb,
+            fps = m.fps,
+            jankPct = m.jankPct,
+            frameP99Ms = m.frameP99Ms,
+            netRxKb = m.netRxKb,
+            netTxKb = m.netTxKb,
+            cpuMaxMhz = m.cpuMaxMhz,
+            // 冷启动耗时只挂在工况首个点上，其余点写 0，避免下游把它当连续量求平均
+            launchMs = if (seq == 0 && !isFinal) Metrics.lastLaunchMs else 0L,
             isFinal = isFinal
         )
     }

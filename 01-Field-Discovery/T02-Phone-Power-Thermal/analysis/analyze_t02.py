@@ -74,7 +74,9 @@ def load_all(raw_dir: str) -> pd.DataFrame:
 
     # 收尾校验行（is_final=1）不参与曲线，但保留用于完整性检查
     for col in ("scenario", "is_final", "elapsed_s", "battery_pct", "current_ma",
-                "power_w", "batt_temp_c", "soc_thermal_c", "cpu_load_pct", "cpu_avg_mhz"):
+                "power_w", "batt_temp_c", "soc_thermal_c", "cpu_load_pct", "cpu_avg_mhz",
+                "app_pid", "app_cpu_pct", "app_pss_mb", "fps", "jank_pct",
+                "frame_p99_ms", "net_rx_kb", "net_tx_kb", "cpu_max_mhz", "launch_ms"):
         if col not in df.columns:
             df[col] = np.nan
 
@@ -104,6 +106,45 @@ def completeness(df: pd.DataFrame) -> pd.DataFrame:
                                                 .fillna("-").astype(str).tolist())))[:60],
         })
     return pd.DataFrame(rows)
+
+
+def _clean(series) -> pd.Series:
+    """把 -1 / 0 / 空统一成 NaN：这些值在采集端表示「未采到」，不是真实的 0。"""
+    if series is None:
+        return pd.Series(dtype=float)
+    v = pd.to_numeric(series, errors="coerce")
+    v = v.where(v > 0)
+    return v
+
+
+def _mean_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.mean()), 2) if len(v) else np.nan
+
+
+def _min_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.min()), 2) if len(v) else np.nan
+
+
+def _max_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.max()), 2) if len(v) else np.nan
+
+
+def _sum_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.sum()), 1) if len(v) else np.nan
+
+
+def _first_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.iloc[0]), 2) if len(v) else np.nan
+
+
+def _last_pos(series):
+    v = _clean(series).dropna()
+    return round(float(v.iloc[-1]), 2) if len(v) else np.nan
 
 
 def metrics(df: pd.DataFrame) -> pd.DataFrame:
@@ -152,6 +193,18 @@ def metrics(df: pd.DataFrame) -> pd.DataFrame:
             "soc_max_c": round(float(np.max(soc_t)), 1) if np.nanmax(soc_t) > 0 else np.nan,
             "cpu_load_mean_pct": round(float(np.mean(pts["cpu_load_pct"].fillna(0))), 1),
             "cpu_mhz_mean": round(float(np.mean(pts["cpu_avg_mhz"].fillna(0))), 0),
+            # ---- 应用侧（进程级）：-1 / 空表示未采到，不能当 0 参与均值 ----
+            "fps_mean": _mean_pos(pts.get("fps")),
+            "fps_min": _min_pos(pts.get("fps")),
+            "jank_mean_pct": _mean_pos(pts.get("jank_pct")),
+            "app_cpu_mean_pct": _mean_pos(pts.get("app_cpu_pct")),
+            "app_pss_max_mb": _max_pos(pts.get("app_pss_mb")),
+            "frame_p99_max_ms": _max_pos(pts.get("frame_p99_ms")),
+            "net_rx_kb": _sum_pos(pts.get("net_rx_kb")),
+            "net_tx_kb": _sum_pos(pts.get("net_tx_kb")),
+            "cpu_max_mhz_head": _first_pos(pts.get("cpu_max_mhz")),
+            "cpu_max_mhz_tail": _last_pos(pts.get("cpu_max_mhz")),
+            "launch_ms": _max_pos(pts.get("launch_ms")),
         })
 
     out = pd.DataFrame(rows)
@@ -256,6 +309,20 @@ def plot_bars(m: pd.DataFrame, out_png: Path) -> None:
     plt.close(fig)
 
 
+def _fmt(v, fmt: str) -> str:
+    if v is None or v != v:
+        return "-"
+    return fmt % v
+
+
+def _fmt2(a, b) -> str:
+    if (a is None or a != a) and (b is None or b != b):
+        return "-"
+    fa = "-" if (a is None or a != a) else "%.0f" % a
+    fb = "-" if (b is None or b != b) else "%.0f" % b
+    return fa + " → " + fb
+
+
 def write_markdown(m: pd.DataFrame, comp: pd.DataFrame, test_line: str, out_md: Path) -> None:
     lines = []
     lines.append("# 课题 02 分析结果\n")
@@ -281,6 +348,24 @@ def write_markdown(m: pd.DataFrame, comp: pd.DataFrame, test_line: str, out_md: 
             ("%.1f" % r["pct_per_h"]) if r["pct_per_h"] == r["pct_per_h"] else "-",
             r["temp_rise_c"],
             ("%.1f" % r["soc_max_c"]) if r["soc_max_c"] == r["soc_max_c"] else "-"))
+
+    # ---- 应用侧性能（进程级）----
+    if "fps_mean" in m.columns and m[["fps_mean", "app_cpu_mean_pct", "app_pss_max_mb"]].notna().any().any():
+        lines.append("\n## 应用侧性能（进程级）\n")
+        lines.append("> 口径与 Emmagee / GT 一致：CPU 取 /proc/<pid>/stat 差分，内存取 PSS，")
+        lines.append("> 帧率与卡顿取 `dumpsys gfxinfo` 累计计数差分。空白表示该工况没有目标应用或未采到。\n")
+        lines.append("| 工况 | 平均帧率 | 最低帧率 | 卡顿率% | 进程CPU% | PSS峰值(MB) | P99帧耗时(ms) | 下行(KB) | 上行(KB) | 大核 首→末(MHz) | 冷启动(ms) |")
+        lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
+        for _, r in m.iterrows():
+            lines.append("| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+                r["label"],
+                _fmt(r.get("fps_mean"), "%.1f"), _fmt(r.get("fps_min"), "%.1f"),
+                _fmt(r.get("jank_mean_pct"), "%.1f"), _fmt(r.get("app_cpu_mean_pct"), "%.1f"),
+                _fmt(r.get("app_pss_max_mb"), "%.0f"), _fmt(r.get("frame_p99_max_ms"), "%.0f"),
+                _fmt(r.get("net_rx_kb"), "%.0f"), _fmt(r.get("net_tx_kb"), "%.0f"),
+                _fmt2(r.get("cpu_max_mhz_head"), r.get("cpu_max_mhz_tail")),
+                _fmt(r.get("launch_ms"), "%.0f")))
+        lines.append("")
 
     lines.append("\n## 统计检验\n")
     lines.append(test_line + "\n")
@@ -333,6 +418,11 @@ def main() -> int:
     plot_series(df_plot, "battery_pct", "Battery (%)",
                 "Battery level by scenario", fig_dir / "fig3_level.png")
     plot_bars(m, fig_dir / "fig4_bars.png")
+
+    # 帧率只在有目标应用的工况才有，全空就不画，避免生成一张空图
+    if "fps" in df_plot.columns and (pd.to_numeric(df_plot["fps"], errors="coerce") > 0).any():
+        plot_series(df_plot, "fps", "FPS", "Frame rate by scenario",
+                    fig_dir / "fig5_fps.png", separate=True)
 
     write_markdown(m, comp, test_line, out_dir / "summary.md")
 

@@ -20,13 +20,17 @@ object Automator {
     private var lastSwipeSec = -999L
     private var lastGuardSec = -999L
     private var lastShotSec = -999L
+    private var lastKeepSec = -999L
     private var cameraSwitched = false
+    private var navStarted = false
 
     fun reset() {
         lastSwipeSec = -999L
         lastGuardSec = -999L
         lastShotSec = -999L
+        lastKeepSec = -999L
         cameraSwitched = false
+        navStarted = false
     }
 
     // ---------------- 对外 ----------------
@@ -55,6 +59,7 @@ object Automator {
                 CollectorState.log(
                     "[自动] 拉起导航 " + label(t.map) + if (ok) " 成功" else " 失败（未选择或未安装）"
                 )
+                if (ok) startNavigation(ctx)
                 shot(ctx, "NAVCAM_t0000")
             }
             Plan.SC_GAME -> {
@@ -98,8 +103,19 @@ object Automator {
                 }
             }
             Plan.SC_GAME -> {
-                // 游戏内操作交给玩家/脚本，这里不注入，避免被判违规
+                // 游戏内操作交给玩家/脚本，这里不注入，避免被判违规或打断正在打的曲子。
+                // 只做「保活」：每 3 分钟确认游戏仍在前台，被系统或误触切走就重新拉起。
+                if (root && elapsedSec - lastKeepSec >= 180) {
+                    lastKeepSec = elapsedSec
+                    keepForeground(ctx, t.game)
+                }
             }
+        }
+
+        // 短视频同理：长时间刷可能被后台清理，静默拉回前台，日志留痕
+        if (scenario == Plan.SC_SVIDEO && root && elapsedSec - lastKeepSec >= 300) {
+            lastKeepSec = elapsedSec
+            keepForeground(ctx, t.video)
         }
         if (root && elapsedSec - lastShotSec >= 600) {
             lastShotSec = elapsedSec
@@ -129,6 +145,9 @@ object Automator {
             }
             val out = Root.exec(cmd, 20000)
             if (!Root.wasRefused(out) && !out.contains("Error") && !out.contains("Exception")) {
+                // `am start -W` 会打印 TotalTime（冷/热启动总耗时），直接当性能指标收下
+                val ms = totalTimeOf(out)
+                if (ms > 0) Metrics.lastLaunchMs = ms
                 return true
             }
         }
@@ -186,6 +205,69 @@ object Automator {
             15000
         )
     }
+
+    /**
+     * 发起真实导航：高德支持 `amapuri://route/plan/` 深链，能直接把「路线规划 + 导航」
+     * 点开，免去人工点选终点。失败就保持普通地图界面（已由 launch 拉起），只记一条日志，
+     * 不阻断工况——绝不能因为一个 Intent 不兼容就让整个 30 分钟白跑。
+     */
+    fun startNavigation(ctx: Context): Boolean {
+        if (!Root.ensure()) {
+            CollectorState.log("[自动] 无 root，请在导航应用里手动点「开始导航」")
+            return false
+        }
+        if (navStarted) return true
+        val pkg = Plan.load(ctx).map
+        if (pkg != Plan.PKG_AMAP) {
+            CollectorState.log("[自动] 非高德地图，跳过深链导航，请手动开始导航")
+            return false
+        }
+        val uri = "amapuri://route/plan/?dlat=" + Plan.NAV_DLAT + "&dlon=" + Plan.NAV_DLON +
+            "&dname=" + Plan.NAV_DEST + "&dev=0&t=0"
+        val out = Root.exec(
+            "am start -a android.intent.action.VIEW -d \"" + uri + "\"", 15000
+        )
+        val ok = !Root.wasRefused(out) && !out.contains("Error") && !out.contains("Exception")
+        navStarted = ok
+        CollectorState.log(
+            "[自动] 深链导航 → " + Plan.NAV_DEST + if (ok) " 已发起" else " 失败，请手动开始导航"
+        )
+        return ok
+    }
+
+    /**
+     * 目标应用保活：读一次当前前台包名，不是目标就重新拉起。
+     * 只在「应保持前台」的工况调用，频率压到 3~5 分钟一次，避免自动化自己成为负载。
+     */
+    fun keepForeground(ctx: Context, pkg: String) {
+        if (pkg.isEmpty() || !Root.ensure()) return
+        val fg = foregroundPkg()
+        if (fg.isEmpty() || fg == pkg) return
+        if (fg.startsWith("com.icec.powerprobe")) return
+        CollectorState.log("[自动] 前台变为 " + fg + "，重新拉起 " + label(pkg))
+        launch(ctx, pkg)
+    }
+
+    fun foregroundPkg(): String {
+        val out = Root.exec(
+            "dumpsys activity activities 2>/dev/null | grep -m1 -E 'mResumedActivity|topResumedActivity'",
+            8000
+        )
+        return PKG_RE.find(out)?.groupValues?.get(1) ?: ""
+    }
+
+    /** 从 `am start -W` 的输出里取 TotalTime */
+    private fun totalTimeOf(out: String): Long {
+        for (line in out.split("\n")) {
+            val t = line.trim()
+            if (t.startsWith("TotalTime:")) {
+                return t.substringAfter(':').trim().toLongOrNull() ?: 0L
+            }
+        }
+        return 0L
+    }
+
+    private val PKG_RE = Regex("([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z0-9_]+){1,6})/")
 
     private fun componentOf(ctx: Context, pkg: String): String? {
         return try {

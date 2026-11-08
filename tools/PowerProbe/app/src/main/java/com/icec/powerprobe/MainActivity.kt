@@ -41,8 +41,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vChain: TextView
     private lateinit var vStatus: TextView
     private lateinit var vProgress: TextView
-    private lateinit var vElapsed: TextView
+    private lateinit var vElapsedRow: Row
     private lateinit var vBattery: TextView
+    private lateinit var vPerf: TextView
     private lateinit var vRoot: TextView
     private lateinit var vUsage: TextView
     private lateinit var vSource: TextView
@@ -173,11 +174,18 @@ class MainActivity : AppCompatActivity() {
         addRow(statusContainer, R.drawable.ic_battery, "采样进度", "每 5 分钟一个点，共 6 点", "0 / 6", true, null)
             .let { vProgress = it.value }
 
-        addRow(statusContainer, R.drawable.ic_timer, "已用时长", "", "0 分 00 秒", true, null)
-            .let { vElapsed = it.value }
+        addRow(
+            statusContainer, R.drawable.ic_timer, "时间",
+            "已用 · 本工况剩余 · 全程剩余", "0:00 · 剩 30 分", true, null
+        ).let { vElapsedRow = it }
 
-        addRow(statusContainer, R.drawable.ic_thermal, "最新读数", "电量 · 电流 · 温度", "-", false, null)
+        addRow(statusContainer, R.drawable.ic_thermal, "最新读数", "电量 · 电流 · 温度", "-", true, null)
             .let { vBattery = it.value }
+
+        addRow(
+            statusContainer, R.drawable.ic_game, "被测应用指标",
+            "帧率 · 卡顿 · 进程 CPU · PSS", "-", false, null
+        ).let { vPerf = it.value }
     }
 
     private fun buildAutomationRows() {
@@ -200,12 +208,12 @@ class MainActivity : AppCompatActivity() {
 
         addRow(
             automationContainer, R.drawable.ic_game,
-            "游戏应用", "自动启动，画质帧率手动设最高", "-", true
+            "游戏应用", "默认 Phigros，自动启动并保活；画质帧率手动设最高", "-", true
         ) { pickApp(KIND_GAME) }.let { vGame = it.value }
 
         addRow(
             automationContainer, R.drawable.ic_file,
-            "导航应用", "自动启动，15 分钟后自动切相机", "-", false
+            "导航应用", "默认高德，自动发起导航；15 分钟后切相机", "-", false
         ) { pickApp(KIND_MAP) }.let { vMap = it.value }
     }
 
@@ -457,9 +465,16 @@ class MainActivity : AppCompatActivity() {
         spark.data = series.first
         spark.data2 = series.second
 
-        val m = CollectorState.elapsedSec / 60
-        val s = CollectorState.elapsedSec % 60
-        vElapsed.text = String.format(Locale.US, "%d 分 %02d 秒", m, s)
+        val running = CollectorState.phase == CollectorState.PHASE_RUNNING
+        vElapsedRow.subtitle.text = String.format(
+            Locale.US, "已用 %s · 本工况 %d 分钟",
+            clock(CollectorState.elapsedSec), Plan.SCENARIO_MINUTES
+        )
+        vElapsedRow.value.text = if (running) {
+            "剩 " + span(CollectorState.remainSec) + "\n全程剩 " + clock(CollectorState.totalRemainSec)
+        } else {
+            "-"
+        }
 
         val latest = CollectorState.latest
         if (latest != null) {
@@ -467,6 +482,9 @@ class MainActivity : AppCompatActivity() {
                 Locale.US, "%d%% · %.0f mA · %.1f℃ · %s",
                 latest.batteryPct, latest.currentMa, latest.battTempC, latest.thermalStatus
             )
+            vPerf.text = perfLine(latest)
+        } else {
+            vPerf.text = if (CollectorState.targetPkg.isEmpty()) "-" else "等待首个采样点"
         }
 
         vRoot.text = if (Root.available) "已授权" else "未授权"
@@ -488,6 +506,34 @@ class MainActivity : AppCompatActivity() {
 
         val t = CollectorState.logText()
         logView.text = if (t.length > 6000) t.substring(t.length - 6000) else t
+    }
+
+    /** 进程级指标两行：第一行帧率/卡顿，第二行进程 CPU/内存 */
+    private fun perfLine(s: Sample): String {
+        if (s.appPid <= 0) {
+            return if (CollectorState.targetPkg.isEmpty()) "本工况无目标应用" else "进程未运行"
+        }
+        val l1 = StringBuilder()
+        if (s.fps >= 0) l1.append(String.format(Locale.US, "%.0f fps", s.fps)) else l1.append("- fps")
+        if (s.jankPct >= 0) l1.append(String.format(Locale.US, " · 卡顿 %.1f%%", s.jankPct))
+        val l2 = String.format(Locale.US, "CPU %.0f%% · %.0fMB", s.appCpuPct, s.appPssMb)
+        return l1.toString() + "\n" + l2
+    }
+
+    private fun clock(sec: Long): String {
+        val s = if (sec < 0) 0 else sec
+        return String.format(Locale.US, "%d:%02d", s / 60, s % 60)
+    }
+
+    private fun span(sec: Long): String {
+        val s = if (sec < 0) 0 else sec
+        val h = s / 3600
+        val m = (s % 3600) / 60
+        return when {
+            h > 0 -> h.toString() + " 小时 " + m + " 分"
+            m > 0 -> m.toString() + " 分"
+            else -> (s % 60).toString() + " 秒"
+        }
     }
 
     private fun shortSource(src: String): String {

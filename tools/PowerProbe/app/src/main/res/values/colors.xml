@@ -6,6 +6,7 @@
     <color name="icon_bg">#F0F1F4</color>
     <color name="divider">#EBEDF0</color>
     <color name="text_secondary">#8A8F98</color>
+    <color name="accent_info">#3B7DD8</color>
     <color name="accent_ok">#2E7D5B</color>
     <color name="accent_warn">#C0442F</color>
 </resources>

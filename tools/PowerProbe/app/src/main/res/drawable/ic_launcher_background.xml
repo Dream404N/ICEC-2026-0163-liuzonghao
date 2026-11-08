@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自适应图标背景层：从墨蓝到近黑的斜向渐变。
+  不用纯黑，是因为深色图标在浅色壁纸上会「糊成一块」；带一点点蓝调，
+  在圆角/圆形遮罩下都能看出层次。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="8"
+                android:startY="4"
+                android:endX="100"
+                android:endY="104"
+                android:startColor="#243046"
+                android:centerColor="#141A24"
+                android:endColor="#0A0C10" />
+        </aapt:attr>
+    </path>
+
+    <!-- 右上角一点点高光，避免大面积死板 -->
+    <path
+        android:pathData="M108,0L60,0L108,48z"
+        android:fillColor="#1AFFFFFF" />
+</vector>

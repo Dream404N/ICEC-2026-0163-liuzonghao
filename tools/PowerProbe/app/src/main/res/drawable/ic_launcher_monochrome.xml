@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 13+ 主题图标（Monet）：系统会用壁纸取色重新着色，
+  所以这一层必须是单色剪影，只用 alpha 表达形状，颜色一律写 #FFFFFF。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M30,42h44a6,6 0 0,1 6,6v12a6,6 0 0,1 -6,6h-44a6,6 0 0,1 -6,-6v-12a6,6 0 0,1 6,-6z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineJoin="round" />
+
+    <path
+        android:pathData="M80,50h2a3,3 0 0,1 3,3v2a3,3 0 0,1 -3,3h-2z"
+        android:fillColor="#FFFFFF" />
+
+    <path
+        android:pathData="M31,56h11l5,-6l7,12l5,-6h12"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

@@ -83,6 +83,22 @@ object Exporter {
             fgCount.entries.sortedByDescending { it.value }
                 .joinToString("；") { "${it.key} × ${it.value}" }
 
+        // ---- 应用侧（进程级）统计 ----
+        val appPts = pts.filter { it.appPid > 0 }
+        val fpsPts = appPts.filter { it.fps >= 0 }
+        val jankPts = appPts.filter { it.jankPct >= 0 }
+        val fpsAvg = if (fpsPts.isEmpty()) Double.NaN else fpsPts.map { it.fps }.average()
+        val fpsMin = fpsPts.minByOrNull { it.fps }?.fps ?: Double.NaN
+        val jankAvg = if (jankPts.isEmpty()) Double.NaN else jankPts.map { it.jankPct }.average()
+        val p99Worst = appPts.map { it.frameP99Ms }.filter { it > 0 }.maxOrNull() ?: Double.NaN
+        val appCpuAvg = if (appPts.isEmpty()) Double.NaN else appPts.map { it.appCpuPct }.average()
+        val pssMax = appPts.map { it.appPssMb }.filter { it > 0 }.maxOrNull() ?: Double.NaN
+        val rxTotal = appPts.map { it.netRxKb }.filter { it >= 0 }.sum()
+        val txTotal = appPts.map { it.netTxKb }.filter { it >= 0 }.sum()
+        val launchMs = pts.firstOrNull { it.launchMs > 0 }?.launchMs ?: 0L
+        val cpuMaxEnd = appPts.lastOrNull()?.cpuMaxMhz ?: Double.NaN
+        val cpuMaxHead = appPts.firstOrNull()?.cpuMaxMhz ?: Double.NaN
+
         val fgOk = pts.count { it.dataSource.contains("fg=usage") }
         val thzOk = pts.count { it.dataSource.contains("thz=sysfs") }
         val cpuOk = pts.count { it.dataSource.contains("cpu=sysfs") }
@@ -90,8 +106,9 @@ object Exporter {
         val ccOk = pts.count { it.chargeUah > 0 }
 
         sb.append("# 课题 02 采集报告 · ").append(scenarioName(scenario)).append("\n\n")
-        sb.append("> 由 PowerProbe 在设备端自动生成。全部数值取自 Android 公共接口，")
-        sb.append("运行过程不需要 root、不执行任何 shell 命令，代码可静态审计。\n\n")
+        sb.append("> 由 PowerProbe 在设备端自动生成。整机功耗/热力走 Android 公共接口，")
+        sb.append("进程级指标（CPU/PSS/帧率/流量）走 root 只读通道；无 root 时自动降级并在")
+        sb.append("「数据来源」一节标注可用率，不隐藏降级。\n\n")
 
         sb.append("## 0. 采集条件\n\n")
         sb.append("| 项 | 值 |\n|---|---|\n")
@@ -127,7 +144,30 @@ object Exporter {
         }
         sb.append("\n")
 
-        sb.append("## 2. 汇总指标\n\n")
+        sb.append("## 2. 应用侧性能（进程级）\n\n")
+        if (appPts.isEmpty()) {
+            sb.append("> 本次未取到目标应用进程（工况为待机，或应用已退出，或未授予 root），")
+            sb.append("本节无可分析数据。\n\n")
+        } else {
+            sb.append("| # | t(min) | 帧率fps | 卡顿% | P99ms | 进程CPU% | PSS MB | ↓KB | ↑KB | 大核MHz |\n")
+            sb.append("|---|---|---|---|---|---|---|---|---|---|\n")
+            for (p in appPts) {
+                sb.append("| ").append(p.seq + 1)
+                    .append(" | ").append(p.elapsedSec / 60)
+                    .append(" | ").append(if (p.fps >= 0) f1(p.fps) else "-")
+                    .append(" | ").append(if (p.jankPct >= 0) f1(p.jankPct) else "-")
+                    .append(" | ").append(if (p.frameP99Ms > 0) f0(p.frameP99Ms) else "-")
+                    .append(" | ").append(f0(p.appCpuPct))
+                    .append(" | ").append(f0(p.appPssMb))
+                    .append(" | ").append(if (p.netRxKb >= 0) f0(p.netRxKb) else "-")
+                    .append(" | ").append(if (p.netTxKb >= 0) f0(p.netTxKb) else "-")
+                    .append(" | ").append(f0(p.cpuMaxMhz))
+                    .append(" |\n")
+            }
+            sb.append("\n")
+        }
+
+        sb.append("## 3. 汇总指标\n\n")
         sb.append("| 指标 | 值 | 计算口径 |\n|---|---|---|\n")
         sb.append("| 起始电量 | ").append(startPct).append("% | 首个采样点 |\n")
         sb.append("| 结束电量 | ").append(endPct).append("% | 末次采样点 |\n")
@@ -147,9 +187,21 @@ object Exporter {
         sb.append("| 系统热等级（最严） | ").append(thWorst).append(" | PowerManager.getCurrentThermalStatus |\n")
         sb.append("| CPU 平均频率 | ").append(f0(cpuAvg)).append(" MHz | 各核瞬时频率均值 |\n")
         sb.append("| CPU 平均占用 | ").append(f1(loadAvg)).append(" % | /proc/stat 差分 |\n")
-        sb.append("| GPU 峰值频率 | ").append(f0(gpuMax)).append(" MHz | 首个可读 GPU 节点 |\n\n")
+        sb.append("| GPU 峰值频率 | ").append(f0(gpuMax)).append(" MHz | 首个可读 GPU 节点 |\n")
+        sb.append("| 平均帧率 | ").append(f1(fpsAvg)).append(" fps | gfxinfo 帧数差分 / 采样间隔 |\n")
+        sb.append("| 最低区间帧率 | ").append(f1(fpsMin)).append(" fps | 各区间帧率取最小 |\n")
+        sb.append("| 平均卡顿率 | ").append(f1(jankAvg)).append(" % | 卡顿帧 / 总帧（区间差分） |\n")
+        sb.append("| 最差 P99 帧耗时 | ").append(f0(p99Worst)).append(" ms | gfxinfo 99th percentile 取最大 |\n")
+        sb.append("| 进程平均 CPU | ").append(f1(appCpuAvg)).append(" % | /proc/<pid>/stat 差分，单核基准 |\n")
+        sb.append("| 进程 PSS 峰值 | ").append(f0(pssMax)).append(" MB | /proc/<pid>/smaps_rollup |\n")
+        sb.append("| 区间流量合计 | ").append(f0(rxTotal)).append(" KB ↓ / ")
+            .append(f0(txTotal)).append(" KB ↑ | 全部非 lo 网卡累计差分 |\n")
+        sb.append("| 冷启动耗时 | ").append(if (launchMs > 0) launchMs.toString() + " ms" else "-")
+            .append(" | `am start -W` 的 TotalTime |\n")
+        sb.append("| 大核频率 首→末 | ").append(f0(cpuMaxHead)).append(" → ")
+            .append(f0(cpuMaxEnd)).append(" MHz | 观察热降频 |\n\n")
 
-        sb.append("## 3. 自动判定\n\n")
+        sb.append("## 4. 自动判定\n\n")
         sb.append("- 平均耗散功率 **").append(f2(Math.abs(pwrAvg))).append(" W**，峰值 **")
             .append(f2(Math.abs(pwrPeak))).append(" W**")
         sb.append("，峰值/平均比 ")
@@ -168,6 +220,16 @@ object Exporter {
         if (charging) {
             sb.append("- ⚠ 本次采集检测到充电状态，掉电与功率数据不能作为放电基线使用。\n")
         }
+        if (!cpuMaxHead.isNaN() && !cpuMaxEnd.isNaN() && cpuMaxHead > 0 &&
+            cpuMaxEnd < cpuMaxHead * 0.75
+        ) {
+            sb.append("- 大核频率由 ").append(f0(cpuMaxHead)).append(" MHz 降至 ")
+                .append(f0(cpuMaxEnd)).append(" MHz（降幅 >25%），存在明显热降频，")
+                .append("峰值性能数据不代表可持续性能。\n")
+        }
+        if (!jankAvg.isNaN() && jankAvg > 5.0) {
+            sb.append("- 平均卡顿率 **").append(f1(jankAvg)).append("%**，高于 5% 的流畅阈值。\n")
+        }
         if (ccOk == 0) {
             sb.append("- ⚠ 本机未提供库仑计读数，电量消耗只能依赖电流积分与百分比差分。\n")
         }
@@ -176,7 +238,7 @@ object Exporter {
         }
         sb.append("\n")
 
-        sb.append("## 4. 数据来源与能力边界\n\n")
+        sb.append("## 5. 数据来源与能力边界\n\n")
         sb.append("| 字段 | 接口 | 单位 | 本次可用率 |\n|---|---|---|---|\n")
         sb.append("| current_ma | `BatteryManager.BATTERY_PROPERTY_CURRENT_NOW` / `_AVERAGE` | µA → mA | ")
             .append(pct(pts.size - pts.count { it.dataSource.contains("batt=none") }, pts.size)).append(" |\n")
@@ -195,7 +257,13 @@ object Exporter {
         sb.append("| cpu_load_pct | `/proc/stat` 两次差分 | jiffies | 100% |\n")
         sb.append("| foreground_pkg | `UsageStatsManager.queryEvents` | 包名 | ")
             .append(pct(fgOk, pts.size)).append(" |\n")
-        sb.append("| power_w | 计算值 | W | U(mV)/1000 × I(mA)/1000，负值 = 放电 |\n\n")
+        sb.append("| power_w | 计算值 | W | U(mV)/1000 × I(mA)/1000，负值 = 放电 |\n")
+        sb.append("| app_cpu_pct / app_pss_mb | `/proc/<pid>/stat`、`smaps_rollup`（root 只读） | % / MB | ")
+            .append(pct(appPts.size, pts.size)).append(" |\n")
+        sb.append("| fps / jank_pct / frame_p99_ms | `dumpsys gfxinfo` 累计计数差分（root） | fps / % / ms | ")
+            .append(pct(fpsPts.size, pts.size)).append(" |\n")
+        sb.append("| net_rx_kb / net_tx_kb | `/sys/class/net/*/statistics`（只读） | KB/区间 | ")
+            .append(pct(appPts.size, pts.size)).append(" |\n\n")
         sb.append("**已知局限（写进正式报告，不藏）**\n\n")
         sb.append("1. 无 root 时读不到 `dumpsys batterystats`，因此拿不到系统级的分应用耗电归因，")
         sb.append("本报告的所有功率都是**整机口径**，不外推到单个 App。\n")

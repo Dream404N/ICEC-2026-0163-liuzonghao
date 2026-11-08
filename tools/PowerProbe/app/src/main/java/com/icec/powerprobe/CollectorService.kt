@@ -12,7 +12,6 @@ import android.os.HandlerThread
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.SystemClock
-import java.io.File
 import java.util.Locale
 
 /**
@@ -26,8 +25,13 @@ import java.util.Locale
  * 单次采样本身要 200~500ms，若每次只延时固定间隔，误差会累积到分钟级。
  * 这里按 startAt + seq*interval 计算绝对时刻。
  *
- * 与上一版的差别：支持「工况队列」，一次启动可以连续跑完 IDLE → SVIDEO → NAVCAM → GAME，
- * 每个工况开始时自动拉起对应 App、结束时自动 force-stop 并归档，中间不需要人干预。
+ * 线程模型（上一版踩过的坑）：
+ * `onStartCommand` 跑在主线程，任何 `su` / `am` 调用都可能被授权弹窗阻塞十几秒。
+ * 所以这里 **一进入 onStartCommand 只做状态初始化与 startForeground**，
+ * 真正的编排全部 `handler.post` 到后台线程；停止流程同理（先摘定时再后台归档）。
+ *
+ * 通知栏是「无人值守」的核心交互面：带进度条、两个倒计时（本工况 / 全程）、
+ * 采样点数与实时读数，锁屏也能一眼看出还剩多久，不需要点亮屏幕进 App。
  */
 class CollectorService : Service() {
 
@@ -40,7 +44,9 @@ class CollectorService : Service() {
         const val EXTRA_CHAIN = "chain"
         const val EXTRA_GAP = "gap_min"
         private const val CHANNEL_ID = "powerprobe_collect"
+        private const val CHANNEL_DONE = "powerprobe_done"
         private const val NOTIF_ID = 1001
+        private const val NOTIF_DONE_ID = 1002
     }
 
     private var thread: HandlerThread? = null
@@ -56,6 +62,9 @@ class CollectorService : Service() {
     private var startAt = 0L
     private var minutes = Plan.SCENARIO_MINUTES
     private var intervalMin = Plan.SAMPLE_INTERVAL_MIN
+
+    /** 整轮计划总时长（秒），用于通知栏的总进度条 */
+    private var planTotalSec = 0L
 
     @Volatile
     private var running = false
@@ -98,13 +107,23 @@ class CollectorService : Service() {
         queue.clear()
         if (chain) queue.addAll(Plan.queue) else queue.add(scenario)
         chainTotal = queue.size
+        planTotalSec = chainTotal.toLong() * minutes * 60L +
+            if (gapMin > 0 && chainTotal > 1) (chainTotal - 1).toLong() * gapMin * 60L else 0L
 
         CollectorState.reset()
         Live.reset()
+        Metrics.resetBaseline("")
         stopped = false
+        // 目标应用探测要读 PackageManager，放主线程没问题；但 autofill 里没有 shell 调用
         targets = Plan.autofill(this)
         running = true
-        startForeground(NOTIF_ID, buildNotification("准备开始 · 共 " + chainTotal + " 个工况"))
+        startForeground(
+            NOTIF_ID,
+            buildNotification(
+                "准备开始", "共 " + chainTotal + " 个工况 · 预计 " + fmtSpan(planTotalSec),
+                0, listOf("即将开始 " + Exporter.scenarioName(queue.first()))
+            )
+        )
         acquireWake()
         CollectorState.log("设备: " + CollectorState.deviceLine)
         CollectorState.log(
@@ -118,7 +137,8 @@ class CollectorService : Service() {
             "计划: " + queue.joinToString(" → ") + "，每工况 " + minutes + " 分钟，每 " +
                 intervalMin + " 分钟采样"
         )
-        beginNext()
+        // 关键：编排整体挪到后台线程，主线程只负责「服务已起来」
+        handler?.post { beginNext() }
         return START_NOT_STICKY
     }
 
@@ -154,20 +174,35 @@ class CollectorService : Service() {
         val idx = chainTotal - queue.size
         CollectorState.chainIndex = idx
         CollectorState.chainTotal = chainTotal
+
+        // 本工况的被测应用：待机工况没有前台应用，其余按工况取
+        val pkg = when (scenario) {
+            Plan.SC_SVIDEO -> targets.video
+            Plan.SC_NAVCAM -> targets.map
+            Plan.SC_GAME -> targets.game
+            else -> ""
+        }
+        CollectorState.targetPkg = pkg
+        // 清 gfxinfo 计数并重置差分基线，让本工况的 FPS/卡顿从零开始统计
+        Metrics.resetBaseline(pkg)
+        Metrics.lastLaunchMs = 0L
+
         CollectorState.log(
             "===== [" + idx + "/" + chainTotal + "] 开始 " + Exporter.scenarioName(scenario) +
-                " · " + minutes + " 分钟 ====="
+                " · " + minutes + " 分钟" + if (pkg.isEmpty()) "" else " · 被测 " + lbl(pkg) + " ====="
         )
-        updateNotification(idx, chainTotal, scenario)
 
         Automator.kickoff(this, scenario, targets)
 
         startAt = SystemClock.elapsedRealtime()
         val st = newSampleTask()
         sampleRunnable = st
+        updateEta()
+        pushNotification()
         handler?.post(st)
         handler?.post(automationTask)
         handler?.post(liveTask)
+        handler?.post(notifTask)
     }
 
     /** 界面曲线：10 秒一次轻量读取，不写 CSV */
@@ -183,6 +218,21 @@ class CollectorService : Service() {
         }
     }
 
+    /**
+     * 通知栏刷新：5 秒一次。
+     *
+     * 为什么单独一个任务：采样是 5 分钟一次，如果只在采样时刷通知，用户看到的「剩余时间」
+     * 会以 5 分钟为步长跳变，体验很差。倒计时必须连续走，而 notify() 本身几乎无开销。
+     */
+    private val notifTask = object : Runnable {
+        override fun run() {
+            if (!running) return
+            updateEta()
+            pushNotification()
+            handler?.postDelayed(this, 5000L)
+        }
+    }
+
     private var sampleRunnable: Runnable? = null
 
     /** 每个工况新建一个采样任务：序号必须从 0 重新计数，不能复用上一工况的实例 */
@@ -193,7 +243,10 @@ class CollectorService : Service() {
             if (!running) return
             val elapsedSec = (SystemClock.elapsedRealtime() - startAt) / 1000L
             try {
-                val s = Sampler.collect(this@CollectorService, currentScenario, seq, elapsedSec, false)
+                val s = Sampler.collect(
+                    this@CollectorService, currentScenario, seq, elapsedSec, false,
+                    CollectorState.targetPkg
+                )
                 CollectorState.addSample(s)
                 CollectorState.latest = s
                 CollectorState.donePoints = seq + 1
@@ -206,6 +259,15 @@ class CollectorService : Service() {
                         if (s.foregroundPkg.isEmpty()) "-" else s.foregroundPkg
                     )
                 )
+                if (s.appPid > 0) {
+                    CollectorState.log(
+                        String.format(
+                            Locale.US,
+                            "     进程 pid=%d cpu=%.0f%% pss=%.0fMB fps=%.0f 卡顿=%.1f%% 流量↓%.0fKB",
+                            s.appPid, s.appCpuPct, s.appPssMb, s.fps, s.jankPct, s.netRxKb
+                        )
+                    )
+                }
             } catch (e: Exception) {
                 CollectorState.log("采样异常: " + e.message)
             }
@@ -220,6 +282,8 @@ class CollectorService : Service() {
                 var delay = dueAt - SystemClock.elapsedRealtime()
                 if (delay < 0L) delay = 0L
                 CollectorState.nextSampleInSec = delay / 1000L
+                updateEta()
+                pushNotification()
                 handler?.postDelayed(this, delay)
             }
         }
@@ -241,6 +305,7 @@ class CollectorService : Service() {
     private fun completeScenario() {
         handler?.removeCallbacks(automationTask)
         handler?.removeCallbacks(liveTask)
+        handler?.removeCallbacks(notifTask)
         sampleRunnable?.let { handler?.removeCallbacks(it) }
         sampleRunnable = null
         running = false
@@ -271,18 +336,29 @@ class CollectorService : Service() {
                 "进入冷却窗口 " + gapMin + " 分钟：请插线充到 80% 后拔线，" +
                     "电池温度回落到 32℃ 以下后下一工况将自动开始"
             )
-            try {
-                val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                nm.notify(
-                    NOTIF_ID,
-                    buildNotification("冷却中 " + gapMin + " 分钟 · 请充电至 80% 并拔线")
-                )
-            } catch (e: Exception) {
-            }
+            CollectorState.gapRemainSec = gapMin * 60L
+            startGapCountdown()
             handler?.postDelayed({ beginNext() }, gapMin * 60000L)
         } else {
             handler?.postDelayed({ beginNext() }, 3000L)
         }
+    }
+
+    /** 冷却窗口也走同一个通知栏：倒计时 + 提示充电，避免用户不知道下一步做什么 */
+    private fun startGapCountdown() {
+        val gapTask = object : Runnable {
+            override fun run() {
+                if (stopped || !running) return
+                CollectorState.gapRemainSec -= 5L
+                if (CollectorState.gapRemainSec < 0L) CollectorState.gapRemainSec = 0L
+                CollectorState.remainSec = CollectorState.gapRemainSec
+                CollectorState.totalRemainSec = CollectorState.gapRemainSec +
+                    queue.size.toLong() * minutes * 60L
+                pushNotification(gapMode = true)
+                if (CollectorState.gapRemainSec > 0L) handler?.postDelayed(this, 5000L)
+            }
+        }
+        handler?.post(gapTask)
     }
 
     private fun finishAll() {
@@ -295,6 +371,7 @@ class CollectorService : Service() {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } catch (e: Exception) {
         }
+        notifyDone()
         stopSelf()
     }
 
@@ -335,31 +412,122 @@ class CollectorService : Service() {
                 stopForeground(STOP_FOREGROUND_REMOVE)
             } catch (e: Exception) {
             }
+            notifyDone()
             stopSelf()
         }
     }
 
-    // ---------------- 归档 ----------------
+    // ---------------- 倒计时与通知 ----------------
 
-    private fun saveArtifacts(scenario: String) {
-        val samples = CollectorState.snapshot()
-        if (samples.isEmpty()) {
-            CollectorState.log("没有采样数据，跳过导出")
-            return
-        }
+    /**
+     * 两套剩余时间：
+     * - remainSec：本工况还剩多久（用户最关心「这一节什么时候结束」）
+     * - totalRemainSec：含后续工况与冷却窗口的整轮剩余（决定「什么时候能去干别的事」）
+     */
+    private fun updateEta() {
+        if (startAt == 0L) return
+        val el = (SystemClock.elapsedRealtime() - startAt) / 1000L
+        val scTotal = minutes * 60L
+        val remain = if (el >= scTotal) 0L else scTotal - el
+        CollectorState.remainSec = remain
+        var rest = queue.size.toLong() * scTotal
+        if (gapMin > 0 && queue.isNotEmpty()) rest += queue.size.toLong() * gapMin * 60L
+        CollectorState.totalRemainSec = remain + rest
+        CollectorState.elapsedSec = el
+    }
+
+    private fun overallPct(): Int {
+        if (planTotalSec <= 0L) return 0
+        val el = (SystemClock.elapsedRealtime() - startAt) / 1000L
+        val doneBefore = (CollectorState.chainIndex - 1).toLong() *
+            (minutes * 60L + if (gapMin > 0) gapMin * 60L else 0L)
+        val cur = if (el > minutes * 60L) minutes * 60L else el
+        val p = (doneBefore + cur) * 100.0 / planTotalSec
+        return p.toInt().coerceIn(0, 100)
+    }
+
+    private fun pushNotification(gapMode: Boolean = false) {
         try {
-            val csv = Exporter.writeCsv(this, scenario, samples)
-            val md = Exporter.writeReport(this, scenario, samples)
-            CollectorState.lastCsvPath = csv.absolutePath
-            CollectorState.lastReportPath = md.absolutePath
-            CollectorState.log("CSV  → " + csv.name)
-            CollectorState.log("报告 → " + md.name)
-            val n = Exporter.publishToDownloads(this, listOf(csv, md))
-            if (n > 0) {
-                CollectorState.log("已导出 " + n + " 个文件到 Download/PowerProbe/")
-            }
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.notify(NOTIF_ID, if (gapMode) buildGapNotification() else buildRunNotification())
         } catch (e: Exception) {
-            CollectorState.log("导出失败: " + e.message)
+        }
+    }
+
+    private fun buildRunNotification(): Notification {
+        val idx = if (CollectorState.chainIndex > 0) CollectorState.chainIndex else 1
+        val total = if (chainTotal > 0) chainTotal else 1
+        val name = Exporter.scenarioName(CollectorState.scenario)
+        val remain = CollectorState.remainSec
+        val pct = overallPct()
+
+        val title = "[" + idx + "/" + total + "] " + name + " · 剩 " + fmtClock(remain)
+        val text = "采样 " + CollectorState.donePoints + "/" + CollectorState.totalPoints +
+            " · 全程剩 " + fmtSpan(CollectorState.totalRemainSec) + " · " + pct + "%"
+
+        val lines = ArrayList<String>()
+        lines.add("工况 " + idx + "/" + total + " " + name + "：剩余 " + fmtSpan(remain))
+        lines.add("全程剩余 " + fmtSpan(CollectorState.totalRemainSec) + "，总进度 " + pct + "%")
+        lines.add(
+            "采样点 " + CollectorState.donePoints + "/" + CollectorState.totalPoints +
+                (if (CollectorState.nextSampleInSec > 0) "，下一" + CollectorState.nextSampleInSec / 60 +
+                    " 分钟后" else "")
+        )
+        val s = CollectorState.latest
+        if (s != null) {
+            lines.add(
+                String.format(
+                    Locale.US, "%.0f mA · %.2f W · 电池 %.1f℃ · %s",
+                    s.currentMa, s.powerW, s.battTempC, s.thermalStatus
+                )
+            )
+            if (s.appPid > 0) {
+                lines.add(
+                    String.format(
+                        Locale.US, "被测应用 pid %d · CPU %.0f%% · %.0fMB · %.0ffps · 卡顿 %.1f%%",
+                        s.appPid, s.appCpuPct, s.appPssMb, s.fps, s.jankPct
+                    )
+                )
+            }
+        }
+        return buildNotification(title, text, pct, lines)
+    }
+
+    private fun buildGapNotification(): Notification {
+        val idx = CollectorState.chainIndex
+        val total = if (chainTotal > 0) chainTotal else 1
+        val next = if (queue.isEmpty()) "-" else Exporter.scenarioName(queue.first())
+        val title = "冷却中 · 剩 " + fmtClock(CollectorState.gapRemainSec)
+        val text = "请充到 80% 后拔线，温度回落后自动开始 " + next
+        val lines = listOf(
+            "第 " + idx + "/" + total + " 个工况已完成，冷却还剩 " + fmtSpan(CollectorState.gapRemainSec),
+            "请插线充到 80% 再拔线；电池温度需回落到 32℃ 以下",
+            "冷却结束自动开始：" + next
+        )
+        return buildNotification(title, text, overallPct(), lines)
+    }
+
+    private fun notifyDone() {
+        try {
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val open = PendingIntent.getActivity(
+                this, 3,
+                Intent(this, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val n = Notification.Builder(this, CHANNEL_DONE)
+                .setContentTitle("测试结束，产物已归档")
+                .setContentText(
+                    "采样点 " + CollectorState.donePoints + " 组 · 文件在 Download/PowerProbe/"
+                )
+                .setSmallIcon(R.drawable.ic_stat_probe)
+                .setColor(getColor(R.color.accent_ok))
+                .setAutoCancel(true)
+                .setContentIntent(open)
+                .build()
+            nm.notify(NOTIF_DONE_ID, n)
+        } catch (e: Exception) {
         }
     }
 
@@ -392,23 +560,19 @@ class CollectorService : Service() {
         try {
             val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val ch = NotificationChannel(
-                CHANNEL_ID, "采集服务", NotificationManager.IMPORTANCE_LOW
+                CHANNEL_ID, "采集与进度", NotificationManager.IMPORTANCE_LOW
             )
             ch.setShowBadge(false)
+            // 进度型通知：这条不响不震，但必须一直可见（LOW 级别本身无声无横幅）
+            ch.enableVibration(false)
+            ch.setSound(null, null)
             nm.createNotificationChannel(ch)
-        } catch (e: Exception) {
-        }
-    }
 
-    private fun updateNotification(idx: Int, total: Int, scenario: String) {
-        try {
-            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.notify(
-                NOTIF_ID,
-                buildNotification(
-                    "[" + idx + "/" + total + "] " + Exporter.scenarioName(scenario) + " 采集中"
-                )
+            val done = NotificationChannel(
+                CHANNEL_DONE, "完成提醒", NotificationManager.IMPORTANCE_DEFAULT
             )
+            done.setShowBadge(true)
+            nm.createNotificationChannel(done)
         } catch (e: Exception) {
         }
     }
@@ -417,13 +581,24 @@ class CollectorService : Service() {
      * 通知里必须有「停止」——这是用户在锁屏/其他 App 里唯一能直接停下来的入口。
      * 点通知本体回到 App，点「停止并归档」直接把 ACTION_STOP 投给服务。
      */
-    private fun buildNotification(text: String): Notification {
+    private fun buildNotification(
+        title: String,
+        text: String,
+        pct: Int,
+        lines: List<String>
+    ): Notification {
         val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         val b = Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("PowerProbe")
+            .setContentTitle(title)
             .setContentText(text)
-            .setSmallIcon(android.R.drawable.stat_notify_sync)
+            .setSmallIcon(R.drawable.ic_stat_probe)
+            .setColor(getColor(R.color.accent_info))
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setShowWhen(false)
+            .setCategory(Notification.CATEGORY_PROGRESS)
+            .setSubText("PowerProbe · 全自动测试")
+            .setProgress(100, pct.coerceIn(0, 100), false)
 
         try {
             val open = PendingIntent.getActivity(
@@ -443,7 +618,29 @@ class CollectorService : Service() {
             )
         } catch (e: Exception) {
         }
+
+        val big = StringBuilder()
+        for (l in lines) big.append(l).append("\n")
+        b.setStyle(Notification.BigTextStyle().bigText(big.toString().trimEnd()))
         return b.build()
+    }
+
+    /** 18:24 这种写法，用于标题（一眼看清，不占宽） */
+    private fun fmtClock(sec: Long): String {
+        val s = if (sec < 0) 0 else sec
+        return String.format(Locale.US, "%d:%02d", s / 60, s % 60)
+    }
+
+    /** 1 小时 22 分 / 18 分 24 秒，用于正文 */
+    private fun fmtSpan(sec: Long): String {
+        val s = if (sec < 0) 0 else sec
+        val h = s / 3600
+        val m = (s % 3600) / 60
+        return when {
+            h > 0 -> h.toString() + " 小时 " + m + " 分"
+            m > 0 -> if (m >= 5) m.toString() + " 分钟" else m.toString() + " 分 " + (s % 60) + " 秒"
+            else -> (s % 60).toString() + " 秒"
+        }
     }
 
     private fun lbl(pkg: String): String {

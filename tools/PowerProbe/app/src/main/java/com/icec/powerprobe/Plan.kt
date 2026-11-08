@@ -3,6 +3,7 @@ package com.icec.powerprobe
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import java.util.Locale
 
 /**
  * 自动化测试计划：四个工况的顺序、时长、以及每个工况要自动拉起的 App。
@@ -38,6 +39,15 @@ object Plan {
 
     val queue: List<String> = listOf(SC_IDLE, SC_SVIDEO, SC_NAVCAM, SC_GAME)
 
+    /**
+     * 导航终点：用于高德深链直接发起路线规划，省掉「人工点终点」这一步。
+     * 选深圳市民中心是因为本机在深圳，路线长度约 10~20 km，导航期间地图重绘、
+     * 定位与路况刷新都有稳定负载；换城市只要改这三个常量。
+     */
+    const val NAV_DEST = "深圳市民中心"
+    const val NAV_DLAT = "22.545500"
+    const val NAV_DLON = "114.054800"
+
     private const val PREF = "powerprobe_plan"
 
     private val VIDEO_CANDIDATES = listOf(
@@ -48,11 +58,32 @@ object Plan {
         "tv.danmaku.bili"                    // 哔哩哔哩
     )
 
+    /** 默认游戏：Phigros（官方包名）。渠道包若不同，下面还有按应用名兜底 */
+    const val PKG_PHIGROS = "com.PigeonGames.Phigros"
+
+    /** 默认地图：高德。导航播报、路口重绘、实时路况都是稳定负载，适合 30 分钟匀速工况 */
+    const val PKG_AMAP = "com.autonavi.minimap"
+
     private val MAP_CANDIDATES = listOf(
+        PKG_AMAP,                            // 高德地图（本机默认）
         "com.baidu.BaiduMap",                // 百度地图
-        "com.autonavi.minimap",              // 高德地图
         "com.tencent.map"                    // 腾讯地图
     )
+
+    /**
+     * 游戏候选。Phigros 放在最前：它是音游，高帧率 + 持续 GPU 占用 + 强触控，
+     * 是测「热与功耗」最干净的负载——没有网络资源流、没有随机地图加载，
+     * 场景重复性远高于开放世界类手游，符合课题要求的「可复现」。
+     */
+    private val GAME_CANDIDATES = listOf(
+        PKG_PHIGROS,
+        "com.PigeonGames.Phigros.cc",        // 部分渠道包
+        "com.miHoYo.Yuanshen",
+        "com.tencent.tmgp.sgame"
+    )
+
+    /** 按应用名模糊匹配，兜住渠道包改名的情况 */
+    private val GAME_LABEL_HINT = "phigros"
 
     fun load(ctx: Context): Targets {
         val sp = ctx.getSharedPreferences(PREF, Context.MODE_PRIVATE)
@@ -73,17 +104,53 @@ object Plan {
             .apply()
     }
 
-    /** 首次运行时自动填一套候选，用户可再改 */
+    /**
+     * 首次运行时自动填一套候选，用户可再改。
+     *
+     * 顺序刻意做成「显式配置优先 → 指定包名 → 应用名模糊匹配 → 已安装游戏兜底」，
+     * 这样本机装了 Phigros 就一定选它，换机也不会因为包名对不上而直接失效。
+     */
     fun autofill(ctx: Context): Targets {
         val cur = load(ctx)
         val t = Targets(
             video = cur.video.ifEmpty { firstInstalled(ctx, VIDEO_CANDIDATES) },
-            game = cur.game.ifEmpty { firstGame(ctx) },
+            game = cur.game.ifEmpty { resolveGame(ctx) },
             map = cur.map.ifEmpty { firstInstalled(ctx, MAP_CANDIDATES) },
             camera = cur.camera
         )
         save(ctx, t)
         return t
+    }
+
+    /** Phigros 优先，其次按应用名模糊匹配，最后才是任意已安装游戏 */
+    fun resolveGame(ctx: Context): String {
+        val hit = firstInstalled(ctx, GAME_CANDIDATES)
+        if (hit.isNotEmpty()) return hit
+        val byName = firstByLabel(ctx, GAME_LABEL_HINT)
+        if (byName.isNotEmpty()) return byName
+        return firstGame(ctx)
+    }
+
+    /** 应用名包含关键字即可（忽略大小写），用于兜住渠道包 */
+    fun firstByLabel(ctx: Context, hint: String): String {
+        return try {
+            val pm = ctx.packageManager
+            val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+            apps.asSequence()
+                .filter { pm.getLaunchIntentForPackage(it.packageName) != null }
+                .filter {
+                    try {
+                        pm.getApplicationLabel(it).toString().lowercase(Locale.US)
+                            .contains(hint.lowercase(Locale.US))
+                    } catch (e: Exception) {
+                        false
+                    }
+                }
+                .map { it.packageName }
+                .firstOrNull() ?: ""
+        } catch (e: Exception) {
+            ""
+        }
     }
 
     fun firstInstalled(ctx: Context, pkgs: List<String>): String {

@@ -40,6 +40,16 @@ object Root {
             "|>>|>\\s*\\S"
     )
 
+    /**
+     * 允许的输出重定向：只放行「丢弃输出」这一种。
+     *
+     * 这是个必须写清楚的历史 bug：黑名单里的 `>\s*\S` 会把 `2>/dev/null` 也算作
+     * 「重定向到文件」而整条拒绝，导致所有带 `2>/dev/null` 的批量只读脚本（电池、
+     * 热区、gfxinfo……）全部被拦下、静默降级成公共 API —— 表现是「root 明明授权了
+     * 却读不到 sysfs」。所以先剥掉这些无害的丢输出片段，再跑黑名单。
+     */
+    private val HARMLESS_REDIRECT = Regex("\\d?>\\s*/dev/null|\\d?>&\\s*1|&>\\s*/dev/null")
+
     private const val REFUSED = "__REFUSED_BY_GUARD__"
 
     /** 探测 su 是否可用（只在首次或手动重探时跑一次） */
@@ -60,7 +70,9 @@ object Root {
     }
 
     fun exec(cmd: String, timeoutMs: Long = 8000): String {
-        if (FORBIDDEN.containsMatchIn(cmd)) {
+        // 先摘掉「丢弃输出」这类无害重定向，否则会被黑名单误伤
+        val probe = HARMLESS_REDIRECT.replace(cmd, "")
+        if (FORBIDDEN.containsMatchIn(probe)) {
             return REFUSED
         }
         return try {
