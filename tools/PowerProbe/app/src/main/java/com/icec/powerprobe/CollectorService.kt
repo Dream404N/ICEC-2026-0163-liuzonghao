@@ -3,6 +3,7 @@ package com.icec.powerprobe
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -59,6 +60,10 @@ class CollectorService : Service() {
     @Volatile
     private var running = false
 
+    /** 停止只能生效一次，避免「停止」被连点或与收尾流程重入 */
+    @Volatile
+    private var stopped = false
+
     override fun onCreate() {
         super.onCreate()
         val t = HandlerThread("powerprobe-sampler")
@@ -95,6 +100,8 @@ class CollectorService : Service() {
         chainTotal = queue.size
 
         CollectorState.reset()
+        Live.reset()
+        stopped = false
         targets = Plan.autofill(this)
         running = true
         startForeground(NOTIF_ID, buildNotification("准备开始 · 共 " + chainTotal + " 个工况"))
@@ -145,6 +152,8 @@ class CollectorService : Service() {
         CollectorState.elapsedSec = 0L
 
         val idx = chainTotal - queue.size
+        CollectorState.chainIndex = idx
+        CollectorState.chainTotal = chainTotal
         CollectorState.log(
             "===== [" + idx + "/" + chainTotal + "] 开始 " + Exporter.scenarioName(scenario) +
                 " · " + minutes + " 分钟 ====="
@@ -158,6 +167,20 @@ class CollectorService : Service() {
         sampleRunnable = st
         handler?.post(st)
         handler?.post(automationTask)
+        handler?.post(liveTask)
+    }
+
+    /** 界面曲线：10 秒一次轻量读取，不写 CSV */
+    private val liveTask = object : Runnable {
+        override fun run() {
+            if (!running) return
+            try {
+                val p = Sampler.quick(this@CollectorService)
+                if (p.first != 0.0 || p.second > 0.0) Live.push(p.first, p.second)
+            } catch (e: Exception) {
+            }
+            handler?.postDelayed(this, 10000L)
+        }
     }
 
     private var sampleRunnable: Runnable? = null
@@ -217,9 +240,11 @@ class CollectorService : Service() {
 
     private fun completeScenario() {
         handler?.removeCallbacks(automationTask)
+        handler?.removeCallbacks(liveTask)
         sampleRunnable?.let { handler?.removeCallbacks(it) }
         sampleRunnable = null
         running = false
+        if (stopped) return
 
         CollectorState.log("工况 " + Exporter.scenarioName(currentScenario) + " 采样点已全部完成，补记收尾样本")
         try {
@@ -262,6 +287,7 @@ class CollectorService : Service() {
 
     private fun finishAll() {
         running = false
+        stopped = true
         CollectorState.log("全部工况完成，产物已归档")
         CollectorState.phase = CollectorState.PHASE_DONE
         releaseWake()
@@ -273,11 +299,16 @@ class CollectorService : Service() {
     }
 
     private fun abortAll() {
-        handler?.removeCallbacksAndMessages(null)
-        if (running && currentScenario.isNotEmpty()) {
-            saveArtifacts(currentScenario)
-        }
+        if (stopped) return
+        stopped = true
         running = false
+        // 先把所有定时任务摘掉，再归档：否则归档期间可能又落一个新点
+        handler?.removeCallbacksAndMessages(null)
+        val sc = currentScenario.ifEmpty { CollectorState.scenario }
+        if (sc.isNotEmpty()) {
+            CollectorState.log("停止指令已确认，归档当前工况已采数据")
+            saveArtifacts(sc)
+        }
         queue.clear()
         CollectorState.phase = CollectorState.PHASE_DONE
         releaseWake()
@@ -362,13 +393,37 @@ class CollectorService : Service() {
         }
     }
 
+    /**
+     * 通知里必须有「停止」——这是用户在锁屏/其他 App 里唯一能直接停下来的入口。
+     * 点通知本体回到 App，点「停止并归档」直接把 ACTION_STOP 投给服务。
+     */
     private fun buildNotification(text: String): Notification {
-        return Notification.Builder(this, CHANNEL_ID)
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        val b = Notification.Builder(this, CHANNEL_ID)
             .setContentTitle("PowerProbe")
             .setContentText(text)
             .setSmallIcon(android.R.drawable.stat_notify_sync)
             .setOngoing(true)
-            .build()
+
+        try {
+            val open = PendingIntent.getActivity(
+                this, 2,
+                Intent(this, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                flags
+            )
+            b.setContentIntent(open)
+
+            val stop = Intent(this, CollectorService::class.java).setAction(ACTION_STOP)
+            val pi = PendingIntent.getService(this, 1, stop, flags)
+            b.addAction(
+                Notification.Action.Builder(
+                    android.R.drawable.ic_menu_close_clear_cancel, "停止并归档", pi
+                ).build()
+            )
+        } catch (e: Exception) {
+        }
+        return b.build()
     }
 
     private fun lbl(pkg: String): String {

@@ -7,4 +7,5 @@
     <color name="divider">#EBEDF0</color>
     <color name="text_secondary">#8A8F98</color>
     <color name="accent_ok">#2E7D5B</color>
+    <color name="accent_warn">#C0442F</color>
 </resources>

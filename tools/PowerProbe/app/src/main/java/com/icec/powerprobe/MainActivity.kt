@@ -35,7 +35,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var permContainer: LinearLayout
     private lateinit var artifactContainer: LinearLayout
     private lateinit var logView: TextView
+    private lateinit var spark: SparklineView
 
+    private lateinit var vStop: TextView
+    private lateinit var vChain: TextView
     private lateinit var vStatus: TextView
     private lateinit var vProgress: TextView
     private lateinit var vElapsed: TextView
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         permContainer = findViewById(R.id.permContainer)
         artifactContainer = findViewById(R.id.artifactContainer)
         logView = findViewById(R.id.logView)
+        spark = findViewById(R.id.spark)
 
         buildStatusRows()
         buildAutomationRows()
@@ -154,8 +158,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildStatusRows() {
+        // 第一行就是停止：这是最容易找不到、又最需要一眼可见的操作
+        addRow(
+            statusContainer, R.drawable.ic_thermal,
+            "停止并归档", "立即结束当前工况，已采数据不会丢", "空闲", true
+        ) { confirmStop() }.let { vStop = it.value }
+
         addRow(statusContainer, R.drawable.ic_timer, "当前状态", "等待开始", "空闲", true, null)
             .let { vStatus = it.value }
+
+        addRow(statusContainer, R.drawable.ic_file, "工况进度", "4 工况依次执行", "0 / 4", true, null)
+            .let { vChain = it.value }
 
         addRow(statusContainer, R.drawable.ic_battery, "采样进度", "每 5 分钟一个点，共 6 点", "0 / 6", true, null)
             .let { vProgress = it.value }
@@ -261,9 +274,6 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        addRow(artifactContainer, R.drawable.ic_thermal, "提前结束", "保留已采数据并归档", "", false) {
-            stopScenario()
-        }
     }
 
     // ---------------- 自动化配置 ----------------
@@ -364,6 +374,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun confirmStop() {
+        if (CollectorState.phase != CollectorState.PHASE_RUNNING) {
+            Toast.makeText(this, "当前没有正在执行的任务", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val n = CollectorState.donePoints
+        AlertDialog.Builder(this)
+            .setTitle("停止并归档？")
+            .setMessage(
+                "立即结束当前工况，已采的 " + n + " 个采样点会写入 CSV 与报告，" +
+                    "未开始的工况不再执行。"
+            )
+            .setPositiveButton("停止") { _, _ ->
+                stopScenario()
+                Toast.makeText(this, "已发送停止指令，正在归档…", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("继续跑", null)
+            .show()
+    }
+
     private fun stopScenario() {
         val i = Intent(this, CollectorService::class.java)
         i.action = CollectorService.ACTION_STOP
@@ -410,6 +440,22 @@ class MainActivity : AppCompatActivity() {
         }
         vStatus.text = phase
         vProgress.text = CollectorState.donePoints.toString() + " / " + CollectorState.totalPoints
+
+        val runningNow = CollectorState.phase == CollectorState.PHASE_RUNNING
+        vStop.text = if (runningNow) "运行中 · 点此停止" else "空闲"
+        vStop.setTextColor(
+            if (runningNow) getColor(R.color.accent_warn) else getColor(R.color.text_secondary)
+        )
+
+        vChain.text = if (CollectorState.chainTotal > 0) {
+            CollectorState.chainIndex.toString() + " / " + CollectorState.chainTotal
+        } else {
+            "0 / 4"
+        }
+
+        val series = Live.series()
+        spark.data = series.first
+        spark.data2 = series.second
 
         val m = CollectorState.elapsedSec / 60
         val s = CollectorState.elapsedSec % 60

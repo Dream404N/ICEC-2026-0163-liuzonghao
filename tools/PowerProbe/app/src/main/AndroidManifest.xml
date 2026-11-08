@@ -54,6 +54,7 @@
         <service
             android:name=".CollectorService"
             android:exported="false"
+            android:stopWithTask="false"
             android:foregroundServiceType="dataSync" />
 
     </application>

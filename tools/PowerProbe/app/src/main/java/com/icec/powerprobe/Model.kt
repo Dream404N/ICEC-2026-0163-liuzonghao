@@ -93,6 +93,11 @@ object CollectorState {
     @Volatile var latest: Sample? = null
     @Volatile var deviceLine: String = ""
 
+    /** 工况队列进度：第几个 / 共几个 */
+    @Volatile var chainIndex: Int = 0
+    @Volatile var chainTotal: Int = 0
+    @Volatile var gapRemainSec: Long = 0L
+
     private val logBuffer = StringBuilder()
     private val samples = ArrayList<Sample>()
     private val timeFmt = java.text.SimpleDateFormat("HH:mm:ss", Locale.US)
@@ -136,5 +141,40 @@ object CollectorState {
         lastCsvPath = ""
         lastReportPath = ""
         latest = null
+        chainIndex = 0
+        chainTotal = 0
+        gapRemainSec = 0L
+    }
+}
+
+/**
+ * 界面曲线用的瞬时缓冲。
+ *
+ * 与 CSV 归档严格分离：CSV 每 5 分钟一个点（对齐官网 24 组口径），
+ * 这里是每 10 秒读一次电池电流/温度，**只用于画图**，不写进 CSV。
+ * 这样界面有平滑曲线，但交付数据的采样口径没有被悄悄改掉。
+ */
+object Live {
+
+    private const val CAP = 180  // 10 秒 × 180 = 30 分钟
+
+    private val current = ArrayList<Float>()
+    private val temp = ArrayList<Float>()
+
+    @Synchronized
+    fun push(mA: Double, tempC: Double) {
+        current.add(mA.toFloat())
+        temp.add(tempC.toFloat())
+        while (current.size > CAP) current.removeAt(0)
+        while (temp.size > CAP) temp.removeAt(0)
+    }
+
+    @Synchronized
+    fun series(): Pair<List<Float>, List<Float>> = Pair(ArrayList(current), ArrayList(temp))
+
+    @Synchronized
+    fun reset() {
+        current.clear()
+        temp.clear()
     }
 }

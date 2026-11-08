@@ -55,6 +55,30 @@ echo "@@END@@"
         "(Android ${Build.VERSION.RELEASE}, SDK ${Build.VERSION.SDK_INT}, " +
         "SoC ${Build.HARDWARE}, ABI ${Build.SUPPORTED_ABIS.firstOrNull() ?: "-"})"
 
+    /**
+     * 轻量读取：只问 BatteryManager 要电流与温度，用于界面曲线。
+     * 不写 CSV、不开子进程、不碰 sysfs，10 秒一次的开销可忽略。
+     */
+    fun quick(ctx: Context): Pair<Double, Double> {
+        val bm = ctx.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
+        var ma = 0.0
+        val cur = intProp(bm, BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+        if (cur != Int.MIN_VALUE && cur != 0) {
+            ma = cur / 1000.0
+        } else {
+            val avg = intProp(bm, BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE)
+            if (avg != Int.MIN_VALUE && avg != 0) ma = avg / 1000.0
+        }
+        val bi: Intent? = try {
+            ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        } catch (e: Exception) {
+            null
+        }
+        val t = bi?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE) ?: Int.MIN_VALUE
+        val tc = if (t != Int.MIN_VALUE && t > 0) t / 10.0 else 0.0
+        return Pair(ma, tc)
+    }
+
     fun collect(ctx: Context, scenario: String, seq: Int, elapsedSec: Long, isFinal: Boolean): Sample {
         val bm = ctx.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
         val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
