@@ -4,35 +4,42 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.os.Build
 import android.os.PowerManager
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 /**
- * 单次采样器。
+ * 单次采样器 —— 双通道：root 直读优先，公共 API 兜底。
  *
- * 设计取舍：
- * 1. 电源指标优先走 root 直读 battery 电源节点的 sysfs 文件，因为系统的
- *    BATTERY_CHANGED 广播只在电量整数变化时刷新，30 分钟内可能只触发几次，
- *    无法反映真实放电曲线。
- * 2. 一次 su 调用批量读取全部节点（约 200ms），避免每个字段起一次 su 进程。
- * 3. 所有单位都做量级自适应：不同芯片/ROM 的 sysfs 单位不统一（µA 与 mA、
- *    µV 与 mV、0.1℃ 与 0.001℃），用启发式归一化，解析失败则回退系统 API。
+ * 通道 A（root 可用时）：一次 su 调用批量只读 sysfs / dumpsys，拿到电流、电压、温度、
+ *   各核频率、GPU 频率、全部热区、真实前台 Activity。单次约 200~500ms。
+ * 通道 B（无 root / su 被拒）：BatteryManager + 粘性广播 + /proc/stat + UsageStatsManager，
+ *   全部为官方公共接口，零权限风险。
+ *
+ * 两条通道写进同一份 CSV，`data_source` 列逐点记录来源，报告里给出各字段可用率。
+ * 这样即使中途换通道（比如授权失效），数据仍然可解释，不会出现「数值变了但不知道
+ * 为什么变」的黑箱。
  */
 object Sampler {
 
-    private val BATCH_CMD_BODY = """
+    /** 一次性批量只读脚本。全部是 cat / grep / dumpsys，不含任何写操作。 */
+    private val BATCH_READ = """
 echo "@@BAT@@"
 for n in current_now current_avg voltage_now temp charge_counter capacity status health; do v=${'$'}(cat /sys/class/power_supply/battery/${'$'}n 2>/dev/null); echo "${'$'}n=${'$'}v"; done
 echo "@@CPUF@@"
 for i in 0 1 2 3 4 5 6 7; do v=${'$'}(cat /sys/devices/system/cpu/cpu${'$'}i/cpufreq/scaling_cur_freq 2>/dev/null); echo "c${'$'}i=${'$'}v"; done
 echo "@@GPU@@"
 cat /sys/class/kgsl/kgsl-3d0/gpuclk 2>/dev/null
+cat /sys/class/kgsl/kgsl-3d0/devfreq/cur_freq 2>/dev/null
 cat /sys/class/misc/mali0/device/clock 2>/dev/null
+cat /sys/class/misc/mali0/device/devfreq/cur_freq 2>/dev/null
 cat /sys/kernel/gpu/gpu_clock 2>/dev/null
 cat /sys/kernel/gpu/gpu_freq 2>/dev/null
-cat /sys/class/devfreq/*mali*/cur_freq 2>/dev/null
+cat /proc/gpufreq/gpufreq_opp_freq 2>/dev/null
+cat /sys/kernel/ged/hal/current_freqency 2>/dev/null
 echo "@@TH@@"
 for z in /sys/class/thermal/thermal_zone*; do t=${'$'}(cat ${'$'}z/type 2>/dev/null); v=${'$'}(cat ${'$'}z/temp 2>/dev/null); if [ -n "${'$'}t" ]; then echo "${'$'}t=${'$'}v"; fi; done
 echo "@@FG@@"
@@ -44,63 +51,98 @@ echo "@@END@@"
 
     private val PKG_RE = Regex("([a-zA-Z][a-zA-Z0-9_]*(?:\\.[a-zA-Z0-9_]+){1,6})/")
 
-    fun deviceLine(): String = "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} " +
-        "(Android ${android.os.Build.VERSION.RELEASE}, SDK ${android.os.Build.VERSION.SDK_INT}, " +
-        "SoC ${android.os.Build.HARDWARE}, ABI ${android.os.Build.SUPPORTED_ABIS.firstOrNull() ?: "-"})"
+    fun deviceLine(): String = "${Build.MANUFACTURER} ${Build.MODEL} " +
+        "(Android ${Build.VERSION.RELEASE}, SDK ${Build.VERSION.SDK_INT}, " +
+        "SoC ${Build.HARDWARE}, ABI ${Build.SUPPORTED_ABIS.firstOrNull() ?: "-"})"
 
     fun collect(ctx: Context, scenario: String, seq: Int, elapsedSec: Long, isFinal: Boolean): Sample {
-        val raw = Shell.exec(BATCH_CMD_BODY)
-        val rootOk = raw.contains("@@END@@")
-        val sec = parseSections(raw)
+        val bm = ctx.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
+        val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
 
+        // ---------- 通道 A：root 批量直读 ----------
+        val rootOk = Root.ensure()
+        var sec: Map<String, List<String>> = HashMap()
+        if (rootOk) {
+            val raw = Root.exec(BATCH_READ, 12000)
+            if (raw.contains("@@END@@")) {
+                sec = parseSections(raw)
+            }
+        }
         val bat = kvOf(sec["BAT"])
         val cpuf = kvOf(sec["CPUF"])
-        val thermal = kvOf(sec["TH"])
+        val thermalRoot = kvOf(sec["TH"])
         val gpuLines = sec["GPU"] ?: emptyList()
         val fgLine = sec["FG"]?.firstOrNull() ?: ""
         val scLine = sec["SC"]?.firstOrNull() ?: ""
 
-        // ---- 系统 API 兜底 ----
-        val battIntent: Intent? = try {
+        // ---------- 通道 B：公共 API ----------
+        val bi: Intent? = try {
             ctx.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         } catch (e: Exception) {
             null
         }
-        val lvl = battIntent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-        val scale = battIntent?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
-        val sysPct = if (lvl >= 0 && scale > 0) lvl * 100 / scale else -1
-
-        val sysVoltMv = battIntent?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: -1
-        val sysTempTenth = battIntent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) ?: -1
-        val statusInt = battIntent?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-        val plugged = battIntent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
-
-        val bm = ctx.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
-        val bmCurrentUa = try {
-            bm?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) ?: Int.MIN_VALUE
-        } catch (e: Exception) {
-            Int.MIN_VALUE
+        val lvl = bi?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val scale = bi?.getIntExtra(BatteryManager.EXTRA_SCALE, 100) ?: 100
+        val capProp = intProp(bm, BatteryManager.BATTERY_PROPERTY_CAPACITY)
+        val sysPct = when {
+            capProp != Int.MIN_VALUE -> capProp
+            lvl >= 0 && scale > 0 -> lvl * 100 / scale
+            else -> -1
         }
+        val sysVoltMv = bi?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: -1
+        val sysTempTenth = bi?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE)
+            ?: Int.MIN_VALUE
+        val statusInt = bi?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val plugged = bi?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
 
-        // ---- 归一化 ----
+        // ---------- 电量 ----------
         val rootCap = num(bat["capacity"])
         val batteryPct = if (!rootCap.isNaN() && rootCap >= 0) rootCap.toInt() else sysPct
 
+        // ---------- 电压 ----------
         val rootVoltMv = uVtoMv(num(bat["voltage_now"]))
         val voltageMv = if (!rootVoltMv.isNaN() && rootVoltMv > 1000) rootVoltMv.toInt() else sysVoltMv
 
-        val rootCurrentMa = uAtoMa(num(bat["current_now"]))
-        val currentMa: Double = when {
-            !rootCurrentMa.isNaN() && Math.abs(rootCurrentMa) > 1.0 -> rootCurrentMa
-            bmCurrentUa != Int.MIN_VALUE && bmCurrentUa != 0 -> bmCurrentUa / 1000.0
-            else -> uAtoMa(num(bat["current_avg"]))
+        // ---------- 电流 ----------
+        val rootCurMa = uAtoMa(num(bat["current_now"]))
+        val apiCurUa = intProp(bm, BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+        val apiCurAvgUa = intProp(bm, BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE)
+        val rootCurAvgMa = uAtoMa(num(bat["current_avg"]))
+        val currentMa: Double
+        val battSrc: String
+        when {
+            !rootCurMa.isNaN() && Math.abs(rootCurMa) > 1.0 -> {
+                currentMa = rootCurMa; battSrc = "sysfs"
+            }
+            apiCurUa != Int.MIN_VALUE && apiCurUa != 0 -> {
+                currentMa = apiCurUa / 1000.0; battSrc = "api_now"
+            }
+            apiCurAvgUa != Int.MIN_VALUE && apiCurAvgUa != 0 -> {
+                currentMa = apiCurAvgUa / 1000.0; battSrc = "api_avg"
+            }
+            !rootCurAvgMa.isNaN() && Math.abs(rootCurAvgMa) > 0.1 -> {
+                currentMa = rootCurAvgMa; battSrc = "sysfs_avg"
+            }
+            else -> {
+                currentMa = 0.0; battSrc = "none"
+            }
         }
 
-        val rootTemp = rawTempToC(num(bat["temp"]))
-        val battTempC = if (!rootTemp.isNaN()) rootTemp else sysTempTenth / 10.0
+        // ---------- 库仑计 ----------
+        val rootCc = num(bat["charge_counter"])
+        val apiCc = intProp(bm, BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
+        val chargeUah = when {
+            !rootCc.isNaN() -> rootCc.toLong()
+            apiCc != Int.MIN_VALUE -> apiCc.toLong()
+            else -> -1L
+        }
 
-        val chargeUah = num(bat["charge_counter"]).let {
-            if (it.isNaN()) -1L else it.toLong()
+        // ---------- 温度 ----------
+        val rootTemp = rawTempToC(num(bat["temp"]))
+        val battTempC = when {
+            !rootTemp.isNaN() && rootTemp > 0 -> rootTemp
+            sysTempTenth != Int.MIN_VALUE && sysTempTenth > 0 -> sysTempTenth / 10.0
+            else -> Double.NaN
         }
 
         val statusStr = bat["status"]?.takeIf { it.isNotEmpty() } ?: statusName(statusInt)
@@ -110,20 +152,20 @@ echo "@@END@@"
         // 功率带符号：负值 = 放电，正值 = 充电
         val powerW = (voltageMv / 1000.0) * (currentMa / 1000.0)
 
-        // ---- CPU ----
-        var freqSum = 0.0
-        var freqCnt = 0
-        for ((_, v) in cpuf) {
-            val mhz = num(v) / 1000.0
-            if (!mhz.isNaN() && mhz > 0) {
-                freqSum += mhz
-                freqCnt++
+        // ---------- CPU 频率 ----------
+        var cpuAvgMhz = Double.NaN
+        var cpuSrc = "none"
+        val rootFreqs = cpuf.values.map { num(it) / 1000.0 }.filter { !it.isNaN() && it > 0 }
+        if (rootFreqs.isNotEmpty()) {
+            cpuAvgMhz = rootFreqs.average(); cpuSrc = "sysfs"
+        } else {
+            val f = Sysfs.cpuFreqMhz()
+            if (f.isNotEmpty()) {
+                cpuAvgMhz = f.average(); cpuSrc = "sysfs_file"
             }
         }
-        val cpuAvgMhz = if (freqCnt > 0) freqSum / freqCnt else Double.NaN
-        val cpuLoad = readCpuLoadPct()
 
-        // ---- GPU ----
+        // ---------- GPU 频率 ----------
         var gpuMhz = Double.NaN
         for (l in gpuLines) {
             val m = freqToMhz(num(l))
@@ -132,35 +174,88 @@ echo "@@END@@"
                 break
             }
         }
+        if (gpuMhz.isNaN()) gpuMhz = Sysfs.gpuMhz()
 
-        // ---- 热区 ----
+        // ---------- 热区 ----------
         var maxC = Double.NaN
         var maxType = ""
         var socC = Double.NaN
-        for ((k, v) in thermal) {
-            val c = rawTempToC(num(v))
-            if (c.isNaN() || c <= 0.0 || c > 150.0) continue
-            if (maxC.isNaN() || c > maxC) {
-                maxC = c
-                maxType = k
+        var thzCount = 0
+        if (thermalRoot.isNotEmpty()) {
+            for ((k, v) in thermalRoot) {
+                val c = rawTempToC(num(v))
+                if (c.isNaN() || c <= 0.0 || c > 150.0) continue
+                thzCount++
+                if (maxC.isNaN() || c > maxC) {
+                    maxC = c
+                    maxType = k
+                }
+                if (isSocZone(k)) {
+                    if (socC.isNaN() || c > socC) socC = c
+                }
             }
-            val kl = k.lowercase(Locale.US)
-            if (kl.contains("soc") || kl.contains("cpu") || kl.contains("cluster") ||
-                kl.contains("gpu") || kl.contains("ap_") || kl.endsWith("_ap")
-            ) {
-                if (socC.isNaN() || c > socC) socC = c
+        }
+        if (thzCount == 0) {
+            val zones = Sysfs.thermalZones()
+            thzCount = zones.size
+            for (z in zones) {
+                val c = z.second
+                if (maxC.isNaN() || c > maxC) {
+                    maxC = c
+                    maxType = z.first
+                }
+                if (isSocZone(z.first)) {
+                    if (socC.isNaN() || c > socC) socC = c
+                }
             }
         }
 
-        // ---- 前台应用（工况真实性证据）----
+        // ---------- 热状态（官方分级） ----------
+        val thStatus = if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                pm?.currentThermalStatus ?: -1
+            } catch (e: Exception) {
+                -1
+            }
+        } else {
+            -1
+        }
+
+        // ---------- 前台应用 ----------
         var fgPkg = ""
+        var fgSrc = "none"
         val m = PKG_RE.find(fgLine)
         if (m != null) {
             fgPkg = m.groupValues[1]
+            fgSrc = "dumpsys"
+        } else {
+            val u = Usage.lastForegroundPkg(ctx)
+            if (u.isNotEmpty()) {
+                fgPkg = u
+                fgSrc = "usage"
+            }
         }
 
-        val pm = ctx.getSystemService(Context.POWER_SERVICE) as? PowerManager
-        val screenOn = if (scLine.isNotEmpty()) scLine.contains("Awake") else (pm?.isInteractive ?: false)
+        // ---------- 屏幕 ----------
+        val screenOn = if (scLine.isNotEmpty()) {
+            scLine.contains("Awake") || scLine.contains("true")
+        } else {
+            try {
+                pm?.isInteractive ?: false
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        val cpuLoad = readCpuLoadPct()
+
+        // ---------- 来源标记 ----------
+        val src = StringBuilder("batt=").append(battSrc)
+        src.append(";thz=").append(if (thzCount > 0) "sysfs" else "none")
+        src.append(";cpu=").append(cpuSrc)
+        src.append(";gpu=").append(if (gpuMhz.isNaN()) "none" else "sysfs")
+        src.append(";fg=").append(fgSrc)
+        src.append(";ch=").append(if (rootOk) "root" else "api")
 
         val ts = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US).format(Date())
 
@@ -171,26 +266,33 @@ echo "@@END@@"
             seq = seq,
             batteryPct = batteryPct,
             voltageMv = voltageMv,
-            currentMa = if (currentMa.isNaN()) 0.0 else currentMa,
-            battTempC = if (battTempC.isNaN()) 0.0 else battTempC,
+            currentMa = nz(currentMa),
+            battTempC = nz(battTempC),
             chargeUah = chargeUah,
             status = statusStr,
-            powerW = if (powerW.isNaN()) 0.0 else powerW,
-            cpuAvgMhz = if (cpuAvgMhz.isNaN()) 0.0 else cpuAvgMhz,
-            cpuLoadPct = if (cpuLoad.isNaN()) 0.0 else cpuLoad,
-            gpuMhz = if (gpuMhz.isNaN()) 0.0 else gpuMhz,
-            thermalMaxC = if (maxC.isNaN()) 0.0 else maxC,
+            powerW = nz(powerW),
+            cpuAvgMhz = nz(cpuAvgMhz),
+            cpuLoadPct = nz(cpuLoad),
+            gpuMhz = nz(gpuMhz),
+            thermalMaxC = nz(maxC),
             thermalMaxType = maxType,
-            socThermalC = if (socC.isNaN()) 0.0 else socC,
+            socThermalC = nz(socC),
             foregroundPkg = fgPkg,
             screenOn = screenOn,
             charging = charging,
-            rootOk = rootOk,
+            dataSource = src.toString(),
+            thermalStatus = thermalStatusName(thStatus),
             isFinal = isFinal
         )
     }
 
     // ---------------- 解析辅助 ----------------
+
+    private fun isSocZone(name: String): Boolean {
+        val k = name.lowercase(Locale.US)
+        return k.contains("soc") || k.contains("cpu") || k.contains("cluster") ||
+            k.contains("gpu") || k.contains("ap_") || k.endsWith("_ap")
+    }
 
     private fun parseSections(raw: String): Map<String, List<String>> {
         val map = HashMap<String, MutableList<String>>()
@@ -202,22 +304,30 @@ echo "@@END@@"
                 cur = name
                 if (!map.containsKey(name)) map[name] = ArrayList()
             } else if (cur != null && line.isNotEmpty()) {
-                val key: String = cur
-                map[key]?.add(line)
+                map[cur]?.add(line)
             }
         }
         return map
     }
 
     private fun kvOf(lines: List<String>?): Map<String, String> {
-        val m = HashMap<String, String>()
+        val map = HashMap<String, String>()
         if (lines != null) {
             for (l in lines) {
                 val i = l.indexOf('=')
-                if (i > 0) m[l.substring(0, i).trim()] = l.substring(i + 1).trim()
+                if (i > 0) map[l.substring(0, i).trim()] = l.substring(i + 1).trim()
             }
         }
-        return m
+        return map
+    }
+
+    private fun intProp(bm: BatteryManager?, prop: Int): Int {
+        if (bm == null) return Int.MIN_VALUE
+        return try {
+            bm.getIntProperty(prop)
+        } catch (e: Exception) {
+            Int.MIN_VALUE
+        }
     }
 
     private fun num(s: String?): Double {
@@ -226,6 +336,8 @@ echo "@@END@@"
         if (t.isEmpty()) return Double.NaN
         return t.toDoubleOrNull() ?: Double.NaN
     }
+
+    private fun nz(v: Double): Double = if (v.isNaN() || v.isInfinite()) 0.0 else v
 
     private fun uAtoMa(v: Double): Double {
         if (v.isNaN()) return Double.NaN
@@ -237,26 +349,9 @@ echo "@@END@@"
         return if (Math.abs(v) > 100000.0) v / 1000.0 else v
     }
 
-    /** sysfs 温度可能是 0.1℃ 或 0.001℃，按量级归一化 */
-    private fun rawTempToC(v: Double): Double {
-        if (v.isNaN()) return Double.NaN
-        val a = Math.abs(v)
-        return when {
-            a > 2000.0 -> v / 1000.0
-            a > 200.0 -> v / 10.0
-            else -> v
-        }
-    }
+    private fun rawTempToC(v: Double): Double = Sysfs.rawTempToC(v)
 
-    private fun freqToMhz(v: Double): Double {
-        if (v.isNaN()) return Double.NaN
-        val a = Math.abs(v)
-        return when {
-            a > 100000000.0 -> v / 1000000.0
-            a > 10000.0 -> v / 1000.0
-            else -> v
-        }
-    }
+    private fun freqToMhz(v: Double): Double = Sysfs.freqToMhz(v)
 
     private fun statusName(code: Int): String = when (code) {
         BatteryManager.BATTERY_STATUS_CHARGING -> "charging"
@@ -266,12 +361,26 @@ echo "@@END@@"
         else -> "unknown"
     }
 
-    /** 读 /proc/stat 两次差分，算整机 CPU 占用率 */
+    private fun thermalStatusName(code: Int): String = when (code) {
+        0 -> "NONE"
+        1 -> "LIGHT"
+        2 -> "MODERATE"
+        3 -> "SEVERE"
+        4 -> "CRITICAL"
+        5 -> "EMERGENCY"
+        6 -> "SHUTDOWN"
+        else -> "NA"
+    }
+
+    /**
+     * 整机 CPU 占用率：读 /proc/stat（全局可读）两次差分。
+     * 100ms 间隔是精度与采样耗时的折中，太短噪声大，太长会拖慢采样节奏。
+     */
     private fun readCpuLoadPct(): Double {
         val a = readCpuStat()
         if (a.isEmpty()) return Double.NaN
         try {
-            Thread.sleep(200)
+            Thread.sleep(100)
         } catch (e: InterruptedException) {
             return Double.NaN
         }
@@ -293,7 +402,7 @@ echo "@@END@@"
 
     private fun readCpuStat(): LongArray {
         return try {
-            val f = java.io.File("/proc/stat")
+            val f = File("/proc/stat")
             if (!f.exists() || !f.canRead()) return LongArray(0)
             val line = f.readLines().firstOrNull { it.startsWith("cpu ") } ?: return LongArray(0)
             val parts = line.trim().split(Regex("\\s+"))

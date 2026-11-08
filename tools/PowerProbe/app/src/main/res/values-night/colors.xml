@@ -4,4 +4,6 @@
     <color name="card_bg">#1C1D21</color>
     <color name="icon_bg">#2A2C31</color>
     <color name="divider">#2E3036</color>
+    <color name="text_secondary">#9AA0A8</color>
+    <color name="accent_ok">#5ED6A6</color>
 </resources>

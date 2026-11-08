@@ -61,8 +61,17 @@ jobs:
           tag_name: apk-latest
           name: PowerProbe APK (latest)
           body: |
-            由 GitHub Actions 自动构建的 debug APK，可直接安装到已 root 的测试机。
+            由 GitHub Actions 自动构建的 debug APK。
 
-            安装：下载 `app-debug.apk` → 用文件管理器打开安装 → 首次运行授予 root 权限。
+            **两种运行方式**
+            - 无 root：全部走 Android 公共 API（BatteryManager / UsageStatsManager），可用；
+            - 有 root：自动切到只读 sysfs + dumpsys，数据更细，并启用全自动（灭屏、翻页、切相机、截图存证）。
+
+            **安全边界**（详见 `tools/PowerProbe/SECURITY.md`）
+            - 命令不接受任何外部输入，全部是编译期常量；
+            - 命中 `rm/mkfs/dd/mount/format/wipe/reboot` 等关键词直接拒绝执行；
+            - 不申请设备管理器、不申请网络权限，数据全部本地。
+
+            安装：下载 `app-debug.apk` → 允许安装未知来源 → 打开后按「权限与数据源」完成授权。
           files: tools/PowerProbe/app/build/outputs/apk/debug/app-debug.apk
           make_latest: true

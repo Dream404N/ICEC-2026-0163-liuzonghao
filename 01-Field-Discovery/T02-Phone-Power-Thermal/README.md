@@ -17,28 +17,52 @@
 
 最后一条是这个方案最关键的设计：**它把「工况是否真的执行」从主观陈述变成了可核验的客观记录**。官网反复强调「防摆拍」，这一列就是我的反证。
 
-### root 带来的增量
+### 双通道：有 root 用 root，没有也能跑
 
-测试机 Redmi K60 Ultra 已 root（Magisk），因此可以：
+测试机 Redmi K60 Ultra 已 root（Magisk），所以能用上更细的数据；但工具本身不依赖 root，
+两条通道写在同一次采样里，逐点记录来源（CSV 的 `data_source` 列）：
 
-- 直接读 `/sys/class/power_supply/battery/current_now`（µA 级瞬时电流），而不是仅靠 `BatteryManager` 的整数百分比；
-- 遍历 `/sys/class/thermal/thermal_zone*/`，同时拿到电池温度、SoC 各簇温度、最高热区及其名称——能回答「热在哪」，而不只是「热不热」；
-- 用 `dumpsys activity activities` 获取前台包名，作为工况执行证据；
-- 用 `dumpsys power` 确认屏幕是否熄灭，区分「待机」是真灭屏还是亮屏放着。
+| 通道 | 条件 | 数据 |
+|---|---|---|
+| A · root 只读直读 | su 可用 | `current_now` 的 µA 级瞬时电流；`thermal_zone*` 全部热区及其名称（能回答「热在哪」，不只是「热不热」）；各核与 GPU 频率；`dumpsys` 的真实前台 Activity |
+| B · 公共 API | 无 root 或 su 被拒 | `BatteryManager` 电流与库仑计、粘性广播的电压与温度、`/proc/stat` CPU 占用、`UsageStatsManager` 前台应用 |
 
-非 root 环境下 App 会自动回退到 `BatteryManager` + `ACTION_BATTERY_CHANGED`，报告里会明确标注 `root 直读 sysfs：失败`，不隐瞒数据来源降级。
+这样做的原因：**评审复现时不该要求评委有 root**。有 root 拿细数据，没 root 也能跑出完整时序，
+报告里给出每个字段的可用率，不隐瞒降级。
+
+root 的安全边界用代码强制，不是靠承诺：命令不接受任何外部输入、命中
+`rm/mkfs/dd/mount/format/wipe/reboot` 等关键词直接拒绝执行、不带设备管理器、不申请网络权限。
+逐条可审计清单见 [`tools/PowerProbe/SECURITY.md`](../../tools/PowerProbe/SECURITY.md)。
+
+### 自动化：不是「点一下记一下」
+
+上一版是手动点工况、手动开 App、手动灭屏，本质是个记录器。现在把它做成执行器：
+
+- **工况队列**：一次启动连跑 `IDLE → SVIDEO → NAVCAM → GAME`，每个工况 30 分钟，
+  到点自动 `force-stop` 目标 App、自动归档、自动接下一个，全程 2 小时无人值守；
+- **自动加压**：待机工况自动发休眠指令并每 2 分钟复核屏幕是否仍熄灭；短视频工况自动拉起
+  抖音/快手并每 25 秒上滑翻页；导航工况 15 分钟后自动切相机并触发录制；
+- **自动存证**：每个工况开始时与每 10 分钟各截一张图，落在 `Download/PowerProbe/shots/`，
+  与 CSV 时间戳对齐，构成「工况确实在执行」的证据链；
+- **目标 App 自适应**：首次启动自动探测本机已装的候选（包名会随商店渠道变），
+  探测不到让用户从已安装列表里点一个，换机器也能跑。
+
+这里有个自我约束值得单说：**自动化本身会耗电**。如果每分钟跑一次 `dumpsys` 去确认前台应用，
+测出来的就是 PowerProbe 的功耗，不是被测 App 的。所以翻页保持 25 秒一次、截图 10 分钟一次，
+采样点附近不做任何 shell 调用。
 
 ## 2. 采集工具
 
-`tools/PowerProbe/`（Kotlin，零第三方依赖，约 1400 行）。
+`tools/PowerProbe/`（Kotlin，约 1900 行；UI 依赖 Material Components，其余全走 Android SDK 原生 API）。
 
-- 4 个工况按钮，每个启动一次 30 分钟 / 6 个采样点的会话
+- **一键全自动**：连跑 4 个工况，每工况 30 分钟 / 6 个采样点（对齐官网 24 组口径），
+  自动拉起 App、自动灭屏、自动翻页、自动切相机、自动归档
 - 前台服务 + `PARTIAL_WAKE_LOCK`，保证灭屏后定时器不被冻结
 - 绝对时刻调度（`startAt + seq × 5min`），避免单次采样耗时累积成漂移
-- 产物：每个工况一份 CSV + 一份 Markdown 报告，同时复制到 `/sdcard/Download/PowerProbe/`
+- 产物：每个工况一份 CSV + 一份 Markdown 报告，经 MediaStore 导出到 `Download/PowerProbe/`
 - APK 由 GitHub Actions 云端构建，产物在 Release `apk-latest`
 
-字段定义与单位归一化规则见 `tools/PowerProbe/README.md`。
+字段定义、单位归一化规则与安全审计点见 `tools/PowerProbe/README.md` 与 `SECURITY.md`。
 
 ## 3. 四个工况的定义与执行规范
 

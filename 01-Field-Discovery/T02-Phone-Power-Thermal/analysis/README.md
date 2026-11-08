@@ -13,7 +13,7 @@ python analyze_t02.py --raw ../raw_data --out .
 
 | 文件 | 内容 |
 |---|---|
-| `completeness.csv` | 每个会话的完整性核验：采样点数、跨度、是否检出充电、root 是否生效、收尾行 elapsed |
+| `completeness.csv` | 每个会话的完整性核验：采样点数、跨度、是否检出充电、数据通道（几行走 root）、收尾行 elapsed |
 | `summary.csv` | 逐工况指标：平均/峰值电流、平均/峰值功率、积分电量、放电速率、温升 |
 | `summary.md` | 可直接引用的结论稿（含统计检验结果） |
 | `figures/fig1_current.png` | 4 个工况的电流时序（2×2 分面） |

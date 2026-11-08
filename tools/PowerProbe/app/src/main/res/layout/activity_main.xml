@@ -58,6 +58,33 @@
                 android:paddingBottom="4dp" />
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- 自动化 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:text="自动化测试"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_bg"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:id="@+id/automationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- 工况 -->
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +92,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="4dp"
-            android:text="采集工况"
+            android:text="单工况手动执行"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp" />
 
@@ -78,6 +105,33 @@
 
             <LinearLayout
                 android:id="@+id/scenarioContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 权限与数据源 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:text="权限与数据源"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/card_bg"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:id="@+id/permContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -149,7 +203,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:lineSpacingExtra="3dp"
-            android:text="数据落点为 Android/data/com.icec.powerprobe/files/PowerProbe/，并会复制到 Download/PowerProbe/。采集期间前台包名会写入 CSV，作为工况真实性的客观证据。"
+            android:text="数据落点为 Android/data/com.icec.powerprobe/files/PowerProbe/，并会经 MediaStore 导出到 Download/PowerProbe/。全程不使用 root、不执行 shell 命令。采集期间前台包名会写入 CSV，作为工况真实性的客观证据。"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp" />
 

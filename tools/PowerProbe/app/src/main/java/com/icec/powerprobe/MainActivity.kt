@@ -1,12 +1,15 @@
 package com.icec.powerprobe
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,7 +30,9 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     private lateinit var statusContainer: LinearLayout
+    private lateinit var automationContainer: LinearLayout
     private lateinit var scenarioContainer: LinearLayout
+    private lateinit var permContainer: LinearLayout
     private lateinit var artifactContainer: LinearLayout
     private lateinit var logView: TextView
 
@@ -35,6 +40,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vProgress: TextView
     private lateinit var vElapsed: TextView
     private lateinit var vBattery: TextView
+    private lateinit var vRoot: TextView
+    private lateinit var vUsage: TextView
+    private lateinit var vSource: TextView
+    private lateinit var vVideo: TextView
+    private lateinit var vGame: TextView
+    private lateinit var vMap: TextView
     private lateinit var vCsv: TextView
     private lateinit var vReport: TextView
 
@@ -57,15 +68,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         statusContainer = findViewById(R.id.statusContainer)
+        automationContainer = findViewById(R.id.automationContainer)
         scenarioContainer = findViewById(R.id.scenarioContainer)
+        permContainer = findViewById(R.id.permContainer)
         artifactContainer = findViewById(R.id.artifactContainer)
         logView = findViewById(R.id.logView)
 
         buildStatusRows()
+        buildAutomationRows()
         buildScenarioRows()
+        buildPermRows()
         buildArtifactRows()
 
         requestNotificationPermission()
+        // 首次启动自动探测本机已安装的候选 App，填好自动化目标
+        Plan.autofill(this)
+        refreshTargets()
         render()
     }
 
@@ -73,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         ui.removeCallbacks(ticker)
         ui.post(ticker)
+        refreshTargets()
     }
 
     override fun onPause() {
@@ -135,7 +154,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildStatusRows() {
-        addRow(statusContainer, R.drawable.ic_timer, "当前状态", "空闲时可直接选择下方工况", "空闲", true, null)
+        addRow(statusContainer, R.drawable.ic_timer, "当前状态", "等待开始", "空闲", true, null)
             .let { vStatus = it.value }
 
         addRow(statusContainer, R.drawable.ic_battery, "采样进度", "每 5 分钟一个点，共 6 点", "0 / 6", true, null)
@@ -148,19 +167,78 @@ class MainActivity : AppCompatActivity() {
             .let { vBattery = it.value }
     }
 
+    private fun buildAutomationRows() {
+        addRow(
+            automationContainer, R.drawable.ic_game,
+            "一键全自动 · 合规", "工况间留 30 分钟冷却，按 protocol 产出可交付数据",
+            "约 4 小时", true
+        ) { confirmChain(30) }
+
+        addRow(
+            automationContainer, R.drawable.ic_timer,
+            "一键全自动 · 连续", "4 工况连跑，用于流程验证与连续负载梯度",
+            "约 2 小时", true
+        ) { confirmChain(0) }
+
+        addRow(
+            automationContainer, R.drawable.ic_file,
+            "短视频应用", "自动启动并定时上滑翻页", "-", true
+        ) { pickApp(KIND_VIDEO) }.let { vVideo = it.value }
+
+        addRow(
+            automationContainer, R.drawable.ic_game,
+            "游戏应用", "自动启动，画质帧率手动设最高", "-", true
+        ) { pickApp(KIND_GAME) }.let { vGame = it.value }
+
+        addRow(
+            automationContainer, R.drawable.ic_file,
+            "导航应用", "自动启动，15 分钟后自动切相机", "-", false
+        ) { pickApp(KIND_MAP) }.let { vMap = it.value }
+    }
+
     private fun buildScenarioRows() {
         addRow(scenarioContainer, R.drawable.ic_battery, "待机", "灭屏静置，系统基线", "30 分钟", true) {
-            startScenario("IDLE")
+            startScenario(Plan.SC_IDLE, false)
         }
-        addRow(scenarioContainer, R.drawable.ic_game, "短视频", "连续滚动播放", "30 分钟", true) {
-            startScenario("SVIDEO")
+        addRow(scenarioContainer, R.drawable.ic_game, "短视频", "自动启动 App 并翻页", "30 分钟", true) {
+            startScenario(Plan.SC_SVIDEO, false)
         }
-        addRow(scenarioContainer, R.drawable.ic_file, "导航 / 拍摄", "前半导航，后半录 4K", "30 分钟", true) {
-            startScenario("NAVCAM")
+        addRow(scenarioContainer, R.drawable.ic_file, "导航 / 拍摄", "前 15 分钟导航，后 15 分钟录像", "30 分钟", true) {
+            startScenario(Plan.SC_NAVCAM, false)
         }
-        addRow(scenarioContainer, R.drawable.ic_game, "高帧率游戏", "画质与帧率最高档", "30 分钟", false) {
-            startScenario("GAME")
+        addRow(scenarioContainer, R.drawable.ic_game, "高帧率游戏", "自动启动游戏并保持前台", "30 分钟", false) {
+            startScenario(Plan.SC_GAME, false)
         }
+    }
+
+    private fun buildPermRows() {
+        addRow(
+            permContainer, R.drawable.ic_battery,
+            "root 通道", "只读白名单 · 点击重新探测", "-", true
+        ) {
+            val ok = Root.reprobe()
+            Toast.makeText(
+                this,
+                if (ok) "root 可用：" + Root.uidLine else "未取得 root，将使用公共 API",
+                Toast.LENGTH_LONG
+            ).show()
+            render()
+        }.let { vRoot = it.value }
+
+        addRow(
+            permContainer, R.drawable.ic_file,
+            "使用情况访问", "前台应用证据 · 点击去系统设置授权", "-", true
+        ) { openUsageAccessSettings() }.let { vUsage = it.value }
+
+        addRow(
+            permContainer, R.drawable.ic_battery,
+            "当前数据来源", "逐点记录在 CSV 的 data_source 列", "-", true, null
+        ).let { vSource = it.value }
+
+        addRow(
+            permContainer, R.drawable.ic_thermal,
+            "通知权限", "前台服务常驻通知，避免被系统冻结", "", false
+        ) { requestNotificationPermission() }
     }
 
     private fun buildArtifactRows() {
@@ -170,11 +248,15 @@ class MainActivity : AppCompatActivity() {
         addRow(artifactContainer, R.drawable.ic_file, "最近报告", "设备端自动生成", "-", true, null)
             .let { vReport = it.value }
 
-        addRow(artifactContainer, R.drawable.ic_file, "复制到 Download", "/sdcard/Download/PowerProbe", "", true) {
-            val out = Exporter.publishToDownloads(this)
+        addRow(artifactContainer, R.drawable.ic_file, "导出到 Download", "Download/PowerProbe", "", true) {
+            val d = Exporter.dir(this)
+            val files = (d.listFiles() ?: emptyArray()).filter {
+                it.isFile && (it.name.endsWith(".csv") || it.name.endsWith(".md"))
+            }
+            val n = Exporter.publishToDownloads(this, files)
             Toast.makeText(
                 this,
-                if (out.isNotEmpty()) "已复制" else "还没有产物文件",
+                if (n > 0) "已导出 $n 个文件" else "还没有产物文件",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -184,19 +266,97 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // ---------------- 自动化配置 ----------------
+
+    private fun confirmChain(gapMin: Int) {
+        val t = Plan.load(this)
+        val missing = ArrayList<String>()
+        if (t.video.isEmpty()) missing.add("短视频")
+        if (t.game.isEmpty()) missing.add("游戏")
+        if (t.map.isEmpty()) missing.add("导航")
+        val warn = if (missing.isEmpty()) {
+            "四个工况按 待机 → 短视频 → 导航拍摄 → 游戏 依次执行。"
+        } else {
+            "以下目标未选择，对应工况将只记录不加压：" + missing.joinToString("、") + "。"
+        }
+        val gapText = if (gapMin > 0) {
+            "工况之间留 $gapMin 分钟冷却窗口，窗口内请插线充到 80% 后拔线，" +
+                "计时结束自动开始下一工况。全程约 4 小时。"
+        } else {
+            "工况之间无间隔，连续负载。数据不含冷却复位，仅用于流程验证，" +
+                "不能当作 protocol 口径的交付数据。全程约 2 小时。"
+        }
+        AlertDialog.Builder(this)
+            .setTitle("开始全自动测试")
+            .setMessage(
+                warn + "\n\n" + gapText +
+                    "\n\n期间不要操作手机、不要充电（冷却窗口除外）。"
+            )
+            .setPositiveButton("开始") { _, _ -> startScenario(Plan.SC_IDLE, true, gapMin) }
+            .setNegativeButton("取消", null)
+            .show()
+    }
+
+    private fun pickApp(kind: String) {
+        val list = Plan.launcherApps(this)
+        if (list.isEmpty()) {
+            Toast.makeText(this, "没有可选的启动器应用", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val labels = list.map { it.first + "\n" + it.second }.toTypedArray()
+        AlertDialog.Builder(this)
+            .setTitle("选择应用")
+            .setItems(labels) { _, which ->
+                val pkg = list[which].second
+                val t = Plan.load(this)
+                val nt = when (kind) {
+                    KIND_VIDEO -> t.copy(video = pkg)
+                    KIND_GAME -> t.copy(game = pkg)
+                    else -> t.copy(map = pkg)
+                }
+                Plan.save(this, nt)
+                refreshTargets()
+            }
+            .setNegativeButton("取消", null)
+            .show()
+    }
+
+    private fun refreshTargets() {
+        val t = Plan.load(this)
+        if (::vVideo.isInitialized) vVideo.text = labelOf(t.video)
+        if (::vGame.isInitialized) vGame.text = labelOf(t.game)
+        if (::vMap.isInitialized) vMap.text = labelOf(t.map)
+    }
+
+    private fun labelOf(pkg: String): String {
+        if (pkg.isEmpty()) return "未选择"
+        return try {
+            val ai = packageManager.getApplicationInfo(pkg, 0)
+            packageManager.getApplicationLabel(ai).toString()
+        } catch (e: Exception) {
+            pkg
+        }
+    }
+
     // ---------------- 行为 ----------------
 
-    private fun startScenario(code: String) {
+    private fun startScenario(code: String, chain: Boolean, gapMin: Int = 0) {
         val i = Intent(this, CollectorService::class.java)
         i.action = CollectorService.ACTION_START
         i.putExtra(CollectorService.EXTRA_SCENARIO, code)
-        i.putExtra(CollectorService.EXTRA_MINUTES, 30)
-        i.putExtra(CollectorService.EXTRA_INTERVAL, 5)
+        i.putExtra(CollectorService.EXTRA_MINUTES, Plan.SCENARIO_MINUTES)
+        i.putExtra(CollectorService.EXTRA_INTERVAL, Plan.SAMPLE_INTERVAL_MIN)
+        i.putExtra(CollectorService.EXTRA_CHAIN, chain)
+        i.putExtra(CollectorService.EXTRA_GAP, gapMin)
         try {
             startForegroundService(i)
             Toast.makeText(
                 this,
-                "已开始：" + Exporter.scenarioName(code) + " · 30 分钟 6 个点",
+                when {
+                    chain && gapMin > 0 -> "全自动已启动：4 工况 + 冷却窗口"
+                    chain -> "全自动已启动：4 工况连续"
+                    else -> "已开始：" + Exporter.scenarioName(code) + " · 30 分钟"
+                },
                 Toast.LENGTH_SHORT
             ).show()
         } catch (e: Exception) {
@@ -211,6 +371,20 @@ class MainActivity : AppCompatActivity() {
             startService(i)
         } catch (e: Exception) {
             Toast.makeText(this, "停止失败：" + e.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun openUsageAccessSettings() {
+        try {
+            val i = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            i.data = Uri.parse("package:" + packageName)
+            startActivity(i)
+        } catch (e: Exception) {
+            try {
+                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+            } catch (e2: Exception) {
+                Toast.makeText(this, "无法打开系统设置，请手动前往「使用情况访问」", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -244,8 +418,23 @@ class MainActivity : AppCompatActivity() {
         val latest = CollectorState.latest
         if (latest != null) {
             vBattery.text = String.format(
-                Locale.US, "%d%% · %.0f mA · %.1f℃", latest.batteryPct, latest.currentMa, latest.battTempC
+                Locale.US, "%d%% · %.0f mA · %.1f℃ · %s",
+                latest.batteryPct, latest.currentMa, latest.battTempC, latest.thermalStatus
             )
+        }
+
+        vRoot.text = if (Root.available) "已授权" else "未授权"
+        vRoot.setTextColor(
+            if (Root.available) getColor(R.color.accent_ok) else getColor(R.color.text_secondary)
+        )
+
+        vUsage.text = if (Usage.hasAccess(this)) "已授予" else "未授予"
+
+        val src = CollectorState.latest?.dataSource
+        vSource.text = if (src.isNullOrEmpty()) {
+            if (Root.available) "root 待采样" else "API 待采样"
+        } else {
+            shortSource(src)
         }
 
         vCsv.text = fileNameOf(CollectorState.lastCsvPath)
@@ -255,9 +444,31 @@ class MainActivity : AppCompatActivity() {
         logView.text = if (t.length > 6000) t.substring(t.length - 6000) else t
     }
 
+    private fun shortSource(src: String): String {
+        // batt=sysfs;thz=sysfs;cpu=sysfs;gpu=none;fg=dumpsys;ch=root → 只显示关键两项
+        val batt = partOf(src, "batt")
+        val fg = partOf(src, "fg")
+        val ch = partOf(src, "ch")
+        return "$ch · 电流$batt · 前台$fg"
+    }
+
+    private fun partOf(src: String, key: String): String {
+        for (seg in src.split(";")) {
+            val i = seg.indexOf('=')
+            if (i > 0 && seg.substring(0, i) == key) return seg.substring(i + 1)
+        }
+        return "-"
+    }
+
     private fun fileNameOf(p: String): String {
         if (p.isEmpty()) return "-"
         val n = p.substringAfterLast('/')
         return if (n.length > 26) n.substring(0, 24) + "…" else n
+    }
+
+    companion object {
+        private const val KIND_VIDEO = "video"
+        private const val KIND_GAME = "game"
+        private const val KIND_MAP = "map"
     }
 }

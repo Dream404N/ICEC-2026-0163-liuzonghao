@@ -83,12 +83,14 @@ def load_all(raw_dir: str) -> pd.DataFrame:
 
 
 def completeness(df: pd.DataFrame) -> pd.DataFrame:
-    """会话完整性：每个工况的正式采样点数、时长、是否检出充电、root 是否生效。"""
+    """会话完整性：每个工况的正式采样点数、时长、是否检出充电、数据通道分布。"""
     rows = []
     for sc, g in df.groupby("scenario"):
         pts = g[g["is_final"] == 0]
         tail = g[g["is_final"] == 1]
         span = float(pts["elapsed_s"].max() - pts["elapsed_s"].min()) if len(pts) > 1 else 0.0
+        src = pts.get("data_source", pd.Series([""] * len(pts))).fillna("").astype(str)
+        root_n = int(src.str.contains("ch=root").sum())
         rows.append({
             "scenario": sc,
             "points": int(len(pts)),
@@ -96,7 +98,7 @@ def completeness(df: pd.DataFrame) -> pd.DataFrame:
             "dropped": int((pts["battery_pct"].iloc[0] - pts["battery_pct"].iloc[-1])
                            if len(pts) > 1 else 0),
             "charging_detected": bool((pts.get("charging", pd.Series([0])).fillna(0) > 0).any()),
-            "root_ok_ratio": round(float(pts.get("root_ok", pd.Series([0])).fillna(0).mean()), 2),
+            "channel": "%d/%d root" % (root_n, len(pts)),
             "tail_elapsed_s": int(tail["elapsed_s"].iloc[0]) if len(tail) else None,
             "foreground": ",".join(sorted(set(pts.get("foreground_pkg", pd.Series(["-"]))
                                                 .fillna("-").astype(str).tolist())))[:60],
@@ -260,12 +262,12 @@ def write_markdown(m: pd.DataFrame, comp: pd.DataFrame, test_line: str, out_md: 
     lines.append("> 由 `analysis/analyze_t02.py` 自动生成，数据源为 `raw_data/*.csv`，未手工修改任何数值。\n")
 
     lines.append("\n## 会话完整性\n")
-    lines.append("| 工况 | 采样点 | 跨度(min) | 掉电(%) | 检出充电 | root 生效比例 | 收尾 elapsed(s) | 前台应用 |")
+    lines.append("| 工况 | 采样点 | 跨度(min) | 掉电(%) | 检出充电 | 数据通道 | 收尾 elapsed(s) | 前台应用 |")
     lines.append("|---|---|---|---|---|---|---|---|")
     for _, r in comp.iterrows():
-        lines.append("| %s | %d | %.1f | %d | %s | %.2f | %s | `%s` |" % (
+        lines.append("| %s | %d | %.1f | %d | %s | %s | %s | `%s` |" % (
             r["scenario"], r["points"], r["span_min"], r["dropped"],
-            "是" if r["charging_detected"] else "否", r["root_ok_ratio"],
+            "是" if r["charging_detected"] else "否", r["channel"],
             r["tail_elapsed_s"] if r["tail_elapsed_s"] is not None else "-",
             r["foreground"] or "-"))
 
