@@ -222,7 +222,7 @@ APK 由 GitHub Actions 构建，不在本地编译（本地无 Android SDK）：
 - 触发：推送到 `main` 且改动 `tools/PowerProbe/**`，或手动 `workflow_dispatch`
 - 产物：Actions Artifacts 的 `PowerProbe-debug-apk`，以及 Release `apk-latest` 下的 `app-debug.apk`
 
-工具链：JDK 17 / Gradle 8.7 / AGP 8.2 / Kotlin 1.9.24 / compileSdk 34 / minSdk 26 / targetSdk 33。
+工具链：JDK 17 / Gradle 8.7 / AGP 8.5.2 / Kotlin 1.9.24 / compileSdk 34 / minSdk 26 / targetSdk 33。
 
 **签名**：`signing/powerprobe.jks` 是仅用于保证覆盖安装一致性的开发密钥（口令 `powerprobe`，
 非发布密钥，也不用于任何正式分发）。CI 每次构建都会打印证书 SHA-256 以便核对；
