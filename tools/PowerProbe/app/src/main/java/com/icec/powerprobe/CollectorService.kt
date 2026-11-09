@@ -80,6 +80,14 @@ class CollectorService : Service() {
         thread = t
         handler = Handler(t.looper)
         CollectorState.deviceLine = Sampler.deviceLine()
+        // 日志即刻落盘：旧版日志只在内存里，杀进程 / 卸载 / 重装一次就全没了
+        CollectorState.logSink = { line ->
+            Exporter.appendLog(
+                this@CollectorService,
+                CollectorState.sessionId.ifEmpty { "manual" },
+                line
+            )
+        }
         createChannel()
     }
 
@@ -111,6 +119,7 @@ class CollectorService : Service() {
             if (gapMin > 0 && chainTotal > 1) (chainTotal - 1).toLong() * gapMin * 60L else 0L
 
         CollectorState.reset()
+        CollectorState.sessionId = Exporter.newSessionId()
         Live.reset()
         Metrics.resetBaseline("")
         stopped = false
@@ -148,6 +157,7 @@ class CollectorService : Service() {
         handler?.removeCallbacksAndMessages(null)
         thread?.quitSafely()
         releaseWake()
+        CollectorState.logSink = null
         super.onDestroy()
     }
 
@@ -248,6 +258,11 @@ class CollectorService : Service() {
                     CollectorState.targetPkg
                 )
                 CollectorState.addSample(s)
+                // 即采即落盘 + 镜像到公共 Download：哪怕中途被强杀或卸载，已采的点仍在
+                Exporter.appendSample(
+                    this@CollectorService, currentScenario,
+                    CollectorState.sessionId, s, seq == 0
+                )
                 CollectorState.latest = s
                 CollectorState.donePoints = seq + 1
                 CollectorState.elapsedSec = elapsedSec
@@ -318,6 +333,7 @@ class CollectorService : Service() {
                 (SystemClock.elapsedRealtime() - startAt) / 1000L, true
             )
             CollectorState.addSample(tail)
+            Exporter.appendSample(this, currentScenario, CollectorState.sessionId, tail, false)
             CollectorState.latest = tail
         } catch (e: Exception) {
             CollectorState.log("收尾采样异常: " + e.message)

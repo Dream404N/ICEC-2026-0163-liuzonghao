@@ -11,17 +11,36 @@ android {
         applicationId "com.icec.powerprobe"
         minSdk 26
         targetSdk 33
-        versionCode 5
-        versionName "1.4.0"
+        versionCode 6
+        versionName "1.5.0"
+    }
+
+    /**
+     * 固定开发签名。
+     *
+     * 不显式配置时，AGP 会在每台构建机上临时生成 ~/.android/debug.keystore；
+     * GitHub Actions 每次都是全新 runner，于是每次产出的 APK 签名证书都不同，
+     * 手机上只能先卸载再装，而卸载会连 /Android/data/<包名>/ 一起删掉，历史数据全丢。
+     * 这里统一指向仓库内这把固定的开发密钥，保证任何一次 CI 产物都能覆盖安装。
+     */
+    signingConfigs {
+        probe {
+            storeFile rootProject.file('signing/powerprobe.jks')
+            storePassword 'powerprobe'
+            keyAlias 'powerprobe'
+            keyPassword 'powerprobe'
+        }
     }
 
     buildTypes {
         debug {
             applicationIdSuffix ""
+            signingConfig signingConfigs.probe
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.probe
         }
     }
 

@@ -48,6 +48,13 @@ jobs:
       - name: Show outputs
         run: ls -lh app/build/outputs/apk/debug/
 
+      - name: Verify signing certificate (must stay identical on every build)
+        run: |
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort | tail -1)
+          if [ -n "$APKSIGNER" ]; then
+            "$APKSIGNER" verify --print-certs app/build/outputs/apk/debug/app-debug.apk || true
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -59,11 +66,21 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
-          name: PowerProbe APK (latest · v1.4.0)
+          name: PowerProbe APK (latest · v1.5.0)
           body: |
-            由 GitHub Actions 自动构建的 debug APK（v1.4.0）。
+            由 GitHub Actions 自动构建的 debug APK（v1.5.0，**固定签名**）。
 
-            **v1.4.0 新增：KernelSU 风格的应用选择器**
+            **v1.5.0：固定签名 + 数据不再丢**
+            - 每次 CI 都用仓库内同一把开发密钥签名，可直接覆盖安装，不再需要卸载；
+              ⚠ 已装 v1.4.0 及更早版本的用户**需要手动卸载一次**（这是最后一次），
+              之后所有新版本都能直接覆盖安装，历史数据不再被清掉。
+            - 采样点「即采即落盘」：每采一个点立刻追加写入 CSV 并镜像到
+              `Download/PowerProbe/`，中途强杀 / 卸载 / 断电也不会丢已采数据；
+            - 运行日志每行同步落盘到公共 Download，重装后 App 会自动把上次日志读回界面；
+            - 实时文件名为 `T02_<工况>_<会话>_live.csv` 与 `T02_<会话>_log.txt`，
+              与工况结束时的正式 CSV / 报告并存。
+
+            **v1.4.0：KernelSU 风格的应用选择器**
             - 独立的「选择应用」页面，常驻搜索栏，输入即过滤应用名与包名；
             - 真实应用图标异步加载并缓存，当前选中项与推荐项（Phigros / 高德等）置顶标记；
             - 「显示系统应用」开关、长按复制包名、一键清除选择、可操作的空态提示。
@@ -84,6 +101,8 @@ jobs:
             - 不申请设备管理器、不申请网络权限，数据全部本地。
 
             安装：下载 `app-debug.apk` → 允许安装未知来源 → 打开后按「权限与数据源」完成授权。
+            升级：v1.5.0 起签名固定，`adb install -r` 或直接覆盖安装即可，数据保留；
+            从 v1.4.0 及更早版本升级时须先卸载一次（旧签名与新签名不兼容）。
             **必须人工的三件事**：插拔充电线、把 Phigros 画质帧率调到最高、现场同框照。
           files: tools/PowerProbe/app/build/outputs/apk/debug/app-debug.apk
           make_latest: true

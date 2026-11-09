@@ -62,7 +62,7 @@ setprop chmod chown mv cp ln shred truncate tee install flash persist
 
 ## 5. 数据流向
 
-全部本地：采样 → 应用私有目录 → MediaStore 导出到 `Download/PowerProbe/`。
+全部本地：采样 →（v1.5.0 起）每 5 分钟即采即写 → 镜像到公共 `Download/PowerProbe/`；工况结束时再出正式 CSV 与报告。应用私有目录也会被卸载清除，所以公共 Download 是唯一的持久副本。
 **没有任何网络请求**，没有 `INTERNET` 权限，APK 里也没有 HTTP 客户端依赖。
 
 ## 6. 复现审计
@@ -77,3 +77,20 @@ grep -rn "ProcessBuilder\|Runtime.getRuntime" tools/PowerProbe/app/src/main/java
 # 3. 确认命令黑名单存在
 grep -n "FORBIDDEN" tools/PowerProbe/app/src/main/java/com/icec/powerprobe/Root.kt
 ```
+
+## 7. 开发签名密钥（v1.5.0 起）
+
+`signing/powerprobe.jks` 是为「每次 CI 构建签名一致、可直接覆盖安装」放进仓库的**开发密钥**，
+口令明文写在 `build.gradle`。它不是发布密钥，不用于任何正式分发，也不接触用户数据：
+App 不申请 `INTERNET` 权限，密钥只在构建机上被 Gradle 读取，运行时完全不参与。
+
+为什么必须固定：v1.4.0 之前，Actions 每次在全新 runner 上临时生成 `debug.keystore`，
+三次构建的证书 SHA-256 各不相同，手机上只能卸载重装，卸载又会连应用私有目录一起删，
+导致未归档的采样与日志丢失。固定签名后可直接覆盖安装，数据保留。
+
+风险与边界：
+- 仓库当前为私有。若仓库转为公开，任何拿到这把密钥的人都能给 `com.icec.powerprobe`
+  签同名包；Android 仍会要求用户确认安装，但同签名允许覆盖升级。
+- 转公开前应删除该文件，改为在 GitHub Actions Secrets 里存 keystore 的 base64 与口令，
+  workflow 解码到构建机临时文件，`build.gradle` 从环境变量读取。
+- 这把密钥与 root 通道无关：不参与任何运行时命令，不写入设备。

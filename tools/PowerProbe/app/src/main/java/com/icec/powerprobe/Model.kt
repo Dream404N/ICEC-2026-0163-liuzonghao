@@ -140,21 +140,48 @@ object CollectorState {
     /** 最近一次进程级指标，界面直接展示 */
     @Volatile var latestMetrics: AppMetrics? = null
 
+    /** 一次「一键全自动」的会话 id：实时 CSV 与日志按会话分文件，避免多次运行互相覆盖 */
+    @Volatile var sessionId: String = ""
+
+    /**
+     * 前台服务挂接的日志落盘回调。
+     * 旧版日志只存在内存 logBuffer 里，杀进程 / 卸载 / 重装一次就全没了；
+     * 现在每行日志同时写进公共 Download，重装后还能读回来。
+     */
+    @Volatile var logSink: ((String) -> Unit)? = null
+
     private val logBuffer = StringBuilder()
     private val samples = ArrayList<Sample>()
     private val timeFmt = java.text.SimpleDateFormat("HH:mm:ss", Locale.US)
 
-    @Synchronized
     fun log(msg: String) {
-        val t = timeFmt.format(java.util.Date())
-        logBuffer.append("[").append(t).append("] ").append(msg).append("\n")
-        if (logBuffer.length > 12000) {
-            logBuffer.delete(0, logBuffer.length - 12000)
+        val sink = logSink
+        var line = ""
+        synchronized(this) {
+            line = "[" + timeFmt.format(java.util.Date()) + "] " + msg + "\n"
+            logBuffer.append(line)
+            if (logBuffer.length > 12000) {
+                logBuffer.delete(0, logBuffer.length - 12000)
+            }
+        }
+        // 文件 IO 放在锁外，避免落盘阻塞其他线程读写状态
+        try {
+            sink?.invoke(line)
+        } catch (e: Exception) {
         }
     }
 
     @Synchronized
     fun logText(): String = logBuffer.toString()
+
+    /** 重装后把上一次的日志拼回界面；不写回文件，避免污染本次会话 */
+    @Synchronized
+    fun appendLogText(text: String) {
+        logBuffer.append(text)
+        if (logBuffer.length > 12000) {
+            logBuffer.delete(0, logBuffer.length - 12000)
+        }
+    }
 
     @Synchronized
     fun addSample(s: Sample) {

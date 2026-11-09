@@ -30,6 +30,134 @@ object Exporter {
 
     private fun stamp(): String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
 
+    /** 一次「一键全自动」一个 id，实时文件按会话分名，多次运行不互相覆盖 */
+    fun newSessionId(): String = stamp()
+
+    private fun liveCsvName(scenario: String, session: String): String =
+        "T02_" + scenario + "_" + session + "_live.csv"
+
+    private fun liveLogName(session: String): String = "T02_" + session + "_log.txt"
+
+    /**
+     * 采样点「即采即落盘」。
+     *
+     * 旧版只在工况结束时一次性写 CSV，中途被杀进程、卸载或断电，内存里的采样点全部丢失。
+     * 现在每采一个点就 append，并把同一份文件镜像到公共 Download —— 应用专属目录
+     * 会在卸载时被系统连同删除，公共 Download 不会。
+     */
+    fun appendSample(ctx: Context, scenario: String, session: String, s: Sample, first: Boolean) {
+        try {
+            val f = File(dir(ctx), liveCsvName(scenario, session))
+            val line = s.toCsvLine() + "\n"
+            if (first || !f.exists()) {
+                f.writeText(Sample.CSV_HEADER + "\n" + line)
+            } else {
+                f.appendText(line)
+            }
+            mirrorToDownloads(ctx, f)
+        } catch (e: Exception) {
+            CollectorState.log("实时 CSV 落盘失败：" + e.message)
+        }
+    }
+
+    /** 每行日志同步落盘（同样镜像到 Download），重装后还能恢复 */
+    fun appendLog(ctx: Context, session: String, line: String) {
+        try {
+            val f = File(dir(ctx), liveLogName(session))
+            f.appendText(line)
+            mirrorToDownloads(ctx, f)
+        } catch (e: Exception) {
+            // 落盘失败时不能再反过来写日志，否则会无限递归
+        }
+    }
+
+    /**
+     * 把私有目录的文件镜像到 Download/PowerProbe/。
+     * 同名文件存在就覆盖（"wt"），不存在才 insert；这样每 5 分钟镜像一次
+     * 不会堆出一堆 "(1)" 副本。与 publishToDownloads 的区别：这里不用 IS_PENDING，
+     * 进程被强杀时文件依然立即可见。
+     */
+    private fun mirrorToDownloads(ctx: Context, src: File) {
+        if (!src.exists()) return
+        if (Build.VERSION.SDK_INT >= 29) {
+            val resolver = ctx.contentResolver
+            val collection = MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            var uri: android.net.Uri? = null
+            try {
+                resolver.query(
+                    collection,
+                    arrayOf(MediaStore.MediaColumns._ID),
+                    MediaStore.MediaColumns.DISPLAY_NAME + "=? AND " +
+                        MediaStore.MediaColumns.RELATIVE_PATH + " LIKE ?",
+                    arrayOf(src.name, Environment.DIRECTORY_DOWNLOADS + "/PowerProbe%"),
+                    null
+                )?.use { c ->
+                    if (c.moveToFirst()) {
+                        uri = android.content.ContentUris.withAppendedId(collection, c.getLong(0))
+                    }
+                }
+            } catch (e: Exception) {
+            }
+            if (uri == null) {
+                val v = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, src.name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, mimeOf(src.name))
+                    put(
+                        MediaStore.MediaColumns.RELATIVE_PATH,
+                        Environment.DIRECTORY_DOWNLOADS + "/PowerProbe"
+                    )
+                }
+                uri = resolver.insert(collection, v)
+            }
+            val u = uri ?: return
+            resolver.openOutputStream(u, "wt")?.use { out ->
+                src.inputStream().use { it.copyTo(out) }
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val pub = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val d = File(pub, "PowerProbe")
+            if (!d.exists()) d.mkdirs()
+            src.copyTo(File(d, src.name), overwrite = true)
+        }
+    }
+
+    /**
+     * 重装 / 重启后从公共 Download 找回上一次运行的日志，让界面不至于一片空白。
+     * 只读，不修改任何历史文件；读不到就安静返回 null。
+     */
+    fun restoreLastLog(ctx: Context, limit: Int = 8000): String? {
+        if (Build.VERSION.SDK_INT < 29) return null
+        return try {
+            val resolver = ctx.contentResolver
+            val collection = MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            var best: android.net.Uri? = null
+            var newest = 0L
+            resolver.query(
+                collection,
+                arrayOf(MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DATE_MODIFIED),
+                MediaStore.MediaColumns.DISPLAY_NAME + " LIKE ? AND " +
+                    MediaStore.MediaColumns.RELATIVE_PATH + " LIKE ?",
+                arrayOf("T02_%_log.txt", Environment.DIRECTORY_DOWNLOADS + "/PowerProbe%"),
+                null
+            )?.use { c ->
+                while (c.moveToNext()) {
+                    val d = c.getLong(1)
+                    if (d >= newest) {
+                        newest = d
+                        best = android.content.ContentUris.withAppendedId(collection, c.getLong(0))
+                    }
+                }
+            }
+            val u = best ?: return null
+            val text = resolver.openInputStream(u)?.bufferedReader()?.use { it.readText() }
+                ?: return null
+            if (text.length > limit) text.substring(text.length - limit) else text
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun writeCsv(ctx: Context, scenario: String, samples: List<Sample>): File {
         val f = File(dir(ctx), "T02_${scenario}_${stamp()}.csv")
         val sb = StringBuilder()

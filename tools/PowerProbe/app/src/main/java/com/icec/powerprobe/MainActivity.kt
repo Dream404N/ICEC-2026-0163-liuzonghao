@@ -87,10 +87,25 @@ class MainActivity : AppCompatActivity() {
         buildArtifactRows()
 
         requestNotificationPermission()
+        // 重装 / 重启后把上一次的日志从公共 Download 捞回来，界面不至于一片空白
+        restorePreviousLog()
         // 首次启动自动探测本机已安装的候选 App，填好自动化目标
         Plan.autofill(this)
         refreshTargets()
         render()
+    }
+
+    /**
+     * 历史日志恢复。
+     * 服务还在跑时日志本身是连续的，此时不恢复，避免把旧日志混进本次会话。
+     */
+    private fun restorePreviousLog() {
+        if (CollectorState.logText().isNotEmpty()) return
+        val past = Exporter.restoreLastLog(this) ?: return
+        CollectorState.appendLogText(
+            "──── 上一次运行的日志（从 Download/PowerProbe 恢复）────\n" +
+                past + "──── 以上为历史，以下为本次运行 ────\n"
+        )
     }
 
     override fun onResume() {

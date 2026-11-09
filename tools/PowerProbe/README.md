@@ -11,6 +11,28 @@
    写 CSV（33 列：整机功耗/热力 + 被测应用的进程级性能）+ 设备端 Markdown 报告；
    有 root 时每 10 分钟还会 `screencap` 留一张截图作为工况存证，防摆拍。
 
+## v1.5.0：固定签名与数据不丢
+
+**问题**：v1.4.0 及更早版本由 GitHub Actions 构建，每台 runner 都会临时生成自己的
+`debug.keystore`，导致**每次 APK 签名证书都不同**。手机上只能先卸载再装，而卸载会把
+`Android/data/com.icec.powerprobe/` 一起删掉；再加上旧版 CSV 只在工况结束时才落盘、
+运行日志只存在内存里，于是「一强制安装，之前的日志就没了」。
+
+**修复**：
+
+| 措施 | 做法 | 效果 |
+|---|---|---|
+| 固定签名 | 仓库内 `signing/powerprobe.jks` + `build.gradle` 显式 `signingConfigs.probe`，debug/release 共用 | 任意两次 CI 产物签名证书一致，可直接覆盖安装 |
+| 采样点即采即落盘 | 每采一个点 `append` 到 `T02_<工况>_<会话>_live.csv`，随后镜像到 `Download/PowerProbe/` | 中途强杀、卸载、断电都不丢已采数据 |
+| 日志持久化 | `CollectorState.log()` 每行同步写入 `T02_<会话>_log.txt` 并镜像到公共目录 | 重装后主界面自动读回上次日志 |
+| 公共目录镜像 | MediaStore 同名覆盖（`openOutputStream(uri, "wt")`），不设 `IS_PENDING` | 卸载不会删除，也不会堆出一堆 `(1)` 副本 |
+
+⚠ **只需卸载一次**：已安装 v1.4.0 及更早版本时，新旧签名不兼容，必须先手动卸载再装 v1.5.0。
+从 v1.5.0 起所有版本都能直接覆盖安装，`Download/PowerProbe/` 里的历史 CSV、日志和报告都在。
+
+正式产物（工况结束时的 `T02_<工况>_<时间戳>.csv` + `_report.md`）仍照常生成，
+与实时文件并存：实时文件用于兜底，正式文件用于交付。
+
 ## 随时可停
 
 停止有三条独立入口，任何一条都能立即生效：
@@ -134,7 +156,7 @@ KSU 是 GPL-3.0，直接复制会把本项目一并传染。
 | `Root.kt` | root 受限执行器 | 黑名单拦截 + 超时强杀 |
 | `Sysfs.kt` | 只读节点读取 | 纯 `java.io.File`，不 fork 进程 |
 | `Usage.kt` | 前台应用证据 | `UsageStatsManager` 事件流，数据由 system_server 写入、第三方改不了 |
-| `Exporter.kt` | CSV + 报告 | 设备端离线生成；MediaStore 写入 Download |
+| `Exporter.kt` | CSV + 报告 + 实时落盘 | 设备端离线生成；采样点/日志即采即写并镜像到公共 Download；MediaStore 同名覆盖 |
 | `Model.kt` | 数据结构 + 进程内状态 | CSV 列顺序与 `Sample.CSV_HEADER` 严格绑定 |
 
 ## 关键设计取舍
@@ -202,16 +224,23 @@ APK 由 GitHub Actions 构建，不在本地编译（本地无 Android SDK）：
 
 工具链：JDK 17 / Gradle 8.7 / AGP 8.2 / Kotlin 1.9.24 / compileSdk 34 / minSdk 26 / targetSdk 33。
 
+**签名**：`signing/powerprobe.jks` 是仅用于保证覆盖安装一致性的开发密钥（口令 `powerprobe`，
+非发布密钥，也不用于任何正式分发）。CI 每次构建都会打印证书 SHA-256 以便核对；
+v1.4.0 之前三次历史构建的指纹互不相同，正是这一版要修的问题。仓库转为公开前，
+建议把这把密钥移出仓库、改用 GitHub Actions Secrets 注入，避免他人用同一签名覆盖安装同名包。
+
 ## 安装与使用
 
-1. 下载 `app-debug.apk` 安装（debug 签名，需允许「安装未知来源应用」）。
+1. 下载 `app-debug.apk` 安装（固定开发签名，需允许「安装未知来源应用」）。若已装 v1.4.0 或更早版本，先卸载一次；之后升级直接覆盖安装即可。
 2. 首次运行授予通知权限；进「权限与数据源」点 **使用情况访问** 去系统设置打开；
    点 **root 通道** 触发一次 su 授权并确认显示「已授权」。
 3. 在「自动化测试」里确认短视频 / 游戏 / 导航三个目标 App（已自动探测为 Phigros / 高德等）。
    点任意一行进入应用选择器，可直接输入名称或包名搜索，点一下即完成更换。
 4. 点 **一键全自动**，确认后把手机放桌上（别充电、别动）。约 2 小时后自动结束。
-5. 产物在 `Android/data/com.icec.powerprobe/files/PowerProbe/`，
-   同时经 MediaStore 导出到 `Download/PowerProbe/`（截图在 `Download/PowerProbe/shots/`）。
+5. 产物在 `Download/PowerProbe/`（卸载也不会被删除）：实时 `*_live.csv` 与 `*_log.txt`
+   每 5 分钟更新一次，工况结束时另出正式 CSV 与 Markdown 报告；截图在
+   `Download/PowerProbe/shots/`。应用专属目录里另有一份镜像，但那个目录会在卸载时被
+   系统清掉，取数据一律以 `Download/` 为准。
 6. 把 CSV / MD 取回仓库 `raw_data/` 与 `reports/`，跑 `analysis/analyze_t02.py`。
 
 ## 已知限制
