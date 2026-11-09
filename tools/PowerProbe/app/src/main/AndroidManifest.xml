@@ -52,6 +52,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AppPickerActivity"
+            android:exported="false"
+            android:label="@string/picker_label"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
         <service
             android:name=".CollectorService"
             android:exported="false"

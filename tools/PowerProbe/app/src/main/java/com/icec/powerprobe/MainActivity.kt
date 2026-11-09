@@ -1,6 +1,7 @@
 package com.icec.powerprobe
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -203,18 +204,18 @@ class MainActivity : AppCompatActivity() {
 
         addRow(
             automationContainer, R.drawable.ic_file,
-            "短视频应用", "自动启动并定时上滑翻页", "-", true
-        ) { pickApp(KIND_VIDEO) }.let { vVideo = it.value }
+            "短视频应用", "点按搜索选择 · 自动启动并定时翻页", "-", true
+        ) { pickApp(AppPickerActivity.KIND_VIDEO) }.let { vVideo = it.value }
 
         addRow(
             automationContainer, R.drawable.ic_game,
-            "游戏应用", "默认 Phigros，自动启动并保活；画质帧率手动设最高", "-", true
-        ) { pickApp(KIND_GAME) }.let { vGame = it.value }
+            "游戏应用", "点按搜索选择 · 默认 Phigros，帧率需手动设最高", "-", true
+        ) { pickApp(AppPickerActivity.KIND_GAME) }.let { vGame = it.value }
 
         addRow(
             automationContainer, R.drawable.ic_file,
-            "导航应用", "默认高德，自动发起导航；15 分钟后切相机", "-", false
-        ) { pickApp(KIND_MAP) }.let { vMap = it.value }
+            "导航应用", "点按搜索选择 · 默认高德，15 分钟后切相机", "-", false
+        ) { pickApp(AppPickerActivity.KIND_MAP) }.let { vMap = it.value }
     }
 
     private fun buildScenarioRows() {
@@ -315,28 +316,50 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    /**
+     * 打开 KSU 风格的应用选择器：常驻搜索栏 + 可搜索的已安装应用列表。
+     * 旧版是 AlertDialog 里一列「名称 + 包名」，装了几十个应用就只能靠肉眼翻，
+     * 这是用户明确要求改掉的地方。
+     */
     private fun pickApp(kind: String) {
-        val list = Plan.launcherApps(this)
-        if (list.isEmpty()) {
-            Toast.makeText(this, "没有可选的启动器应用", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val labels = list.map { it.first + "\n" + it.second }.toTypedArray()
-        AlertDialog.Builder(this)
-            .setTitle("选择应用")
-            .setItems(labels) { _, which ->
-                val pkg = list[which].second
-                val t = Plan.load(this)
-                val nt = when (kind) {
-                    KIND_VIDEO -> t.copy(video = pkg)
-                    KIND_GAME -> t.copy(game = pkg)
-                    else -> t.copy(map = pkg)
-                }
-                Plan.save(this, nt)
-                refreshTargets()
+        val t = Plan.load(this)
+        val i = Intent(this, AppPickerActivity::class.java)
+        i.putExtra(AppPickerActivity.EXTRA_KIND, kind)
+        i.putExtra(AppPickerActivity.EXTRA_TITLE, when (kind) {
+            AppPickerActivity.KIND_VIDEO -> "选择短视频应用"
+            AppPickerActivity.KIND_GAME -> "选择游戏应用"
+            else -> "选择导航应用"
+        })
+        i.putExtra(AppPickerActivity.EXTRA_CURRENT, when (kind) {
+            AppPickerActivity.KIND_VIDEO -> t.video
+            AppPickerActivity.KIND_GAME -> t.game
+            else -> t.map
+        })
+        startActivityForResult(i, REQ_PICK_APP)
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != REQ_PICK_APP || resultCode != Activity.RESULT_OK || data == null) return
+        val kind = data.getStringExtra(AppPickerActivity.EXTRA_KIND) ?: return
+        val pkg = data.getStringExtra(AppPickerActivity.EXTRA_PKG) ?: return
+        val label = data.getStringExtra(AppPickerActivity.EXTRA_LABEL) ?: ""
+        val nt = Plan.load(this).let { t ->
+            when (kind) {
+                AppPickerActivity.KIND_VIDEO -> t.copy(video = pkg)
+                AppPickerActivity.KIND_GAME -> t.copy(game = pkg)
+                AppPickerActivity.KIND_MAP -> t.copy(map = pkg)
+                else -> t
             }
-            .setNegativeButton("取消", null)
-            .show()
+        }
+        Plan.save(this, nt)
+        refreshTargets()
+        Toast.makeText(
+            this,
+            if (pkg.isEmpty()) "已清除选择" else "已选择：$label",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun refreshTargets() {
@@ -559,8 +582,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val KIND_VIDEO = "video"
-        private const val KIND_GAME = "game"
-        private const val KIND_MAP = "map"
+        private const val REQ_PICK_APP = 100
     }
 }

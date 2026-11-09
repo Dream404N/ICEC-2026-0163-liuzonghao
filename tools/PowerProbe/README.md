@@ -46,6 +46,25 @@
 刷新频率 5 秒（`notify()` 开销可忽略），但**采样仍然 5 分钟一次**——倒计时连续走，
 数据口径没有被偷偷改密。
 
+## 应用选择器（KernelSU 风格）
+
+三个目标应用（短视频 / 游戏 / 导航）不再是「弹一个长列表靠肉眼翻」，而是独立页面：
+
+- **常驻 pill 搜索栏**：输入即过滤，同时匹配应用名与包名，忽略大小写、自动去空格；
+  清空按钮一键复位，软键盘的「搜索」键收起键盘。
+- **真实应用图标**：`PackageManager.getApplicationIcon` 异步加载 + `LruCache` 缓存，
+  `ListView` 复用视图并用 tag 校验包名，快速滚动不会贴错图标或掉帧。
+- **置顶与标签**：当前选中项标「当前」并打勾，推荐项（Phigros / 高德 / 抖音等）标「推荐」，
+  其余按名称排序；换机、渠道包改名也能一眼找到目标。
+- **显示系统应用**开关：默认只列用户安装的、有桌面图标的应用；打开后补列无图标的系统应用
+  （相机、下载管理等）。受 Android 11 应用可见性限制，这里只声明 launcher intent 的 `queries`，
+  不申请 `QUERY_ALL_PACKAGES`。
+- **长按复制包名**，底部「清除当前选择」可把目标恢复为空（该工况只记录不加压）。
+- 列表为空时给出可操作的空态提示，而不是一片空白。
+
+交互与版式参照 KernelSU Manager 的应用页，但代码是自实现的 Material3 布局——
+KSU 是 GPL-3.0，直接复制会把本项目一并传染。
+
 ## 进程级性能指标（与 Emmagee / GT 对齐）
 
 只测整机电流只能回答「多耗电」，回答不了「有没有把机器压满」。v1.3 起补上行业通用的
@@ -105,8 +124,9 @@
 
 | 文件 | 职责 | 关键点 |
 |---|---|---|
-| `MainActivity.kt` | 界面 | Material3 卡片行；一键全自动入口；目标 App 选择 |
-| `CollectorService.kt` | 前台服务 + 工况队列 | `PARTIAL_WAKE_LOCK` 防冻结；按绝对时刻 `startAt + seq×1min` 调度；工况间自动接力 |
+| `MainActivity.kt` | 界面 | Material3 卡片行；一键全自动入口；跳转到可搜索的应用选择器 |
+| `AppPickerActivity.kt` | 目标应用选择 | KSU 风格常驻搜索栏、名称/包名即时过滤、系统应用开关、图标异步缓存、长按复制包名 |
+| `CollectorService.kt` | 前台服务 + 工况队列 | `PARTIAL_WAKE_LOCK` 防冻结；按绝对时刻 `startAt + seq×5min` 调度；工况间自动接力 |
 | `Automator.kt` | 自动化执行器 | 拉起 App、翻页、灭屏/唤醒、切相机、截图存证 |
 | `Plan.kt` | 测试计划与目标应用 | 默认 Phigros + 高德；包名对不上时按应用名模糊匹配，换机器也能跑 |
 | `Sampler.kt` | 单次采样 | A/B 双通道，字段级降级，单位量级自适应 |
@@ -134,7 +154,7 @@
 
 ## CSV 字段字典
 
-共 23 列，顺序即 `Sample.CSV_HEADER`。
+共 33 列，顺序即 `Sample.CSV_HEADER`。
 
 | # | 字段 | 含义 | 来源（A 通道 / B 通道） | 归一化 |
 |---|---|---|---|---|
@@ -160,7 +180,17 @@
 | 20 | `charging` | 是否充电 | `EXTRA_PLUGGED` / `EXTRA_STATUS` | 1/0；为 1 时不可作放电基线 |
 | 21 | `data_source` | 本行字段来源 | 运行时探测 | `batt=…;thz=…;cpu=…;gpu=…;fg=…;ch=root\|api` |
 | 22 | `thermal_status` | 系统热压力等级 | `PowerManager.getCurrentThermalStatus()` | `NONE`…`SHUTDOWN`，读不到 `NA` |
-| 23 | `is_final` | 是否为收尾校验行 | 调度器 | 1 表示 `elapsed_s` 应接近 1800 |
+| 23 | `app_pid` | 被测应用进程 pid | `pidof` | -1 = 进程未运行或本工况无目标 |
+| 24 | `app_cpu_pct` | 被测应用进程 CPU | `/proc/<pid>/stat` 第 14、15 列差分 | 单核 100% 基准，多线程可 >100 |
+| 25 | `app_pss_mb` | 被测应用 PSS 内存 | `/proc/<pid>/smaps_rollup` | 多进程 App 累加 |
+| 26 | `fps` | 区间平均帧率 | `dumpsys gfxinfo` 累计帧数差分 | -1 = 未采到，不写 0 |
+| 27 | `jank_pct` | 区间卡顿帧占比 | gfxinfo Janky 帧差分 / 总帧 | % |
+| 28 | `frame_p99_ms` | 99 分位帧耗时 | gfxinfo 99th percentile | ms |
+| 29 | `net_rx_kb` | 区间下行流量 | 非 lo 网卡 `<iface>/statistics/rx_bytes` 差分 | KB / 区间 |
+| 30 | `net_tx_kb` | 区间上行流量 | 非 lo 网卡 `<iface>/statistics/tx_bytes` 差分 | KB / 区间 |
+| 31 | `cpu_max_mhz` | 大核当前最高频率 | 各核 `scaling_cur_freq` 取最大 | 观察热降频 |
+| 32 | `launch_ms` | 冷 / 热启动耗时 | `am start -W` 的 `TotalTime` | 只挂在工况首点，其余写 0 |
+| 33 | `is_final` | 是否为收尾校验行 | 调度器 | 1 表示 `elapsed_s` 应接近 1800 |
 
 ## 构建
 
@@ -177,7 +207,8 @@ APK 由 GitHub Actions 构建，不在本地编译（本地无 Android SDK）：
 1. 下载 `app-debug.apk` 安装（debug 签名，需允许「安装未知来源应用」）。
 2. 首次运行授予通知权限；进「权限与数据源」点 **使用情况访问** 去系统设置打开；
    点 **root 通道** 触发一次 su 授权并确认显示「已授权」。
-3. 在「自动化测试」里确认短视频 / 游戏 / 导航三个目标 App（已自动探测，可点击更换）。
+3. 在「自动化测试」里确认短视频 / 游戏 / 导航三个目标 App（已自动探测为 Phigros / 高德等）。
+   点任意一行进入应用选择器，可直接输入名称或包名搜索，点一下即完成更换。
 4. 点 **一键全自动**，确认后把手机放桌上（别充电、别动）。约 2 小时后自动结束。
 5. 产物在 `Android/data/com.icec.powerprobe/files/PowerProbe/`，
    同时经 MediaStore 导出到 `Download/PowerProbe/`（截图在 `Download/PowerProbe/shots/`）。

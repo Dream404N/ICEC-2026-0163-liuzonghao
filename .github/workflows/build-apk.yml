@@ -59,13 +59,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
-          name: PowerProbe APK (latest)
+          name: PowerProbe APK (latest · v1.4.0)
           body: |
-            由 GitHub Actions 自动构建的 debug APK。
+            由 GitHub Actions 自动构建的 debug APK（v1.4.0）。
+
+            **v1.4.0 新增：KernelSU 风格的应用选择器**
+            - 独立的「选择应用」页面，常驻搜索栏，输入即过滤应用名与包名；
+            - 真实应用图标异步加载并缓存，当前选中项与推荐项（Phigros / 高德等）置顶标记；
+            - 「显示系统应用」开关、长按复制包名、一键清除选择、可操作的空态提示。
+
+            **已有能力**
+            - 进程级性能指标：被测应用 CPU / PSS / 帧率 / 卡顿率 / P99 / 流量 / 大核频率 / 冷启动耗时，口径与 Emmagee、GT 一致；
+            - 通知栏主控：进度条 + 工况倒计时 + 全程倒计时 + 实时读数 + 停止按钮；
+            - 一键全自动四工况，自动拉起 Phigros 与高德并发起导航，自动翻页、切相机、截图存证；
+            - CSV 33 列，设备端报告与分析脚本同步生成图表和统计检验。
 
             **两种运行方式**
-            - 无 root：全部走 Android 公共 API（BatteryManager / UsageStatsManager），可用；
-            - 有 root：自动切到只读 sysfs + dumpsys，数据更细，并启用全自动（灭屏、翻页、切相机、截图存证）。
+            - 无 root：全部走 Android 公共 API（BatteryManager / UsageStatsManager），可用，但拿不到进程级指标；
+            - 有 root：只读 sysfs + dumpsys，数据更细，并启用全自动编排。
 
             **安全边界**（详见 `tools/PowerProbe/SECURITY.md`）
             - 命令不接受任何外部输入，全部是编译期常量；
@@ -73,5 +84,6 @@ jobs:
             - 不申请设备管理器、不申请网络权限，数据全部本地。
 
             安装：下载 `app-debug.apk` → 允许安装未知来源 → 打开后按「权限与数据源」完成授权。
+            **必须人工的三件事**：插拔充电线、把 Phigros 画质帧率调到最高、现场同框照。
           files: tools/PowerProbe/app/build/outputs/apk/debug/app-debug.apk
           make_latest: true
