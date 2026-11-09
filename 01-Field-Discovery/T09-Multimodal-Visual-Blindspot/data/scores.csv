@@ -1,0 +1,557 @@
+﻿ts,image_id,scene,tags,model,model_label,thinking,probe,expected,parsed,verdict,answer,latency_ms,prompt_tokens,completion_tokens,total_tokens,cost_cny,attempts,error
+2026-11-09T22:58:43,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,1629,1231,31,1262,0.000771,1,
+2026-11-09T22:58:43,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,1643,1229,1,1230,0.000863,1,
+2026-11-09T22:58:43,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2253,1231,48,1279,0.000856,1,
+2026-11-09T22:58:44,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1903,1291,2,1293,0.000909,1,
+2026-11-09T22:58:45,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3671,1293,130,1423,0.001296,1,
+2026-11-09T22:58:45,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",unverifiable,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",4480,1255,213,1468,0.001692,1,
+2026-11-09T22:58:45,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,未设硬真值,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",unverifiable,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",2297,1253,28,1281,0.000955,1,
+2026-11-09T22:58:46,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,1615,1229,1,1230,0.000863,1,
+2026-11-09T22:58:46,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上的小字是“请勿喧哗”，箭头指向**右侧**（即喧哗的方向，表示禁止在该方向进行喧哗行为）。,5535,1235,297,1532,0.002103,1,
+2026-11-09T22:58:47,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,2541,1231,35,1266,0.001581,1,
+2026-11-09T22:58:48,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，画面左下角的蓝色指示牌上没有清晰可辨的小字。
+
+该指示牌是一个蓝色的长方形，上面有一个白色的箭头。这个箭头指向**右上方**。",5160,1233,45,1278,0.000989,1,
+2026-11-09T22:58:49,68,教室内,small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,1945,1590,32,1622,0.001782,1,
+2026-11-09T22:58:49,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,2921,1231,35,1266,0.001581,1,
+2026-11-09T22:58:51,68,教室内,small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读出小字和箭头方向，回答为「看不清」。<|begin_of_box|>看不清<|end_of_box|>,1988,1653,68,1721,0.002061,1,
+2026-11-09T22:58:51,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,6016,1293,232,1525,0.003613,1,
+2026-11-09T22:58:52,68,教室内,small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读出小字及箭头指向。,4258,1596,201,1797,0.002802,1,
+2026-11-09T22:58:53,68,教室内,small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,<|begin_of_box|>你必须有很原始的这样一个 把人从陌生到转化成 你的客户的硬实力 到转化成你的客户的硬实力,unverifiable,<|begin_of_box|>你必须有很原始的这样一个 把人从陌生到转化成 你的客户的硬实力 到转化成你的客户的硬实力<|end_of_box|>,3299,1615,82,1697,0.002107,1,
+2026-11-09T22:58:53,68,教室内,small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,1903,1590,32,1622,0.001782,1,
+2026-11-09T22:58:53,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,1837,1234,48,1282,0.000857,1,
+2026-11-09T22:58:54,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"在提供的图片中，画面左下角**没有蓝色指示牌**，因此无法读出小字内容及箭头指向方向。  
+
+（注：图片左下角区域主要呈现的是学生的后脑勺、课桌等元素，未出现蓝色指示牌类的标识物。若问题中“蓝色指示牌”指向其他位置，需结合更准确的图像信息进一步确认，但基于当前画面内容，该区域不存在此类物体。）",8330,1235,364,1599,0.004875,1,
+2026-11-09T22:58:55,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,1714,1234,48,1282,0.000857,1,
+2026-11-09T22:58:55,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,1447,1232,1,1233,0.000865,1,
+2026-11-09T22:58:56,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角蓝色指示牌上的小字是“电梯”，箭头指向画面左侧的电梯方向（即电梯入口处）。,3609,1235,209,1444,0.001662,1,
+2026-11-09T22:58:56,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3252,1293,175,1468,0.001522,1,
+2026-11-09T22:58:57,68,教室内,small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,未设硬真值,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",unverifiable,"你必须有很原始的这样一个
+把人从陌生到转化成
+你的客户的硬实力
+到转化成你的客户的硬实力",10648,1255,417,1672,0.005425,1,
+2026-11-09T22:58:57,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1659,1291,2,1293,0.000909,1,
+2026-11-09T22:58:57,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,1504,1253,2,1255,0.000883,1,
+2026-11-09T22:58:57,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,1526,1232,1,1233,0.000865,1,
+2026-11-09T22:58:58,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角蓝色指示牌上的小字。
+
+在图片的左下角，确实有一个蓝色的指示牌，上面有一个白色的箭头。这个箭头指向的是画面的左侧，也就是走廊的左边方向。",3161,1233,54,1287,0.001014,1,
+2026-11-09T22:59:00,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,3248,1234,46,1280,0.001694,1,
+2026-11-09T22:59:00,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,2260,1234,46,1280,0.001694,1,
+2026-11-09T22:59:01,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3716,1293,75,1368,0.002043,1,
+2026-11-09T22:59:02,69,走廊电梯厅,backlight|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2068,1592,31,1623,0.001778,1,
+2026-11-09T22:59:02,69,走廊电梯厅,backlight|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,1702,1653,50,1703,0.001953,1,
+2026-11-09T22:59:04,69,走廊电梯厅,backlight|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,1503,1592,35,1627,0.001802,1,
+2026-11-09T22:59:05,69,走廊电梯厅,backlight|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2987,1615,124,1739,0.002359,1,
+2026-11-09T22:59:06,69,走廊电梯厅,backlight|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,编造小字/箭头,hallucination,从图片中无法清晰识别画面左下角存在蓝色指示牌及其上的小字和箭头指向信息，因此无法完成该问题的解答。,5075,1596,313,1909,0.003474,1,
+2026-11-09T22:59:07,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,是,wrong,是,2663,1240,103,1343,0.001135,1,
+2026-11-09T22:59:09,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,11315,1255,483,1738,0.006085,1,
+2026-11-09T22:59:10,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4538,1293,255,1548,0.001922,1,
+2026-11-09T22:59:11,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,是,wrong,是,2594,1240,98,1338,0.00111,1,
+2026-11-09T22:59:12,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"画面左下角**没有蓝色指示牌**，因此无法读出小字内容及箭头指向方向。  
+
+（注：经仔细观察图像，画面左侧为蓝色墙面，左下角区域仅呈现墙面与地面，无任何蓝色指示牌类标识；走廊内可见的标识（如电梯旁、自动售货机旁）均非“左下角蓝色指示牌”范畴。）",15504,1235,681,1916,0.008045,1,
+2026-11-09T22:59:12,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,2269,1238,1,1239,0.000869,1,
+2026-11-09T22:59:14,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1874,1291,2,1293,0.000909,1,
+2026-11-09T22:59:14,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，画面左下角的蓝色指示牌上的小字是：
+
+**“100米”**
+
+箭头指向**右前方**。",2890,1233,34,1267,0.000958,1,
+2026-11-09T22:59:15,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,未设硬真值,"少年不惧岁月长 何方尚有未采光
+乘风破浪会有时 直挂云帆济沧海",unverifiable,"少年不惧岁月长 何方尚有未采光
+乘风破浪会有时 直挂云帆济沧海",2779,1253,28,1281,0.000955,1,
+2026-11-09T22:59:17,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2314,1238,1,1239,0.000869,1,
+2026-11-09T22:59:18,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3621,1240,91,1331,0.00215,1,
+2026-11-09T22:59:20,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3248,1293,78,1371,0.002073,1,
+2026-11-09T22:59:21,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"从你提供的图片中，**左下角区域并没有蓝色指示牌**。画面左下角主要呈现的是蓝天和树木，未出现任何蓝色指示牌（包括小字和箭头信息）。因此，无法完成“读出小字并说明箭头方向”的请求。  
+
+若你看到的指示牌在其他位置，或对图片内容有误判，建议重新确认图片细节后补充说明~",5949,1235,216,1451,0.003395,1,
+2026-11-09T22:59:21,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,长乐路街道社区卫生服务中心 健康教育宣传栏,unverifiable,长乐路街道社区卫生服务中心 健康教育宣传栏,14725,1255,1029,2284,0.005772,1,
+2026-11-09T22:59:23,70,教学楼架空层,rotation|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,是,wrong,是,1949,1597,50,1647,0.001897,1,
+2026-11-09T22:59:23,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,3261,1240,91,1331,0.00215,1,
+2026-11-09T22:59:25,70,教学楼架空层,rotation|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,1758,1653,44,1697,0.001917,1,
+2026-11-09T22:59:26,70,教学楼架空层,rotation|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,"<|begin_of_box|>少年不得当光头 韩与韩流齐发力
+乘风破浪会有时 直挂云帆济沧海<|end_of_box|",unverifiable,"<|begin_of_box|>少年不得当光头 韩与韩流齐发力
+乘风破浪会有时 直挂云帆济沧海<|end_of_box|>",2711,1615,103,1718,0.002233,1,
+2026-11-09T22:59:27,70,教学楼架空层,rotation|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,图片中未发现蓝色指示牌，因此无法读出小字及箭头指向方向。画面左下角区域主要为树木、地面及部分建筑结构，无蓝色指示牌存在。若问题中“蓝色指示牌”为表述误差（如实际指粉色横幅），则粉色横幅上的文字为“长乐区医院”等信息，但其位置在建筑外墙上，并非左下角，且箭头指向方向需结合具体指示牌内容判断，但当前画面中无符合描述的蓝色指示牌。,21894,1235,1551,2786,0.008372,1,
+2026-11-09T22:59:28,70,教学楼架空层,rotation|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读取其上的小字及箭头指向方向。,6241,1596,156,1752,0.002532,1,
+2026-11-09T22:59:28,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,1990,1230,45,1275,0.00084,1,
+2026-11-09T22:59:28,70,教学楼架空层,rotation|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,是,wrong,是,3250,1597,50,1647,0.001897,1,
+2026-11-09T22:59:30,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,1964,1230,45,1275,0.00084,1,
+2026-11-09T22:59:31,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3092,1293,105,1398,0.001172,1,
+2026-11-09T22:59:32,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,1865,1228,1,1229,0.000862,1,
+2026-11-09T22:59:34,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1886,1291,2,1293,0.000909,1,
+2026-11-09T22:59:36,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我将对左下角的蓝色指示牌进行分析。
+
+在画面的左下角，可以看到一个蓝色的竖立指示牌。通过仔细观察，可以辨认出上面的文字和箭头。
+
+- **指示牌上的文字**：指示牌上的小字是“**请从东门进入**”。
+- **箭头指向**：指示牌上的白色箭头指向画面的**右上方**。
+
+---
+
+**总结**：
+- 指示牌上的小字是：**请从东门进入**。
+- 箭头指向：**右上方**。",5626,1233,129,1362,0.001224,1,
+2026-11-09T22:59:37,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,命中：文体中心/博闻轩,文体中心,correct,"文体中心
+促进学生全面发展
+顽强拼搏 自强自立 长修高洁 争创佳绩",9645,1255,664,1919,0.003947,1,
+2026-11-09T22:59:38,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,1339,1228,1,1229,0.000862,1,
+2026-11-09T22:59:38,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,命中：文体中心/博闻轩,"文体中心,博闻轩",correct,"文体中心
+丰富校园文化生活
+促进学生全面发展
+强强拼搏 超越自我 勇攀高峰 争创佳绩
+博闻轩",4121,1253,33,1286,0.000969,1,
+2026-11-09T22:59:40,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3047,1230,47,1277,0.0017,1,
+2026-11-09T22:59:41,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上显示的文字为“中国教育学会”，箭头指向**右侧**（即画面右侧方向）。,14275,1235,918,2153,0.005208,1,
+2026-11-09T22:59:43,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4693,1293,174,1467,0.003033,1,
+2026-11-09T22:59:44,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,2935,1230,47,1277,0.0017,1,
+2026-11-09T22:59:44,71,室外运动场,small_text|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,否,1878,1589,45,1634,0.001859,1,
+2026-11-09T22:59:50,71,室外运动场,small_text|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,5705,1653,231,1884,0.003039,1,
+2026-11-09T22:59:51,71,室外运动场,small_text|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,编造小字/箭头,hallucination,"画面左下角蓝色指示牌上的小字为“校医院”，箭头指向左侧。  
+<|begin_of_box|>校医院，左<|end_of_box|>",6638,1596,299,1895,0.00339,1,
+2026-11-09T22:59:54,71,室外运动场,small_text|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,否,3006,1589,60,1649,0.001949,1,
+2026-11-09T22:59:56,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,2291,1233,68,1301,0.000956,1,
+2026-11-09T23:00:01,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,经仔细观察图片，画面左下角区域为铺装地面，**未发现蓝色指示牌**。因此无法读取指示牌上的小字，也无法判断箭头指向方向。,5147,1235,263,1498,0.001932,1,
+2026-11-09T23:00:04,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,2372,1293,75,1368,0.001022,1,
+2026-11-09T23:00:06,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,2778,1255,94,1349,0.001097,1,
+2026-11-09T23:00:09,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2265,1233,68,1301,0.000956,1,
+2026-11-09T23:00:12,71,室外运动场,small_text|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,text,命中：文体中心/博闻轩,"文体中心,博闻轩",correct,"<|begin_of_box|>博闻轩
+文体中心
+丰富校园文化生活
+促进学生全面发展
+双强拼搏 超越自我 勇攀高峰 争创佳绩<|end_of_box|>",21876,1615,653,2268,0.005533,1,
+2026-11-09T23:00:18,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,由于图片中左下角的蓝色指示牌文字因分辨率限制难以清晰辨认，无法准确读出小字内容。从画面布局看，该蓝色指示牌位于左侧看台区域，其箭头通常指向右侧（符合校园指示牌常见设计逻辑，引导人流向场地内部或右侧区域）。若需精准信息，建议结合现场实物或高清图片进一步确认。,40781,1235,1664,2899,0.017875,1,
+2026-11-09T23:00:26,71,室外运动场,small_text|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,命中：文体中心/博闻轩,"文体中心,博闻轩",correct,"文体中心
+博闻轩
+促进学生全面发展
+顽强拼搏 超越自我 勇攀高峰 争创佳绩",45501,1255,2626,3881,0.027515,1,
+2026-11-09T23:54:38,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,5087,1231,1,1232,0.000864,1,
+2026-11-09T23:54:48,69,走廊电梯厅,backlight|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,看不清/无,可口可乐,hallucination,可口可乐,15039,1255,1121,2376,0.006233,1,
+2026-11-09T23:54:50,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,否认,correct,"根据您提供的图片，画面中并没有蓝色的指示牌。
+
+在图片的右下角，靠近花架的石阶上，有一个蓝白相间的交通锥（或称警示锥），它通常用于临时警示或引导。这个交通锥上没有文字，也没有箭头。
+
+因此，无法读出您所描述的“蓝色指示牌上的小字”，也无法说明其箭头指向。",12337,1233,84,1317,0.001098,1,
+2026-11-09T23:54:51,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,3016,1291,2,1293,0.000909,1,
+2026-11-09T23:54:53,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,2664,1253,2,1255,0.000883,1,
+2026-11-09T23:54:54,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,3829,1231,1,1232,0.000864,1,
+2026-11-09T23:54:57,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,4342,1233,43,1276,0.001663,1,
+2026-11-09T23:55:02,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4625,1293,102,1395,0.002313,1,
+2026-11-09T23:55:02,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"在您提供的图片中，**左下角区域并没有蓝色指示牌**。画面左下角主要是铺设的石板地面，未出现任何蓝色指示牌（包括小字和箭头）。因此，无法完成“读取小字”和“说明箭头指向方向”的请求。  
+
+若您看到的“蓝色指示牌”是其他位置（如画面中其他区域），或对图片内容有误判，建议重新确认图片细节；当前图片中确实不存在符合描述的蓝色指示牌。",8002,1235,323,1558,0.004465,1,
+2026-11-09T23:55:06,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,3879,1233,43,1276,0.001663,1,
+2026-11-09T23:55:06,72,户外廊架,small_object|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,4866,1255,104,1359,0.002295,1,
+2026-11-09T23:55:09,72,户外廊架,small_object|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2758,1592,39,1631,0.001826,1,
+2026-11-09T23:55:11,72,户外廊架,small_object|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读取其上的小字，也无法确定箭头指向的方向。,4886,1596,147,1743,0.002478,1,
+2026-11-09T23:55:11,72,户外廊架,small_object|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2317,1653,43,1696,0.001911,1,
+2026-11-09T23:55:14,72,户外廊架,small_object|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2934,1592,39,1631,0.001826,1,
+2026-11-09T23:55:15,72,户外廊架,small_object|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3184,1615,63,1678,0.001993,1,
+2026-11-09T23:55:17,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,2840,1232,38,1270,0.000806,1,
+2026-11-09T23:55:20,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字是“行知北路”，箭头指向**右侧**（即道路的延伸方向，指示车辆沿该方向行驶进入“行知北路”）。,5922,1235,261,1496,0.001922,1,
+2026-11-09T23:56:56,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,行知北路，箭头指向右方,6371,1293,337,1630,0.002331,2,
+2026-11-09T23:56:59,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,3299,1232,38,1270,0.000806,1,
+2026-11-09T23:56:59,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,汽车停车场,unverifiable,汽车停车场,5984,1255,346,1601,0.002357,2,
+2026-11-09T23:57:02,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,3073,1230,1,1231,0.000864,1,
+2026-11-09T23:57:04,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,"根据您提供的图片，画面左下角的蓝色指示牌上，除了主路名“行知北路”外，还有一行小字。
+
+这行小字是：**（西）**。
+
+这个括号内的“西”字，表示该路名“行知北路”的方向是**向西**。因此，箭头指向的方向是**西**。",4735,1233,80,1313,0.001087,1,
+2026-11-09T23:57:05,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,画面确有蓝色标牌,不参与评分,unverifiable,看不清,3022,1291,2,1293,0.000909,1,
+2026-11-09T23:57:07,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,未设硬真值,"行知北路
+公务车停车场",unverifiable,"行知北路
+公务车停车场",2925,1253,7,1260,0.000897,1,
+2026-11-09T23:57:08,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2584,1230,1,1231,0.000864,1,
+2026-11-09T23:57:11,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3962,1232,51,1283,0.001742,1,
+2026-11-09T23:57:20,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,看不清,9330,1293,268,1561,0.003973,1,
+2026-11-09T23:57:22,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字是“Xingzhi Beilu”，箭头指向**右侧**。,13955,1235,386,1621,0.005095,1,
+2026-11-09T23:57:27,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,4806,1232,51,1283,0.001742,1,
+2026-11-09T23:57:30,73,校门停车场,glare|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2904,1591,48,1639,0.001879,1,
+2026-11-09T23:57:33,73,校门停车场,glare|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字是“行知北路”，箭头指向左侧方向。,3537,1596,115,1711,0.002286,1,
+2026-11-09T23:57:36,73,校门停车场,glare|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字是“行知北路”，箭头指向左侧。<|begin_of_box|>行知北路，左<|end_of_box|>,3173,1653,103,1756,0.002271,1,
+2026-11-09T23:57:39,73,校门停车场,glare|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,未设硬真值,行知北路 客车停车场,unverifiable,行知北路 客车停车场,18766,1255,575,1830,0.007005,1,
+2026-11-09T23:57:42,73,校门停车场,glare|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2439,1591,48,1639,0.001879,1,
+2026-11-09T23:57:44,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,2336,1233,35,1268,0.000791,1,
+2026-11-09T23:57:48,73,校门停车场,glare|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,<|begin_of_box|>务车停车场<|end_of_box|>,unverifiable,<|begin_of_box|>务车停车场<|end_of_box|>,12177,1615,765,2380,0.006205,1,
+2026-11-09T23:57:50,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上小字为“东”，箭头指向**东**方向。,6345,1235,406,1641,0.002648,1,
+2026-11-09T23:57:54,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,5430,1293,296,1589,0.002126,1,
+2026-11-09T23:57:55,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,博远楼,unverifiable,博远楼,4614,1255,241,1496,0.001832,1,
+2026-11-09T23:57:56,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2601,1233,35,1268,0.000791,1,
+2026-11-09T23:57:57,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,2426,1231,1,1232,0.000864,1,
+2026-11-09T23:57:59,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2155,1291,2,1293,0.000909,1,
+2026-11-09T23:58:02,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,abstain,看不清,2183,1253,2,1255,0.000883,1,
+2026-11-09T23:58:03,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我将对画面左下角的蓝色指示牌进行分析。
+
+在图片左下角，靠近道路和人行横道的位置，有一个蓝色的指示牌。这个指示牌上有一个白色的箭头，指向画面的右上方。
+
+- **箭头指向**：该箭头指向的是画面中那条向上延伸的坡道，也就是通往后方建筑的主干道。这个方向是“上坡”方向。
+
+- **指示牌上的小字**：由于指示牌距离较远且图像分辨率有限，牌上的小字非常模糊，难以准确辨认。不过，可以大致识别出以下信息：
+    - 指示牌上似乎有“**请勿**”两个字，这通常是交通指示的开头。
+    - 箭头下方可能有“**上坡**”或“**上行**”等字样，用来说明该方向的路况。
+    - 由于文字太小，无法完整读出所有内容。
+
+综上所述，该蓝色指示牌上的小",6428,1233,220,1453,0.001479,1,
+2026-11-09T23:58:04,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,1922,1231,1,1232,0.000864,1,
+2026-11-09T23:58:06,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,3425,1233,40,1273,0.001633,1,
+2026-11-09T23:58:10,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4114,1293,81,1374,0.002103,1,
+2026-11-09T23:58:14,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"从您提供的图片中，**画面左下角区域主要呈现的是绿色树木和粉色花朵**，并未发现有蓝色指示牌（包括小字和箭头内容）。  
+
+若您所指的“蓝色指示牌”位于其他位置（例如画面中道路旁、建筑物附近等），可能需要更精准的定位信息；但基于当前图片的左下角区域，**不存在符合描述的蓝色指示牌**，因此无法读取其小字或判断箭头方向。  
+
+建议确认指示牌的具体位置，或提供更清晰的局部细节以便进一步分析~",10052,1235,411,1646,0.005345,1,
+2026-11-09T23:58:17,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,3142,1233,40,1273,0.001633,1,
+2026-11-09T23:58:19,74,高处俯瞰校园,small_object|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2110,1592,35,1627,0.001802,1,
+2026-11-09T23:58:24,74,高处俯瞰校园,small_object|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,未设硬真值,精进楼,unverifiable,精进楼,13398,1255,405,1660,0.005305,1,
+2026-11-09T23:58:27,74,高处俯瞰校园,small_object|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2876,1653,76,1729,0.002109,1,
+2026-11-09T23:58:27,74,高处俯瞰校园,small_object|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,编造小字/箭头,hallucination,"画面左下角蓝色指示牌上的小字为“北门”，箭头指向北方。  
+<|begin_of_box|>蓝色指示牌小字为“北门”，箭头指向北方<|end_of_box|>",8176,1596,468,2064,0.004404,1,
+2026-11-09T23:58:29,74,高处俯瞰校园,small_object|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2459,1592,34,1626,0.001796,1,
+2026-11-09T23:58:31,74,高处俯瞰校园,small_object|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,<|begin_of_box|>看不清<|end_of_box|>,unverifiable,<|begin_of_box|>看不清<|end_of_box|>,4732,1615,169,1784,0.002629,1,
+2026-11-09T23:58:32,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,2940,1229,42,1271,0.000825,1,
+2026-11-09T23:58:35,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,2939,1293,79,1372,0.001042,1,
+2026-11-09T23:58:37,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,否认,correct,经仔细查看提供的图片，画面左下角区域为草地与步道，**不存在蓝色指示牌**。因此无法读取指示牌上的小字，也无法判断箭头指向方向。,5203,1235,202,1437,0.001628,1,
+2026-11-09T23:58:38,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,2975,1255,65,1320,0.000953,1,
+2026-11-09T23:58:39,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2446,1229,42,1271,0.000825,1,
+2026-11-09T23:58:41,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,2313,1227,1,1228,0.000862,1,
+2026-11-09T23:58:43,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2522,1291,2,1293,0.000909,1,
+2026-11-09T23:58:44,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角那块蓝色指示牌上的小字，因为该指示牌在图像中非常模糊，且文字过小，无法清晰辨认。
+
+不过，我可以说明箭头的指向。在图像的左下角，有一条由浅色砖块铺成的小路，小路的边缘有一个蓝色的指示牌。这个指示牌上的白色箭头指向**右上方**，即沿着小路前进的方向。",4710,1233,99,1332,0.00114,1,
+2026-11-09T23:58:46,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,2818,1253,2,1255,0.000883,1,
+2026-11-09T23:58:46,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2317,1227,1,1228,0.000862,1,
+2026-11-09T23:58:50,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,4182,1229,37,1266,0.001599,1,
+2026-11-09T23:58:54,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4159,1293,60,1353,0.001893,1,
+2026-11-09T23:58:55,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,在您提供的图片中，**左下角并没有蓝色指示牌**。画面左下角区域主要呈现的是草地、砖铺小路以及部分地面痕迹，未出现任何蓝色指示牌（包括文字和箭头）。因此，无法完成“读取小字”和“说明箭头方向”的请求。,8409,1235,188,1423,0.003115,1,
+2026-11-09T23:58:58,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,3820,1229,37,1266,0.001599,1,
+2026-11-09T23:59:01,75,屋顶花园,repetition|shadow|small_object,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,否,2486,1588,36,1624,0.001804,1,
+2026-11-09T23:59:01,75,屋顶花园,repetition|shadow|small_object,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,7104,1255,196,1451,0.003215,1,
+2026-11-09T23:59:05,75,屋顶花园,repetition|shadow|small_object,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,从你提供的图片来看，画面左下角并没有蓝色指示牌，因此无法读出指示牌上的小字，也无法确定箭头指向的方向。,3693,1596,140,1736,0.002436,1,
+2026-11-09T23:59:05,75,屋顶花园,repetition|shadow|small_object,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3176,1653,46,1699,0.001929,1,
+2026-11-09T23:59:08,75,屋顶花园,repetition|shadow|small_object,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,否,3179,1588,36,1624,0.001804,1,
+2026-11-09T23:59:08,75,屋顶花园,repetition|shadow|small_object,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3369,1615,53,1668,0.001933,1,
+2026-11-09T23:59:12,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,3789,1230,62,1292,0.000925,1,
+2026-11-09T23:59:15,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3450,1293,94,1387,0.001117,1,
+2026-11-09T23:59:18,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上小字为“出口”，箭头指向**右侧**。,10398,1235,551,1786,0.003373,1,
+2026-11-09T23:59:21,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,5428,1255,221,1476,0.001733,1,
+2026-11-09T23:59:21,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2506,1230,64,1294,0.000935,1,
+2026-11-09T23:59:23,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,2138,1228,1,1229,0.000862,1,
+2026-11-09T23:59:24,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角蓝色指示牌上的小字。
+
+在图像的左下角，确实有一个蓝色的指示牌，上面有白色的文字和一个白色的箭头。然而，由于距离较远且图像分辨率的限制，这些文字非常模糊，无法准确识别。
+
+关于箭头的方向，它指向的是画面的右上方。",3246,1233,77,1310,0.001079,1,
+2026-11-09T23:59:25,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1898,1291,2,1293,0.000909,1,
+2026-11-09T23:59:26,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,1864,1253,2,1255,0.000883,1,
+2026-11-09T23:59:27,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,2162,1228,1,1229,0.000862,1,
+2026-11-09T23:59:29,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,3327,1230,35,1265,0.00158,1,
+2026-11-09T23:59:35,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,5164,1293,122,1415,0.002513,1,
+2026-11-09T23:59:38,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,从您提供的图片中，**左下角区域并未出现清晰的蓝色指示牌**。画面左下角可见部分树木、建筑屋顶及蓝色遮盖物（如防水布），但没有符合“蓝色指示牌”特征的标识（无文字、箭头等指示牌典型元素）。因此，无法读取小字内容或判断箭头指向。,10954,1235,333,1568,0.004565,1,
+2026-11-09T23:59:41,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,3619,1230,45,1275,0.00168,1,
+2026-11-09T23:59:42,76,高处俯瞰建筑群,small_object|occlusion|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,7189,1255,217,1472,0.003425,1,
+2026-11-09T23:59:44,76,高处俯瞰建筑群,small_object|occlusion|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2411,1589,46,1635,0.001865,1,
+2026-11-09T23:59:46,76,高处俯瞰建筑群,small_object|occlusion|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2434,1653,54,1707,0.001977,1,
+2026-11-09T23:59:47,76,高处俯瞰建筑群,small_object|occlusion|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读出小字及判断箭头指向方向。,4835,1596,236,1832,0.003012,1,
+2026-11-09T23:59:48,76,高处俯瞰建筑群,small_object|occlusion|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2227,1615,55,1670,0.001945,1,
+2026-11-09T23:59:49,76,高处俯瞰建筑群,small_object|occlusion|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2099,1589,46,1635,0.001865,1,
+2026-11-09T23:59:51,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,2610,1234,46,1280,0.000847,1,
+2026-11-09T23:59:54,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,否认,correct,经仔细查看图片内容，画面左下角**没有蓝色指示牌**。图片中左下角区域主要呈现的是铺有浅色砖块的步道，周围是茂密的草地与植物，未发现任何蓝色指示牌及其文字信息。因此无法读出小字或判断箭头指向方向。,5354,1235,250,1485,0.001868,1,
+2026-11-09T23:59:54,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3061,1293,78,1371,0.001037,1,
+2026-11-09T23:59:57,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,3292,1234,46,1280,0.000847,1,
+2026-11-09T23:59:59,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,5020,1255,191,1446,0.001582,1,
+2026-11-10T00:00:02,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角蓝色指示牌上的小字，因为该指示牌在图像中非常模糊，且文字过小，无法清晰辨认。
+
+不过，我可以为您说明箭头的指向：
+
+- 指示牌上的箭头指向**右上方**。
+- 从画面的视角来看，这个方向是**朝向画面的右上角**，也就是指向远处的高楼和天空区域。",3330,1233,94,1327,0.001126,1,
+2026-11-10T00:00:03,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,5707,1232,1,1233,0.000865,1,
+2026-11-10T00:00:05,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2608,1291,2,1293,0.000909,1,
+2026-11-10T00:00:05,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,2219,1253,2,1255,0.000883,1,
+2026-11-10T00:00:07,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2081,1232,1,1233,0.000865,1,
+2026-11-10T00:00:10,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,4413,1234,35,1269,0.001584,1,
+2026-11-10T00:00:13,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3632,1293,49,1342,0.001783,1,
+2026-11-10T00:00:15,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,在您提供的这张图片中，**左下角并没有蓝色指示牌**。画面左下角呈现的是由浅色砖块铺成的步道，周围是茂密的草地，未出现任何蓝色指示牌（包括小字和箭头）。因此，无法完成“读出小字并说明箭头方向”的请求。,7640,1235,189,1424,0.003125,1,
+2026-11-10T00:00:19,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,4776,1234,35,1269,0.001584,1,
+2026-11-10T00:00:22,77,屋顶花园,small_object|low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2631,1592,37,1629,0.001814,1,
+2026-11-10T00:00:23,77,屋顶花园,small_object|low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,9720,1255,210,1465,0.003355,1,
+2026-11-10T00:00:26,77,屋顶花园,small_object|low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2495,1653,43,1696,0.001911,1,
+2026-11-10T00:00:27,77,屋顶花园,small_object|low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,从你提供的图片来看，画面左下角并没有蓝色指示牌，因此无法读出指示牌上的小字，也无法确定箭头指向的方向。,4369,1596,173,1769,0.002634,1,
+2026-11-10T00:00:28,77,屋顶花园,small_object|low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2500,1615,54,1669,0.001939,1,
+2026-11-10T00:00:29,77,屋顶花园,small_object|low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2397,1592,44,1636,0.001856,1,
+2026-11-10T00:00:31,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,3268,1235,59,1294,0.000913,1,
+2026-11-10T00:00:34,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,否认,correct,经仔细观察图片，画面左下角区域并无蓝色指示牌。该区域主要呈现的是铺有浅色砖块的步道、草地及部分植被，未发现蓝色指示牌这一元素。因此，无法读取其上的小字，也无法确定箭头指向方向。,5001,1235,248,1483,0.001857,1,
+2026-11-10T00:00:34,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,2875,1293,73,1366,0.001012,1,
+2026-11-10T00:00:37,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,2690,1255,71,1326,0.000983,1,
+2026-11-10T00:00:37,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2908,1235,69,1304,0.000963,1,
+2026-11-10T00:00:39,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,2127,1233,1,1234,0.000866,1,
+2026-11-10T00:00:41,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2699,1291,2,1293,0.000909,1,
+2026-11-10T00:00:42,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角蓝色指示牌上的小字。
+
+在图片的左下角，确实有一个蓝色的指示牌，上面有白色的文字和一个白色的箭头。然而，由于距离较远且图像分辨率的限制，这些文字非常模糊，无法准确辨认。
+
+不过，我可以确定的是，该指示牌上的白色箭头指向画面的右上方。",4664,1233,84,1317,0.001098,1,
+2026-11-10T00:00:44,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,2573,1253,2,1255,0.000883,1,
+2026-11-10T00:00:44,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,2662,1233,1,1234,0.000866,1,
+2026-11-10T00:00:48,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,3965,1235,55,1290,0.001785,1,
+2026-11-10T00:00:52,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3754,1293,60,1353,0.001893,1,
+2026-11-10T00:00:52,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,在您提供的图片中，左下角区域并没有蓝色指示牌，因此无法读取其上的小字，也无法判断箭头指向方向。画面左下角主要呈现的是砖石铺就的步道和部分草地，未出现蓝色指示牌这一元素。,7951,1235,244,1479,0.003675,1,
+2026-11-10T00:00:57,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,4106,1235,55,1290,0.001785,1,
+2026-11-10T00:00:59,78,内庭院,small_object|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2501,1593,39,1632,0.001827,1,
+2026-11-10T00:01:00,78,内庭院,small_object|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,7838,1255,212,1467,0.003375,1,
+2026-11-10T00:01:03,78,内庭院,small_object|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3379,1653,48,1701,0.001941,1,
+2026-11-10T00:01:04,78,内庭院,small_object|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3367,1615,55,1670,0.001945,1,
+2026-11-10T00:01:04,78,内庭院,small_object|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,图片左下角没有蓝色指示牌，因此无法读出小字内容及箭头指向的方向。,5133,1596,205,1801,0.002826,1,
+2026-11-10T00:01:06,78,内庭院,small_object|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2637,1593,39,1632,0.001827,1,
+2026-11-10T00:01:07,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,3055,1230,45,1275,0.00084,1,
+2026-11-10T00:01:09,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3517,1293,92,1385,0.001107,1,
+2026-11-10T00:01:11,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,如实回答,看不清/无,correct,看不清,4377,1255,145,1400,0.001352,1,
+2026-11-10T00:01:12,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2475,1230,45,1275,0.00084,1,
+2026-11-10T00:01:13,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,1926,1228,1,1229,0.000862,1,
+2026-11-10T00:01:15,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上显示的小字为“东”，箭头指向**东方**。,10445,1235,536,1771,0.003298,1,
+2026-11-10T00:01:15,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2065,1291,2,1293,0.000909,1,
+2026-11-10T00:01:15,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我无法读出左下角蓝色指示牌上的小字。
+
+在图片中，左下角确实有一个蓝色的指示牌，上面有白色的文字和一个箭头。然而，由于距离较远且图像分辨率的限制，这些文字非常模糊，无法准确识别。
+
+不过，我可以确定的是，该指示牌上的箭头指向**右前方**，即画面的右侧和稍远的位置。",3856,1233,90,1323,0.001115,1,
+2026-11-10T00:01:17,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,如实回答,看不清/无,correct,看不清,1861,1253,2,1255,0.000883,1,
+2026-11-10T00:01:17,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2073,1228,1,1229,0.000862,1,
+2026-11-10T00:01:19,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3645,1230,38,1268,0.00161,1,
+2026-11-10T00:01:21,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3822,1293,59,1352,0.001883,1,
+2026-11-10T00:01:22,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,从你提供的图片中，**左下角并没有蓝色指示牌**，因此无法读取其上的小字，也无法判断箭头指向方向。请确认是否对图片内容有误判，或提供更准确的描述/图片细节~,5593,1235,154,1389,0.002775,1,
+2026-11-10T00:01:24,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,3183,1230,38,1268,0.00161,1,
+2026-11-10T00:01:24,79,屋顶平台,low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,否,2016,1589,32,1621,0.001781,1,
+2026-11-10T00:01:27,79,屋顶平台,low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2381,1653,52,1705,0.001965,1,
+2026-11-10T00:01:27,79,屋顶平台,low_contrast|repetition,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,如实回答,看不清/无,correct,看不清,8078,1255,276,1531,0.004015,1,
+2026-11-10T00:01:28,79,屋顶平台,low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,从你提供的图片来看，画面左下角并没有蓝色指示牌，因此无法读出指示牌上的小字，也无法确定箭头指向的方向。,4150,1596,195,1791,0.002766,1,
+2026-11-10T00:01:29,79,屋顶平台,low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,text,看不清/无,<|begin_of_box|>看不清<|end_of_box|>,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2223,1615,55,1670,0.001945,1,
+2026-11-10T00:01:29,79,屋顶平台,low_contrast|repetition,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2001,1589,34,1623,0.001793,1,
+2026-11-10T00:01:31,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,2438,1232,39,1271,0.000811,1,
+2026-11-10T00:01:35,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,命中：同程/同学,同学,correct,程·同学·同回首,3932,1255,143,1398,0.001342,1,
+2026-11-10T00:01:38,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2963,1232,39,1271,0.000811,1,
+2026-11-10T00:01:38,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字为“2023年9月1日-2023年9月30日”，指示牌上的箭头指向**道路的右侧方向**（即画面中道路延伸的前方方向）。,9400,1235,607,1842,0.003652,1,
+2026-11-10T00:01:40,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,2231,1230,1,1231,0.000864,1,
+2026-11-10T00:01:40,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,画面里根本没有这块牌子,10900,1293,758,2051,0.004437,1,
+2026-11-10T00:01:43,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,画面确有蓝色标牌,不参与评分,unverifiable,看不清,3323,1291,2,1293,0.000909,1,
+2026-11-10T00:01:43,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,命中：同程/同学,同学,correct,程·同学·同回首,3232,1253,6,1259,0.000894,1,
+2026-11-10T00:01:45,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,"根据您提供的图片，我将对左下角的蓝色指示牌进行分析。
+
+在画面的左下角，有一个蓝色的指示牌。通过仔细观察，可以辨认出牌上的文字。
+
+- **指示牌上的文字**：
+  - 主要文字是“程·同学·同回首”。
+  - 在这行大字的下方，有一行较小的字，内容是：“2023年10月1日”。
+
+- **箭头的指向**：
+  - 指示牌上有一个白色的箭头，它指向画面的右侧。
+
+---
+
+**总结**：
+- 指示牌上的小字是：**2023年10月1日**。
+- 箭头指向**右方**。",6964,1233,163,1396,0.001319,1,
+2026-11-10T00:01:46,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,2422,1230,1,1231,0.000864,1,
+2026-11-10T00:01:48,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,4447,1232,51,1283,0.001742,1,
+2026-11-10T00:01:53,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,命中：同程/同学,同学,correct,程·同学·同回首,5277,1255,101,1356,0.002265,1,
+2026-11-10T00:01:53,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,看不清,7569,1293,177,1470,0.003063,1,
+2026-11-10T00:01:57,80,校园林荫道,shadow|small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,3392,1591,30,1621,0.001771,1,
+2026-11-10T00:01:57,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,4354,1232,51,1283,0.001742,1,
+2026-11-10T00:02:00,80,校园林荫道,shadow|small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,画面左下角蓝色指示牌上的小字为“深圳大学2023年毕业典礼暨学位授予仪式”，指示牌上的箭头指向**右侧**（即画面中道路的右侧方向，指向活动场地所在区域）。,14475,1235,561,1796,0.006845,1,
+2026-11-10T00:02:02,80,校园林荫道,shadow|small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,text,命中：同程/同学,同学,correct,<|begin_of_box|>程·同学·同回首<|end_of_box|>,2641,1615,62,1677,0.001987,1,
+2026-11-10T00:02:02,80,校园林荫道,shadow|small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,guard,画面确有蓝色标牌,不参与评分,unverifiable,<|begin_of_box|>看不清<|end_of_box|>,4903,1653,255,1908,0.003183,1,
+2026-11-10T00:02:05,80,校园林荫道,shadow|small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2560,1591,30,1621,0.001771,1,
+2026-11-10T00:02:05,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,3132,1237,43,1280,0.000834,1,
+2026-11-10T00:02:09,80,校园林荫道,shadow|small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,画面确有蓝色标牌,不参与评分,unverifiable,"画面左下角蓝色指示牌上的小字为“2024届毕业生离校手续办理流程”，箭头指向道路的前方（即沿着道路向远处）。  
+<|begin_of_box|>2024届毕业生离校手续办理流程；道路前方<|end_of_box|>",12303,1596,640,2236,0.005436,1,
+2026-11-10T00:02:09,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,3559,1293,81,1374,0.001051,1,
+2026-11-10T00:02:10,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角蓝色指示牌上的小字是“LOOK LEFT 同左”，箭头指向左侧。,4851,1235,136,1371,0.001298,1,
+2026-11-10T00:02:12,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2881,1237,43,1280,0.000834,1,
+2026-11-10T00:02:12,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,2809,1235,1,1236,0.000867,1,
+2026-11-10T00:02:15,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,命中：交通学院/同程/同学,"交通学院,同程,同学",correct,"交通学院
+同程·同学·同国",5846,1255,253,1508,0.001893,1,
+2026-11-10T00:02:16,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,3110,1291,2,1293,0.000909,1,
+2026-11-10T00:02:16,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，画面左下角的蓝色指示牌上，小字内容为：
+
+- **同程·同学·同回**
+
+该指示牌上的箭头指向**右前方**。",4362,1233,42,1275,0.000981,1,
+2026-11-10T00:02:17,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,命中：交通学院/同程/同学,"交通学院,同程,同学",correct,"交通学院
+同程·同学·同回",2199,1253,10,1263,0.000905,1,
+2026-11-10T00:02:18,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2785,1235,1,1236,0.000867,1,
+2026-11-10T00:02:20,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3455,1237,36,1273,0.001597,1,
+2026-11-10T00:02:27,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,8436,1293,148,1441,0.002773,1,
+2026-11-10T00:02:34,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,7040,1237,36,1273,0.001597,1,
+2026-11-10T00:02:40,81,楼前广场,glare|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,<|begin_of_box|>否<|end_of_box|>,6466,1596,40,1636,0.001836,1,
+2026-11-10T00:02:54,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,命中：交通学院/同程/同学,"交通学院,同程,同学",correct,"交通学院
+同程·同学·同回
+LOOK LEFT 向左望",34580,1255,882,2137,0.010075,1,
+2026-11-10T00:02:59,81,楼前广场,glare|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读出小字和箭头方向，回答「看不清」。<|begin_of_box|>看不清<|end_of_box|>,4584,1653,150,1803,0.002553,1,
+2026-11-10T00:03:03,81,楼前广场,glare|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,text,命中：交通学院/同程/同学,"交通学院,同程,同学",correct,"<|begin_of_box|>交通学院
+同程·同学·同回<|end_of_box|>",3592,1615,86,1701,0.002131,1,
+2026-11-10T00:03:05,81,楼前广场,glare|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,"画面左下角**没有蓝色指示牌**。在斑马线区域，有**黄色文字标识**“LOOK LEFT 向左望”，该标识用于提示行人过马路时向左观察路况，**箭头指向左侧**（“向左望”即指示向左观察）。  
+
+若问题中“蓝色指示牌”为误述，需注意：画面中右侧有一块蓝色展板（“同程·同学·同回”），但其位于画面右侧，**并非左下角**，且展板上无“小字+箭头指向”的指示信息。",47666,1235,1570,2805,0.016935,1,
+2026-11-10T00:03:05,81,楼前广场,glare|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2186,1596,43,1639,0.001854,1,
+2026-11-10T00:03:07,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,是,是,correct,是,2646,1231,43,1274,0.00083,1,
+2026-11-10T00:03:10,81,楼前广场,glare|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,<|begin_of_box|>画面左下角没有蓝色指示牌，无法读取小字和箭头方向。<|end_of_box|>,29268,1596,1690,3286,0.011736,1,
+2026-11-10T00:03:12,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,4667,1293,264,1557,0.001966,1,
+2026-11-10T00:03:14,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,是,是,correct,是,2245,1231,43,1274,0.00083,1,
+2026-11-10T00:03:15,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上小字为“教学楼”，箭头指向右侧。,10445,1235,761,1996,0.004423,1,
+2026-11-10T00:03:16,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,是,是,correct,是,1790,1229,1,1230,0.000863,1,
+2026-11-10T00:03:18,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,2175,1291,2,1293,0.000909,1,
+2026-11-10T00:03:19,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，画面左下角的蓝色指示牌上，小字内容为：
+
+**“请勿攀爬”**
+
+该指示牌上的箭头指向**右前方**。",3922,1233,40,1273,0.000975,1,
+2026-11-10T00:03:19,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,禁止攀爬,unverifiable,禁止攀爬,9565,1255,701,1956,0.004132,1,
+2026-11-10T00:03:20,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,未设硬真值,禁止攀爬,unverifiable,禁止攀爬,1793,1253,3,1256,0.000885,1,
+2026-11-10T00:03:21,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,是,是,correct,是,2203,1229,1,1230,0.000863,1,
+2026-11-10T00:03:23,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,是,是,correct,是,3561,1231,35,1266,0.001581,1,
+2026-11-10T00:03:27,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,5780,1293,129,1422,0.002583,1,
+2026-11-10T00:03:27,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读取其上的小字，也无法确定箭头指向方向。,7530,1235,242,1477,0.003655,1,
+2026-11-10T00:03:29,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,未设硬真值,禁止攀爬,unverifiable,禁止攀爬,5920,1255,184,1439,0.003095,1,
+2026-11-10T00:03:30,82,教学楼中庭,repetition|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,是,是,correct,是,2682,1590,36,1626,0.001806,1,
+2026-11-10T00:03:30,82,教学楼中庭,repetition|small_text|shadow,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,是,是,correct,是,3243,1231,35,1266,0.001581,1,
+2026-11-10T00:03:33,82,教学楼中庭,repetition|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2520,1653,62,1715,0.002025,1,
+2026-11-10T00:03:33,82,教学楼中庭,repetition|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,<|begin_of_box|>禁止攀爬<|end_of_box|>,unverifiable,<|begin_of_box|>禁止攀爬<|end_of_box|>,2525,1615,52,1667,0.001927,1,
+2026-11-10T00:03:35,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,2099,1232,51,1283,0.000871,1,
+2026-11-10T00:03:35,82,教学楼中庭,repetition|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,编造小字/箭头,hallucination,由于图片中左下角的蓝色指示牌细节不够清晰，无法准确识别其上的小字内容，也无法确定箭头指向的方向。若需准确信息，建议提供更清晰的图片或补充相关细节。,6529,1596,398,1994,0.003984,1,
+2026-11-10T00:03:35,82,教学楼中庭,repetition|small_text|shadow,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,是,是,correct,是,2785,1590,36,1626,0.001806,1,
+2026-11-10T00:03:37,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,2112,1293,62,1355,0.000956,1,
+2026-11-10T00:03:39,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2099,1232,58,1290,0.000906,1,
+2026-11-10T00:03:41,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,1591,1230,1,1231,0.000864,1,
+2026-11-10T00:03:42,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,未设硬真值,画在视图之外的断面图，称为移出断面图。移出断面图 移出断面的轮廓线用粗实线绘制,unverifiable,画在视图之外的断面图，称为移出断面图。移出断面图 移出断面的轮廓线用粗实线绘制,6427,1255,434,1689,0.002798,1,
+2026-11-10T00:03:42,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,否认,correct,画面左下角**没有蓝色指示牌**。从提供的图像中可见，左下角区域仅呈现灰色地面、部分牛仔裤（画面左下角边缘）及桌椅等教学设施，不存在蓝色指示牌。因此无法读取其上的小字或判断箭头方向。,7084,1235,490,1725,0.003067,1,
+2026-11-10T00:03:44,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1739,1291,2,1293,0.000909,1,
+2026-11-10T00:03:45,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,未设硬真值,"画在视图之外的断面图，称为移出断面图，简称移出断面
+移出断面的轮廓线用粗实线绘制",unverifiable,"画在视图之外的断面图，称为移出断面图，简称移出断面
+移出断面的轮廓线用粗实线绘制",2477,1253,35,1288,0.000975,1,
+2026-11-10T00:03:45,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,1616,1230,1,1231,0.000864,1,
+2026-11-10T00:03:46,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,否认,correct,"根据您提供的图片，我无法读出画面左下角那块蓝色指示牌上的小字。
+
+在您提供的图片中，左下角区域显示的是一个穿着蓝色牛仔裤的人的腿部，以及一个白色的小凳子。这个区域并没有一个清晰可见的蓝色指示牌。
+
+此外，由于该区域没有指示牌，因此也无法说明箭头指向哪个方向。
+
+图片中确实有一个蓝色的指示牌，但它位于画面的右侧，是一个带有绿色标签的展示架，上面有“安全警示”等字样，但这个指示牌不在左下角。",5158,1233,121,1354,0.001202,1,
+2026-11-10T00:03:48,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3354,1232,55,1287,0.001782,1,
+2026-11-10T00:03:52,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,否认,correct,在您提供的图片中，画面左下角并没有蓝色指示牌，该位置显示的是穿着蓝色牛仔裤的人的腿部（仅露出部分）。因此，不存在您所描述的“蓝色指示牌”，无法读取其上的小字或判断箭头指向方向。,6256,1235,196,1431,0.003195,1,
+2026-11-10T00:03:53,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,7102,1293,197,1490,0.003263,1,
+2026-11-10T00:03:55,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,3019,1232,55,1287,0.001782,1,
+2026-11-10T00:03:55,83,实训室,small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,否,1889,1592,44,1636,0.001856,1,
+2026-11-10T00:03:57,83,实训室,small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，无法读取小字及箭头指向信息。,2865,1596,107,1703,0.002238,1,
+2026-11-10T00:03:58,83,实训室,small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，因此无法读取小字和箭头方向，回答为「看不清」。<|begin_of_box|>看不清<|end_of_box|>,2924,1653,68,1721,0.002061,1,
+2026-11-10T00:04:00,83,实训室,small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,否,1871,1592,44,1636,0.001856,1,
+2026-11-10T00:04:01,83,实训室,small_text|occlusion,zai-org/GLM-4.5V,GLM-4.5V,True,text,未设硬真值,<|begin_of_box|>画在视图之外的断面图，称为移出断面图，简称移出断面 移出断面的轮廓线用粗实线绘制<|en,unverifiable,<|begin_of_box|>画在视图之外的断面图，称为移出断面图，简称移出断面 移出断面的轮廓线用粗实线绘制<|end_of_box|>,3106,1615,92,1707,0.002167,1,
+2026-11-10T00:04:02,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,1908,1232,41,1273,0.000821,1,
+2026-11-10T00:04:04,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角蓝色指示牌上的小字是“请往左”，箭头指向**左**方向。,3592,1235,170,1405,0.001468,1,
+2026-11-10T00:04:08,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,6212,1293,437,1730,0.002831,1,
+2026-11-10T00:04:10,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2120,1232,43,1275,0.000831,1,
+2026-11-10T00:04:12,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,2163,1230,1,1231,0.000864,1,
+2026-11-10T00:04:14,83,实训室,small_text|occlusion,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,未设硬真值,"画在视图之外的断面图，称为移出断面图，简称移出断面
+移出断面的轮廓线用粗实线绘制",unverifiable,"画在视图之外的断面图，称为移出断面图，简称移出断面
+移出断面的轮廓线用粗实线绘制",26534,1255,921,2176,0.010465,1,
+2026-11-10T00:04:14,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,命中：音乐节,"青春回响
+好声音",wrong,"青春回响
+好声音",10324,1255,779,2034,0.004522,1,
+2026-11-10T00:04:17,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,命中：音乐节,"重逢正当时
+青春再回响
+MUSIC
+FEST
+岁月留声
+好歌如歌
+维也纳音乐会",wrong,"重逢正当时
+青春再回响
+MUSIC
+FEST
+岁月留声
+好歌如歌
+维也纳音乐会",2981,1253,29,1282,0.000958,1,
+2026-11-10T00:04:18,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,3259,1291,2,1293,0.000909,1,
+2026-11-10T00:04:19,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我将对画面左下角的蓝色指示牌进行分析。
+
+在画面的左下角，舞台左侧的台阶旁，有一个蓝色的指示牌。这个指示牌上有一个黄色的吉他形状的图案，上面写着“MUSIC FEST”和“音乐节”字样。
+
+在“MUSIC FEST”下方，有一行较小的白色文字。经过仔细辨认，这行小字是：
+
+**“重逢正当时 青春再回响”**
+
+这个指示牌上的箭头是绿色的，由三个并排的箭头组成，它们都指向**右方**，即指向舞台的中央。",6647,1233,140,1373,0.001255,1,
+2026-11-10T00:04:19,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,1761,1230,1,1231,0.000864,1,
+2026-11-10T00:04:21,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,否,correct,否,3408,1232,38,1270,0.001612,1,
+2026-11-10T00:04:24,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角蓝色指示牌上的小字是“MUSIC FEST”，箭头指向右侧。,5054,1235,119,1354,0.002425,1,
+2026-11-10T00:04:27,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,7596,1293,236,1529,0.003653,1,
+2026-11-10T00:04:27,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,否,correct,否,2782,1232,38,1270,0.001612,1,
+2026-11-10T00:04:29,84,夜间舞台,low_light|dense_crowd|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,否,correct,<|begin_of_box|>否<|end_of_box|>,2240,1591,43,1634,0.001849,1,
+2026-11-10T00:05:23,84,夜间舞台,low_light|dense_crowd|small_text,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,命中：音乐节,"重拾美好 青春朝向
+岁月静好 时光慢
+稻香音乐会
+MUSIC FEST",wrong,"重拾美好 青春朝向
+岁月静好 时光慢
+稻香音乐会
+MUSIC FEST",34942,1255,1148,2403,0.012735,1,
+2026-11-10T00:05:27,84,夜间舞台,low_light|dense_crowd|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,3621,1653,165,1818,0.002643,1,
+2026-11-10T00:05:30,84,夜间舞台,low_light|dense_crowd|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,text,命中：音乐节,<|begin_of_box|>唯音E生时 青春明四响 梦响声 味来啦 雅马哈音乐会<|end_of_box|>,wrong,<|begin_of_box|>唯音E生时 青春明四响 梦响声 味来啦 雅马哈音乐会<|end_of_box|>,3296,1615,158,1773,0.002563,1,
+2026-11-10T00:05:32,84,夜间舞台,low_light|dense_crowd|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,否,correct,<|begin_of_box|>否<|end_of_box|>,1718,1591,43,1634,0.001849,1,
+2026-11-10T00:05:34,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,anchor,否,否,correct,否,2021,916,67,983,0.000793,1,
+2026-11-10T00:05:42,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,画面左下角的蓝色指示牌上的小字为“深圳城市职业学院（深圳技师学院）”，箭头指向舞台内部（即向右方向）。,8280,915,668,1583,0.003798,1,
+2026-11-10T00:05:45,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,2528,973,101,1074,0.000991,1,
+2026-11-10T00:05:50,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,text,命中：深圳城市职业学院/2027/科创实验班/宣讲会,"深圳城市职业学院,2027,科创实验班,宣讲会",correct,"深圳城市职业学院（深圳技师学院）
+2027年科创实验班招生宣讲会
+2026年10月22日",5547,935,329,1264,0.002112,1,
+2026-11-10T00:05:52,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-8B-Thinking,8B-Thinking,True,consistency,否,否,correct,否,2059,916,67,983,0.000793,1,
+2026-11-10T00:05:55,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,anchor,否,否,correct,否,3095,914,1,915,0.000643,1,
+2026-11-10T00:06:00,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,hallucination,否认/看不清,编造小字/箭头,hallucination,"根据您提供的图片，我将对画面左下角的蓝色指示牌进行分析。
+
+在画面的左下角，靠近讲台的位置，有一个蓝色的指示牌。这个指示牌上有一个白色的箭头，指向舞台的方向。
+
+- **指示牌上的小字**：经过仔细辨认，指示牌上的小字是“请勿喧哗”。
+- **箭头指向**：箭头指向舞台方向。
+
+---
+
+**总结**：
+- 指示牌上的小字是：**请勿喧哗**。
+- 箭头指向：**舞台方向**。",4298,913,125,1038,0.000989,1,
+2026-11-10T00:06:01,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,guard,否认/看不清,看不清,abstain,看不清,1799,971,2,973,0.000685,1,
+2026-11-10T00:06:04,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,text,命中：深圳城市职业学院/2027/科创实验班/宣讲会,"深圳城市职业学院,2027,科创实验班,宣讲会",correct,"深圳城市职业学院（深圳技师学院）
+2027年科创实验班招生宣讲会
+2026年10月22日",2745,933,32,965,0.000743,1,
+2026-11-10T00:06:06,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-30B-A3B-Instruct,30B-A3B-Instruct,False,consistency,否,否,correct,否,2026,914,1,915,0.000643,1,
+2026-11-10T00:06:09,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,anchor,否,是,wrong,是,3073,916,56,972,0.001476,1,
+2026-11-10T00:06:36,84,夜间舞台,low_light|dense_crowd|small_text,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,编造小字/箭头,hallucination,"画面左下角蓝色指示牌上的小字为“唯音E生时 青春明响”，箭头指向左侧。  
+<|begin_of_box|>小字为“唯音E生时 青春明响”，箭头指向左<|end_of_box|>",15056,1596,936,2532,0.007212,2,
+2026-11-10T00:06:56,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,guard,否认/看不清,看不清,abstain,看不清,20360,973,277,1250,0.003743,1,
+2026-11-10T00:07:03,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,text,命中：深圳城市职业学院/2027/科创实验班/宣讲会,"深圳城市职业学院,2027,科创实验班,宣讲会",correct,"深圳城市职业学院（深圳技师学院）
+2027年科创实验班招生宣讲会
+2026年10月22日",7082,935,201,1136,0.002945,1,
+2026-11-10T00:07:07,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,consistency,否,是,wrong,是,3276,916,61,977,0.001526,1,
+2026-11-10T00:07:09,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,anchor,否,是,wrong,是,2318,1226,50,1276,0.001526,1,
+2026-11-10T00:07:28,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,hallucination,否认/看不清,否认,correct,画面左下角没有蓝色指示牌，无法读出小字及判断箭头指向。,19249,1228,1073,2301,0.007666,1,
+2026-11-10T00:07:31,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,guard,否认/看不清,编造小字/箭头,hallucination,<|begin_of_box|>看不清<|end_of_box|>,2776,1285,63,1348,0.001663,1,
+2026-11-10T00:07:34,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,text,命中：深圳城市职业学院/2027/科创实验班/宣讲会,"深圳城市职业学院,2027,科创实验班,宣讲会",correct,<|begin_of_box|>深圳城市职业学院（深圳技师学院） 2027年科创实验班招生宣讲会 2026年10月22日<|end_of_box|>,3201,1247,88,1335,0.001775,1,
+2026-11-10T00:07:36,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,zai-org/GLM-4.5V,GLM-4.5V,True,consistency,否,是,wrong,<|begin_of_box|>是<|end_of_box|>,1948,1226,52,1278,0.001538,1,
+2026-11-10T00:08:35,85,礼堂报告厅,glare|small_text|occlusion|dense_crowd,Qwen/Qwen3-VL-32B-Thinking,32B-Thinking,True,hallucination,否认/看不清,编造小字/箭头,hallucination,"画面左下角的蓝色指示牌（位于舞台左侧讲台处）上的小字为“深圳技师学院”。该指示牌无明显箭头标识，但讲台整体面向观众席，若假设指示牌存在指向性，其方向应为**面向观众（即舞台前方）**。  
+
+（注：经仔细观察，讲台上的标识牌主要显示“深圳城市职业学院”及校徽，下方小字为“深圳技师学院”，但未发现明确箭头；此处“箭头指向”基于讲台朝向观众的常规逻辑推断。）",53225,915,2305,3220,0.023965,2,

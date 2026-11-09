@@ -15,13 +15,19 @@
 
 | 阶段 | 选题 | 状态 |
 | --- | --- | --- |
-| 第一阶段 · 实地测评（10 选 2 · 20 分） | **课题 02：个人手机多工况发热与掉电实测** | 进行中 |
-| 第一阶段 · 第二项 | 待定 | — |
+| 第一阶段 · 实地测评（10 选 2 · 20 分） | **课题 02：个人手机多工况发热与掉电实测** | 进行中（待真机数据回传） |
+| 第一阶段 · 第二项 | **课题 09：多模态大模型校园复杂视觉盲区实测** | 已完成实测与报告 |
 | 第二阶段 · 开放式项目（8 选 1 · 60 分） | 待定 | — |
 
 课题 02 不使用现成的电量监控 App，而是自研采集工具（`tools/PowerProbe/`），
 原因是现成工具无法按工况打标签、无法导出原始时序、不记录测试期间的前台应用。
 测试条件与作废规则见 `01-Field-Discovery/T02-Phone-Power-Thermal/protocol.md`。
+
+课题 09 把「拍 15 张图、用 2 个模型比一比」做成可复现流水线：18 张实地照片、4 款低价视觉模型、
+5 类探针、人工真值表、自动判分与 Markdown/HTML 报告。入口见
+`01-Field-Discovery/T09-Multimodal-Visual-Blindspot/README.md`，成品报告在同级 `reports/`。
+题目要求 2 款模型，这里做 4 款是为了同时对照参数规模、推理模式、dense/MoE 与厂商；
+`guard` 探针还实测了「加拒答提示到底有没有用」，包括个别模型不降反升的反例。
 
 ## 目录
 
@@ -32,6 +38,11 @@
     photos/                      现场同框照
     reports/                     设备端自动生成的报告
     analysis/                    Python 分析与图表
+  T09-Multimodal-Visual-Blindspot/  课题 09：视觉盲区实测
+    data/                        人工真值、原图 SHA-256 清单、逐次调用结果、评分表
+    photos/                      18 张 2048px 高清副本
+    reports/                     自动生成的 md/html 报告、素材联系表
+    tools/                       一键测试工具、报告生成器、图像处理（JDK）
 02-20Days-Challenge/         第二阶段 · 工坊项目
   process_logs/                每日运行日志
   iterations/                  迭代记录
@@ -49,8 +60,14 @@ tools/PowerProbe/            课题 02 采集 App（Kotlin / Android）
 - 产物：Actions Artifacts `PowerProbe-debug-apk`，以及 Release `apk-latest` 下的 `app-debug.apk`
 - 依赖仅 AppCompat 与 Material Components（均为 Apache-2.0），界面按 Material3 设计语言自实现
 
+课题 09 的工具链刻意保持零第三方依赖：Python 标准库做 API 调用与判分，JDK 自带 `ImageIO`
+做图像缩放与联系表，`python tools/vlm_bench.py all` 一条命令跑完「统一输入 → 4 模型 × 5 探针
+实测 → 评分表 → Markdown/HTML 报告」。全量 360 次调用按官方人民币单价估算约 ¥0.81。
+
 ## 约定
 
 - 过程数据每日同步，commit 写明当天做了什么。
 - 失败、报错、改选题的原因如实记录，不补写、不摆拍。
 - 原始数据与照片均为本人采集；使用 AI 辅助会注明。
+- **任何 API key / token 不入库**：密钥只放工作区外的 `.workbuddy/`，`.gitignore` 与同步脚本
+  双重拦截，提交前还会做全仓密钥串扫描，详见各课题的 `SECURITY.md`。

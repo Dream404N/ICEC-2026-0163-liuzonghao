@@ -17,3 +17,11 @@ venv/
 *身份证*
 *准考证*
 *手机号*
+
+# 课题 09：密钥、本地配置与中间缩略图绝不入库
+*.key
+.env
+.env.*
+config.json
+*api_key*
+**/data/thumbs/

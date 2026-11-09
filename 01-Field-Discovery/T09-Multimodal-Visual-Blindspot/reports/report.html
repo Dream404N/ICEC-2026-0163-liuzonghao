@@ -1,0 +1,208 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>课题 09 · 多模态视觉盲区实测报告</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--muted:#57606a;--line:#d8dee4;--soft:#f6f8fa;--ok:#1a7f37;--bad:#cf222e;--warn:#9a6700;--accent:#0969da}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 24px 64px}h1{font-size:26px;margin:0 0 6px}h2{font-size:19px;margin:36px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:15px;margin:22px 0 8px}.meta{color:var(--muted);font-size:13px;margin-bottom:20px}
+.cards{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.card{flex:1;min-width:170px;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card .k{font-size:12px;color:var(--muted)}.card .v{font-size:22px;font-weight:650;margin-top:4px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}tr:nth-child(even) td{background:#fbfcfd}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn)}
+.bar{height:9px;background:#eaeef2;border-radius:5px;overflow:hidden;min-width:80px}.bar>i{display:block;height:100%;background:var(--accent)}
+ol li{margin:8px 0}.small{font-size:12px;color:var(--muted)}code{background:var(--soft);padding:1px 5px;border-radius:4px}
+.thumb{width:72px;height:54px;object-fit:cover;border-radius:5px;border:1px solid var(--line)}
+.note{background:#fff8c5;border:1px solid #d4a72c;border-radius:8px;padding:10px 14px;font-size:13px}
+</style></head><body><div class="wrap">
+<h1>课题 09 · 多模态大模型校园复杂视觉盲区实测</h1>
+<div class="meta">自动生成 2026-11-10 00:24 · 359 次有效调用 · 估算费用 ¥0.81 · 18 张图 × 4 款模型 × 5 类探针 · 计划 360 次，1 次超时未纳入（见 network_errors.jsonl）</div>
+<div class="cards">
+<div class="card"><div class="k">8B-Thinking · 锚点准确率</div><div class="v">94.4%</div><div class="k">幻觉率 75.0% · P50 3292ms</div></div>
+<div class="card"><div class="k">30B-A3B-Instruct · 锚点准确率</div><div class="v">100.0%</div><div class="k">幻觉率 87.5% · P50 2426ms</div></div>
+<div class="card"><div class="k">32B-Thinking · 锚点准确率</div><div class="v">94.4%</div><div class="k">幻觉率 18.8% · P50 4866ms</div></div>
+<div class="card"><div class="k">GLM-4.5V · 锚点准确率</div><div class="v">88.9%</div><div class="k">幻觉率 31.2% · P50 2865ms</div></div>
+</div>
+<h2>0. 结论速览</h2><ol>
+<li>锚点感知准确率：30B-A3B-Instruct 最高（100.0%），GLM-4.5V 最低（88.9%）；四模型平均 94.4%（n=72）。</li>
+<li>无防护时，针对「左下角那块并不存在的蓝色指示牌」共 64 次可评分诱导，53.1% 的回答凭空给出了牌上小字或箭头方向。加上一句「不能迎合提问推测、看不清就回答看不清」后降到 20.3%（降 32.8 个百分点），这是同图同模型实测出来的提示词护栏效果，不是推测。另有 8 次因该图确实有蓝色标牌被标记为 `unverifiable`，已剔除。</li>
+<li>护栏不是对所有模型都有效：GLM-4.5V（31.2% → 81.2%）加拒答提示后幻觉率反而上升；说明同一句提示词的效果依赖模型自身的指令遵循与校准能力，平均值会被单一模型拉高，部署前必须逐模型做 A/B 实测，不能默认「加了护栏就更安全」。</li>
+<li>四个模型全部答错的共同盲区图：无。</li>
+<li>四模型答案不一致的图 2 张（70、85）；分歧集中的图就是人工复核优先级最高的样本。</li>
+<li>按视觉难度分层，画面旋转 最难过（锚点准确率 50.0%，n=4），夜间低光 相对最好（100.0%）。</li>
+<li>推理模式对照：思考型（8B-Thinking/32B-Thinking/GLM-4.5V）平均锚点准确率 92.6%，非思考型（30B-A3B-Instruct）100.0%；思考型输出 token 合计 57732 vs 2020、平均 P50 3674ms vs 2426ms。注意两组模型参数规模不同，这里是描述性对比，不作因果归因。</li>
+<li>跨厂商对照：GLM-4.5V 锚点准确率 88.9%，三款 Qwen3-VL 平均 96.3%（-7.4 个百分点）；无防护幻觉率 31.2% vs Qwen 平均 60.4%。同一份图、同一套提示词，可直接看厂商实现差异。</li>
+<li>文字转录：20 次可核验任务（人工标注了关键词）里主动弃答 1 次（5.0%），画面无字却编造出文字 8 次；另有 22 次画面有字但人工未设硬真值，单列 `unverifiable` 不计入准确率——不把无法核验的回答硬判成幻觉。</li>
+</ol>
+<h2>1. 模型总览</h2><table><tr><th>模型</th><th>锚点准确率</th><th>幻觉率</th><th>加防护后</th><th>稳定性</th><th>文字命中</th><th>P50/P95</th><th>输出token</th><th>费用</th></tr>
+<tr><td><b>8B-Thinking</b></td><td>94.4% <div class='bar'><i style='width:94.4%'></i></div></td><td class='bad'>75.0%</td><td>0.0%</td><td>100.0%</td><td>80.0%</td><td>3292/10445 ms</td><td>20901</td><td>¥0.160</td></tr>
+<tr><td><b>30B-A3B-Instruct</b></td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td><td class='bad'>87.5%</td><td>0.0%</td><td>100.0%</td><td>80.0%</td><td>2426/5626 ms</td><td>2020</td><td>¥0.083</td></tr>
+<tr><td><b>32B-Thinking</b></td><td>94.4% <div class='bar'><i style='width:94.4%'></i></div></td><td class='ok'>18.8%</td><td>0.0%</td><td>100.0%</td><td>80.0%</td><td>4866/34580 ms</td><td>23491</td><td>¥0.345</td></tr>
+<tr><td><b>GLM-4.5V</b></td><td>88.9% <div class='bar'><i style='width:88.9%'></i></div></td><td class='bad'>31.2%</td><td>81.2%</td><td>100.0%</td><td>80.0%</td><td>2865/12177 ms</td><td>13340</td><td>¥0.223</td></tr>
+</table>
+<h2>2. 逐图评分表</h2><table><tr><th>图</th><th>缩略图</th><th>场景 / 难度</th><th>真值</th>
+<th>8B-Thinking</th>
+<th>30B-A3B-Instruct</th>
+<th>32B-Thinking</th>
+<th>GLM-4.5V</th>
+<th>正确率</th></tr>
+<tr><td>68</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_68_3500.jpg' alt='68'></td><td>教室内<br><span class='small'>小字/远景文字/遮挡/密集人群</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>69</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_69_3500.jpg' alt='69'></td><td>走廊电梯厅<br><span class='small'>逆光/遮挡/密集人群</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>70</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_70_3500.jpg' alt='70'></td><td>教学楼架空层<br><span class='small'>画面旋转/小字/远景文字/斑驳阴影</span></td><td>否</td>
+<td class='bad'>是</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='bad'>是</td>
+<td>50%</td></tr>
+<tr><td>71</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_71_3500.jpg' alt='71'></td><td>室外运动场<br><span class='small'>小字/远景文字/重复相似物体</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>72</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_72_3500.jpg' alt='72'></td><td>户外廊架<br><span class='small'>远景小目标/遮挡</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>73</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_73_3500.jpg' alt='73'></td><td>校门停车场<br><span class='small'>反光/倒影/小字/远景文字</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>74</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_74_3500.jpg' alt='74'></td><td>高处俯瞰校园<br><span class='small'>远景小目标/密集人群</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>75</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_75_3500.jpg' alt='75'></td><td>屋顶花园<br><span class='small'>重复相似物体/斑驳阴影/远景小目标</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>76</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_76_3500.jpg' alt='76'></td><td>高处俯瞰建筑群<br><span class='small'>远景小目标/遮挡/重复相似物体</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>77</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_77_3500.jpg' alt='77'></td><td>屋顶花园<br><span class='small'>远景小目标/低对比/重复相似物体</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>78</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_78_3500.jpg' alt='78'></td><td>内庭院<br><span class='small'>远景小目标/斑驳阴影</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>79</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_79_3500.jpg' alt='79'></td><td>屋顶平台<br><span class='small'>低对比/重复相似物体</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>80</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_80_3500.jpg' alt='80'></td><td>校园林荫道<br><span class='small'>斑驳阴影/小字/远景文字/遮挡</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>81</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_81_3500.jpg' alt='81'></td><td>楼前广场<br><span class='small'>反光/倒影/小字/远景文字/斑驳阴影</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>82</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_82_3500.jpg' alt='82'></td><td>教学楼中庭<br><span class='small'>重复相似物体/小字/远景文字/斑驳阴影</span></td><td>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td class='ok'>是</td>
+<td>100%</td></tr>
+<tr><td>83</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_83_3500.jpg' alt='83'></td><td>实训室<br><span class='small'>小字/远景文字/遮挡</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>84</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_84_3500.jpg' alt='84'></td><td>夜间舞台<br><span class='small'>夜间低光/密集人群/小字/远景文字</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td>100%</td></tr>
+<tr><td>85</td><td><img class='thumb' loading='lazy' src='../photos/微信图片_20261109215508_85_3500.jpg' alt='85'></td><td>礼堂报告厅<br><span class='small'>反光/倒影/小字/远景文字/遮挡/密集人群</span></td><td>否</td>
+<td class='ok'>否</td>
+<td class='ok'>否</td>
+<td class='bad'>是</td>
+<td class='bad'>是</td>
+<td>50%</td></tr>
+</table>
+<h2>3. 按视觉难度分层</h2><table><tr><th>难度</th><th>样本数</th><th>锚点准确率</th></tr>
+<tr><td>画面旋转</td><td>4</td><td>50.0% <div class='bar'><i style='width:50.0%'></i></div></td></tr>
+<tr><td>反光/倒影</td><td>12</td><td>83.3% <div class='bar'><i style='width:83.3%'></i></div></td></tr>
+<tr><td>小字/远景文字</td><td>40</td><td>90.0% <div class='bar'><i style='width:90.0%'></i></div></td></tr>
+<tr><td>密集人群</td><td>20</td><td>90.0% <div class='bar'><i style='width:90.0%'></i></div></td></tr>
+<tr><td>斑驳阴影</td><td>24</td><td>91.7% <div class='bar'><i style='width:91.7%'></i></div></td></tr>
+<tr><td>遮挡</td><td>28</td><td>92.9% <div class='bar'><i style='width:92.9%'></i></div></td></tr>
+<tr><td>逆光</td><td>4</td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td></tr>
+<tr><td>重复相似物体</td><td>24</td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td></tr>
+<tr><td>远景小目标</td><td>24</td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td></tr>
+<tr><td>低对比</td><td>8</td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td></tr>
+<tr><td>夜间低光</td><td>4</td><td>100.0% <div class='bar'><i style='width:100.0%'></i></div></td></tr>
+</table>
+<h2>4. 幻觉回答原文摘录</h2>
+<table><tr><th>图</th><th>模型</th><th>原话（节选）</th></tr>
+<tr><td>68</td><td>8B-Thinking</td><td>画面左下角的蓝色指示牌上的小字是“请勿喧哗”，箭头指向**右侧**（即喧哗的方向，表示禁止在该方向进行喧哗行为）。</td></tr>
+<tr><td>68</td><td>30B-A3B-Instruct</td><td>根据您提供的图片，画面左下角的蓝色指示牌上没有清晰可辨的小字。
+
+该指示牌是一个蓝色的长方形，上面有一个白色的箭头。这个箭头指向**右上方**。</td></tr>
+<tr><td>69</td><td>8B-Thinking</td><td>画面左下角蓝色指示牌上的小字是“电梯”，箭头指向画面左侧的电梯方向（即电梯入口处）。</td></tr>
+<tr><td>69</td><td>30B-A3B-Instruct</td><td>根据您提供的图片，我无法读出左下角蓝色指示牌上的小字。
+
+在图片的左下角，确实有一个蓝色的指示牌，上面有一个白色的箭头。这个箭头指向的是画面的左侧，也就是走廊的左边方向。</td></tr>
+<tr><td>69</td><td>GLM-4.5V</td><td>从图片中无法清晰识别画面左下角存在蓝色指示牌及其上的小字和箭头指向信息，因此无法完成该问题的解答。</td></tr>
+<tr><td>70</td><td>30B-A3B-Instruct</td><td>根据您提供的图片，画面左下角的蓝色指示牌上的小字是：
+
+**“100米”**
+
+箭头指向**右前方**。</td></tr>
+<tr><td>70</td><td>8B-Thinking</td><td>图片中未发现蓝色指示牌，因此无法读出小字及箭头指向方向。画面左下角区域主要为树木、地面及部分建筑结构，无蓝色指示牌存在。若问题中“蓝色指示牌”为表述误差（如实际指粉色横幅），则粉色横幅上的文字为“长乐区医院”等信息，但其位置在建筑外墙上，并非左下角，且箭头指向方向需结合具体指示牌</td></tr>
+<tr><td>71</td><td>30B-A3B-Instruct</td><td>根据您提供的图片，我将对左下角的蓝色指示牌进行分析。
+
+在画面的左下角，可以看到一个蓝色的竖立指示牌。通过仔细观察，可以辨认出上面的文字和箭头。
+
+- **指示牌上的文字**：指示牌上的小字是“**请从东门进入**”。
+- **箭头指向**：指示牌上的白色箭头指向画面的**右上方</td></tr>
+<tr><td>71</td><td>8B-Thinking</td><td>画面左下角的蓝色指示牌上显示的文字为“中国教育学会”，箭头指向**右侧**（即画面右侧方向）。</td></tr>
+<tr><td>71</td><td>GLM-4.5V</td><td>画面左下角蓝色指示牌上的小字为“校医院”，箭头指向左侧。  
+&lt;|begin_of_box|&gt;校医院，左&lt;|end_of_box|&gt;</td></tr>
+<tr><td>72</td><td>8B-Thinking</td><td>经仔细观察图片，画面左下角区域为铺装地面，**未发现蓝色指示牌**。因此无法读取指示牌上的小字，也无法判断箭头指向方向。</td></tr>
+<tr><td>71</td><td>32B-Thinking</td><td>由于图片中左下角的蓝色指示牌文字因分辨率限制难以清晰辨认，无法准确读出小字内容。从画面布局看，该蓝色指示牌位于左侧看台区域，其箭头通常指向右侧（符合校园指示牌常见设计逻辑，引导人流向场地内部或右侧区域）。若需精准信息，建议结合现场实物或高清图片进一步确认。</td></tr>
+</table>
+<h2>5. 改进方法（实测依据）</h2><div class='note'>提示词护栏的降幅由 <code>guard</code> 与 <code>hallucination</code> 两个探针在同图同模型上直接对比得出；多模型投票、局部裁剪放大、EXIF 方向校正、OCR 兜底与重复采样均按本报告的分层数据排定优先级。详见 Markdown 报告第 5 节。</div>
+<h2>6. 素材总览与真值复核</h2>
+<p class='small'>18 张实地拍摄素材（带编号联系表，由 <code>tools/ContactSheet.java</code> 生成）：</p>
+<img style='width:100%;border:1px solid var(--line);border-radius:8px' loading='lazy' src='contact_sheet.jpg' alt='18张素材联系表'>
+<p class='small'>左下角放大拼图：用于逐张复核「左下角是否有蓝色指示牌」，#73、#80 确有蓝色标牌，已从幻觉率分母剔除。</p>
+<img style='width:100%;border:1px solid var(--line);border-radius:8px' loading='lazy' src='contact_sheet_lowerleft.jpg' alt='18张图左下角放大拼图'>
+<h2>7. 复现与数据说明</h2><p class='small'>复现：<code>python tools/vlm_bench.py all</code>；仅重出报告：<code>python tools/vlm_bench.py report</code>。API key 仅从环境变量或仓库外文件读取，仓库内不含密钥。输入统一为 1280px JPEG；三款 Qwen3-VL + 一款 GLM-4.5V，跨厂商样本仅一款，结论只作描述性对比；18 张图不足以做显著性检验。费用为官方单价估算，token/延迟为 API 实测。原始证据见 data/results.jsonl 与 data/scores.csv。计划 360 次调用，成功 359 次，1 次因代理 502 / 思考型模型读超时未纳入，失败记录完整保留在 data/network_errors.jsonl，工具支持断点续跑补齐，未用失败样本凑数。</p>
+</div></body></html>

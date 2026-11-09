@@ -1,0 +1,25 @@
+{
+  "_comment": "配置模板。API key 绝不写在这里：工具只从环境变量或 key_file 指向的仓库外文件读取。复制为 config.json 可覆盖默认值，config.json 已加入 .gitignore。",
+  "api_base": "https://api.siliconflow.cn/v1",
+  "api_key_env": "SILICONFLOW_API_KEY",
+  "key_file": "../../../../.workbuddy/.siliconflow_key",
+  "source_dir": "F:/下载/多模态测试",
+  "thumb_max_edge": 1280,
+  "thumb_quality": 0.82,
+  "photo_max_edge": 2048,
+  "workers": 3,
+  "timeout_sec": 90,
+  "retries": 3,
+  "temperature": 0,
+  "max_tokens": 220,
+  "price_note": "人民币/百万 token 单价，取自硅基流动官方定价页 https://siliconflow.cn/pricing（本工具实际调用的是 api.siliconflow.cn，2026-11-09 核对）；每张图约 1200 视觉 token，全量 360 次调用的总费用为个位数人民币量级。token 数来自 API 返回的 usage，费用为按单价估算，实际扣费以控制台账单为准；思考型模型的 reasoning token 计入 completion_tokens。",
+  "availability_note": "2026-11-09 实测选型：Qwen3-VL-8B-Instruct 与 Qwen3-VL-32B-Instruct 在 25~60s 超时下连续多次无响应（含独立重试），PaddleOCR-VL-1.5 同样超时，故未纳入主测；最终 4 款均在真实探针下稳定于 1.5~3.2s 返回。选型先做可用性验证，不拿超时失败样本凑数。首轮全量在 6 并发下触发本机代理 502 Bad Gateway，遂降为 3 并发、指数退避重试，并把网络失败单独归档到 data/network_errors.jsonl，不计入评分表、下次 run 自动补跑。",
+  "models": [
+    {"id": "Qwen/Qwen3-VL-8B-Thinking", "label": "8B-Thinking", "family": "Qwen3-VL", "params": "8B dense + 思考模式", "thinking": true, "price_in": 0.50, "price_out": 5.00},
+    {"id": "Qwen/Qwen3-VL-30B-A3B-Instruct", "label": "30B-A3B-Instruct", "family": "Qwen3-VL", "params": "30B MoE（约 3B 激活）· 非思考", "thinking": false, "price_in": 0.70, "price_out": 2.80},
+    {"id": "Qwen/Qwen3-VL-32B-Thinking", "label": "32B-Thinking", "family": "Qwen3-VL", "params": "32B dense + 思考模式", "thinking": true, "price_in": 1.00, "price_out": 10.00},
+    {"id": "zai-org/GLM-4.5V", "label": "GLM-4.5V", "family": "GLM", "params": "跨厂商视觉模型 + 思考", "thinking": true, "price_in": 1.00, "price_out": 6.00}
+  ],
+  "probes": ["anchor", "hallucination", "guard", "text", "consistency"],
+  "guard_note": "guard 探针 = 同一幻觉问题 + 一句「不要迎合提问编造」的防护提示，用来实测提示词改进到底有没有用，而不是只在报告里空谈。"
+}
