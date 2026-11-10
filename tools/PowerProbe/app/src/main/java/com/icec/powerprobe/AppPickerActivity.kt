@@ -37,7 +37,7 @@ import java.util.concurrent.Executors
  *
  * 与旧版 AlertDialog 列表的区别：
  * - 输入即过滤，同时匹配「应用名」和「包名」，不用在几百行里翻；
- * - 当前选中项与推荐项置顶并打标签，换机时也能一眼找到 Phigros / 高德；
+ * - 当前选中项与推荐项置顶并打标签，换机时也能一眼找到 Phigros / 系统相机；
  * - 应用图标异步加载并缓存，ListView 复用视图，滚动不会掉帧；
  * - 支持显示无桌面图标的系统应用，也支持一键清除选择。
  */
@@ -75,7 +75,10 @@ class AppPickerActivity : AppCompatActivity() {
                 Plan.PKG_PHIGROS, "com.PigeonGames.Phigros.cc",
                 "com.miHoYo.Yuanshen", "com.tencent.tmgp.sgame"
             )
-            KIND_MAP -> setOf(Plan.PKG_AMAP, "com.baidu.BaiduMap", "com.tencent.map")
+            KIND_MAP -> setOf(
+                Plan.PKG_CAMERA, "com.miui.camera", "com.android.camera2",
+                "com.oppo.camera", "com.vivo.camera", "com.huawei.camera"
+            )
             else -> setOf(
                 "com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite",
                 "com.smile.gifmaker", "tv.danmaku.bili"
@@ -113,7 +116,7 @@ class AppPickerActivity : AppCompatActivity() {
         title.text = intent.getStringExtra(EXTRA_TITLE) ?: "选择应用"
         hint.text = when (kind) {
             KIND_GAME -> "推荐 Phigros · 点按选中 · 长按复制包名"
-            KIND_MAP -> "推荐 高德地图 · 点按选中 · 长按复制包名"
+            KIND_MAP -> "推荐 系统相机 · 点按选中 · 长按复制包名"
             else -> "输入即筛选 · 点按选中 · 长按复制包名"
         }
 

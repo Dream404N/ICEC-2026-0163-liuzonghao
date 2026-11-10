@@ -140,7 +140,7 @@ class CollectorService : Service() {
         )
         CollectorState.log(
             "目标应用: 视频=" + lbl(targets.video) + " 游戏=" + lbl(targets.game) +
-                " 导航=" + lbl(targets.map)
+                " 相机=" + lbl(targets.map)
         )
         CollectorState.log(
             "计划: " + queue.joinToString(" → ") + "，每工况 " + minutes + " 分钟，每 " +

@@ -26,7 +26,6 @@
 | `Sampler.collect()` | 批量脚本：`cat` 电池/CPU/GPU/热区节点、`dumpsys activity`、`dumpsys power`、`grep` | 只读 |
 | `Metrics.probe()` | 批量脚本：`pidof`、`awk /proc/<pid>/stat`、`grep Pss: /proc/<pid>/smaps_rollup`、`dumpsys gfxinfo`、`cat /sys/class/net/*/statistics` | 只读 |
 | `Metrics.resetBaseline()` | `dumpsys gfxinfo <包名> reset` | 仅清空该应用的帧统计计数，不动任何用户数据 |
-| `Automator.startNavigation()` | `am start -a VIEW -d amapuri://route/plan/?…` | 仅向高德投一个深链，未安装则报错退出 |
 | `Automator.launch()` | `am start -W -n <组件>` 或 `monkey -p <包名> … 1` | 仅启动应用 |
 | `Automator.swipeUp()` / `screenOff()` / `screenOn()` | `input swipe` / `input keyevent 223` / `224` | 仅注入 UI 事件 |
 | `Automator.forceStop()` / `startVideoCapture()` | `am force-stop <包名>` / `am start -a …VIDEO_CAPTURE` + `input keyevent 27` | 仅作用于应用 |

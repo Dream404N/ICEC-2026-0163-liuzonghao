@@ -21,16 +21,12 @@ object Automator {
     private var lastGuardSec = -999L
     private var lastShotSec = -999L
     private var lastKeepSec = -999L
-    private var cameraSwitched = false
-    private var navStarted = false
 
     fun reset() {
         lastSwipeSec = -999L
         lastGuardSec = -999L
         lastShotSec = -999L
         lastKeepSec = -999L
-        cameraSwitched = false
-        navStarted = false
     }
 
     // ---------------- 对外 ----------------
@@ -55,11 +51,19 @@ object Automator {
                 shot(ctx, "SVIDEO_t0000")
             }
             Plan.SC_NAVCAM -> {
+                // 全程相机录像：开场就拉起相机并触发录制，不再有「前 15 分钟导航」。
                 val ok = launch(ctx, t.map)
                 CollectorState.log(
-                    "[自动] 拉起导航 " + label(t.map) + if (ok) " 成功" else " 失败（未选择或未安装）"
+                    "[自动] 拉起相机 " + label(t.map) + if (ok) " 成功" else " 失败（未选择或未安装）"
                 )
-                if (ok) startNavigation(ctx)
+                if (ok) {
+                    if (Root.ensure()) {
+                        startVideoCapture()
+                        CollectorState.log("[自动] 已触发相机录像，全程保持")
+                    } else {
+                        CollectorState.log("[自动] 无 root，请手动打开相机开始录像")
+                    }
+                }
                 shot(ctx, "NAVCAM_t0000")
             }
             Plan.SC_GAME -> {
@@ -89,19 +93,6 @@ object Automator {
                     swipeUp()
                 }
             }
-            Plan.SC_NAVCAM -> {
-                // 前 15 分钟导航，后 15 分钟切相机录 4K
-                if (!cameraSwitched && elapsedSec >= 900) {
-                    cameraSwitched = true
-                    if (root) {
-                        startVideoCapture()
-                        CollectorState.log("[自动] t=15min 切换到相机录像")
-                        shot(ctx, "NAVCAM_t0900")
-                    } else {
-                        CollectorState.log("[自动] 无 root，请手动打开相机开始录像")
-                    }
-                }
-            }
             Plan.SC_GAME -> {
                 // 游戏内操作交给玩家/脚本，这里不注入，避免被判违规或打断正在打的曲子。
                 // 只做「保活」：每 3 分钟确认游戏仍在前台，被系统或误触切走就重新拉起。
@@ -112,10 +103,18 @@ object Automator {
             }
         }
 
-        // 短视频同理：长时间刷可能被后台清理，静默拉回前台，日志留痕
-        if (scenario == Plan.SC_SVIDEO && root && elapsedSec - lastKeepSec >= 300) {
+        // 短视频与相机录像同理：长时间运行可能被后台清理，静默拉回前台，日志留痕。
+        // 频率压到 5 分钟一次，避免自动化本身成为被测负载。
+        // 相机录像工况绝不在这里重复调用 startVideoCapture()：KEYCODE_CAMERA 是
+        // 「开始/停止」切换，再按一次会把录制停掉；录制只由 kickoff 触发一次。
+        val keepPkg = when (scenario) {
+            Plan.SC_SVIDEO -> t.video
+            Plan.SC_NAVCAM -> t.map
+            else -> ""
+        }
+        if (keepPkg.isNotEmpty() && root && elapsedSec - lastKeepSec >= 300) {
             lastKeepSec = elapsedSec
-            keepForeground(ctx, t.video)
+            keepForeground(ctx, keepPkg)
         }
         if (root && elapsedSec - lastShotSec >= 600) {
             lastShotSec = elapsedSec
@@ -204,35 +203,6 @@ object Automator {
             "screencap -p /sdcard/Download/PowerProbe/shots/" + System.currentTimeMillis() + "_" + safe + ".png",
             15000
         )
-    }
-
-    /**
-     * 发起真实导航：高德支持 `amapuri://route/plan/` 深链，能直接把「路线规划 + 导航」
-     * 点开，免去人工点选终点。失败就保持普通地图界面（已由 launch 拉起），只记一条日志，
-     * 不阻断工况——绝不能因为一个 Intent 不兼容就让整个 30 分钟白跑。
-     */
-    fun startNavigation(ctx: Context): Boolean {
-        if (!Root.ensure()) {
-            CollectorState.log("[自动] 无 root，请在导航应用里手动点「开始导航」")
-            return false
-        }
-        if (navStarted) return true
-        val pkg = Plan.load(ctx).map
-        if (pkg != Plan.PKG_AMAP) {
-            CollectorState.log("[自动] 非高德地图，跳过深链导航，请手动开始导航")
-            return false
-        }
-        val uri = "amapuri://route/plan/?dlat=" + Plan.NAV_DLAT + "&dlon=" + Plan.NAV_DLON +
-            "&dname=" + Plan.NAV_DEST + "&dev=0&t=0"
-        val out = Root.exec(
-            "am start -a android.intent.action.VIEW -d \"" + uri + "\"", 15000
-        )
-        val ok = !Root.wasRefused(out) && !out.contains("Error") && !out.contains("Exception")
-        navStarted = ok
-        CollectorState.log(
-            "[自动] 深链导航 → " + Plan.NAV_DEST + if (ok) " 已发起" else " 失败，请手动开始导航"
-        )
-        return ok
     }
 
     /**

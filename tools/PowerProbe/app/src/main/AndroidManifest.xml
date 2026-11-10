@@ -16,7 +16,7 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- Android 11+ 应用可见性：自动探测已安装的短视频/游戏/导航 App 需要这段声明。
+    <!-- Android 11+ 应用可见性：自动探测已安装的短视频/游戏/相机 App 需要这段声明。
          这里用 launcher intent 过滤，而不是申请 QUERY_ALL_PACKAGES，
          只拿到「有桌面图标的应用」，范围最小。 -->
     <queries>

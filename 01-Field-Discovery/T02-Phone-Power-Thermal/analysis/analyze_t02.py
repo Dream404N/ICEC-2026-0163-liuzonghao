@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 SCENARIO_LABEL = {
     "IDLE": "Idle (screen off)",
     "SVIDEO": "Short video",
-    "NAVCAM": "Nav / Camera",
+    "NAVCAM": "相机录像",
     "GAME": "High-FPS game",
 }
 SCENARIO_ORDER = ["IDLE", "SVIDEO", "NAVCAM", "GAME"]

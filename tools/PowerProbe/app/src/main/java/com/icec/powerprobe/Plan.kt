@@ -16,6 +16,8 @@ import java.util.Locale
 data class Targets(
     val video: String = "",
     val game: String = "",
+    // 历史字段名，现存放「相机应用」包名。不改标识符是为了兼容已采集 CSV 的
+    // scenario=NAVCAM 口径与用户设备上已保存的 SharedPreferences，避免升级后配置丢失。
     val map: String = "",
     val camera: String = ""
 )
@@ -39,15 +41,6 @@ object Plan {
 
     val queue: List<String> = listOf(SC_IDLE, SC_SVIDEO, SC_NAVCAM, SC_GAME)
 
-    /**
-     * 导航终点：用于高德深链直接发起路线规划，省掉「人工点终点」这一步。
-     * 选深圳市民中心是因为本机在深圳，路线长度约 10~20 km，导航期间地图重绘、
-     * 定位与路况刷新都有稳定负载；换城市只要改这三个常量。
-     */
-    const val NAV_DEST = "深圳市民中心"
-    const val NAV_DLAT = "22.545500"
-    const val NAV_DLON = "114.054800"
-
     private const val PREF = "powerprobe_plan"
 
     private val VIDEO_CANDIDATES = listOf(
@@ -61,13 +54,21 @@ object Plan {
     /** 默认游戏：Phigros（官方包名）。渠道包若不同，下面还有按应用名兜底 */
     const val PKG_PHIGROS = "com.PigeonGames.Phigros"
 
-    /** 默认地图：高德。导航播报、路口重绘、实时路况都是稳定负载，适合 30 分钟匀速工况 */
-    const val PKG_AMAP = "com.autonavi.minimap"
+    /**
+     * 第四工况（官网口径「导航 / 拍摄」）在本机按**拍摄**部分执行：全程相机录像。
+     * 原因：实测高德深链在本机不生效，日志明确记录「非高德地图，跳过深链导航」，
+     * 采集下来的前台一直是 com.android.camera。与其留一个跑不起来的导航半程、
+     * 让报告名实不符，不如把工况统一成真实发生了的负载。
+     */
+    const val PKG_CAMERA = "com.android.camera"
 
-    private val MAP_CANDIDATES = listOf(
-        PKG_AMAP,                            // 高德地图（本机默认）
-        "com.baidu.BaiduMap",                // 百度地图
-        "com.tencent.map"                    // 腾讯地图
+    private val CAMERA_CANDIDATES = listOf(
+        PKG_CAMERA,                          // AOSP / 小米系统相机（本机实测命中）
+        "com.miui.camera",                   // 小米新版相机
+        "com.android.camera2",               // 部分 ROM
+        "com.oppo.camera",
+        "com.vivo.camera",
+        "com.huawei.camera"
     )
 
     /**
@@ -115,7 +116,7 @@ object Plan {
         val t = Targets(
             video = cur.video.ifEmpty { firstInstalled(ctx, VIDEO_CANDIDATES) },
             game = cur.game.ifEmpty { resolveGame(ctx) },
-            map = cur.map.ifEmpty { firstInstalled(ctx, MAP_CANDIDATES) },
+            map = cur.map.ifEmpty { firstInstalled(ctx, CAMERA_CANDIDATES) },
             camera = cur.camera
         )
         save(ctx, t)

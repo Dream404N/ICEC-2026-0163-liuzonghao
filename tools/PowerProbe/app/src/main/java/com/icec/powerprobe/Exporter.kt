@@ -478,7 +478,7 @@ object Exporter {
     fun scenarioName(code: String): String = when (code) {
         "IDLE" -> "待机"
         "SVIDEO" -> "短视频"
-        "NAVCAM" -> "导航 / 拍摄"
+        "NAVCAM" -> "相机录像"
         "GAME" -> "高帧率游戏"
         else -> code
     }

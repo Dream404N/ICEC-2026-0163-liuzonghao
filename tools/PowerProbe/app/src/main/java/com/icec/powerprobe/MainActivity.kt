@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 
         addRow(
             automationContainer, R.drawable.ic_file,
-            "导航应用", "点按搜索选择 · 默认高德，15 分钟后切相机", "-", false
+            "相机应用", "点按搜索选择 · 默认系统相机，全程录像", "-", false
         ) { pickApp(AppPickerActivity.KIND_MAP) }.let { vMap = it.value }
     }
 
@@ -240,7 +240,7 @@ class MainActivity : AppCompatActivity() {
         addRow(scenarioContainer, R.drawable.ic_game, "短视频", "自动启动 App 并翻页", "30 分钟", true) {
             startScenario(Plan.SC_SVIDEO, false)
         }
-        addRow(scenarioContainer, R.drawable.ic_file, "导航 / 拍摄", "前 15 分钟导航，后 15 分钟录像", "30 分钟", true) {
+        addRow(scenarioContainer, R.drawable.ic_file, "相机录像", "全程相机录像，屏幕常亮", "30 分钟", true) {
             startScenario(Plan.SC_NAVCAM, false)
         }
         addRow(scenarioContainer, R.drawable.ic_game, "高帧率游戏", "自动启动游戏并保持前台", "30 分钟", false) {
@@ -307,9 +307,9 @@ class MainActivity : AppCompatActivity() {
         val missing = ArrayList<String>()
         if (t.video.isEmpty()) missing.add("短视频")
         if (t.game.isEmpty()) missing.add("游戏")
-        if (t.map.isEmpty()) missing.add("导航")
+        if (t.map.isEmpty()) missing.add("相机")
         val warn = if (missing.isEmpty()) {
-            "四个工况按 待机 → 短视频 → 导航拍摄 → 游戏 依次执行。"
+            "四个工况按 待机 → 短视频 → 相机录像 → 游戏 依次执行。"
         } else {
             "以下目标未选择，对应工况将只记录不加压：" + missing.joinToString("、") + "。"
         }
@@ -343,7 +343,7 @@ class MainActivity : AppCompatActivity() {
         i.putExtra(AppPickerActivity.EXTRA_TITLE, when (kind) {
             AppPickerActivity.KIND_VIDEO -> "选择短视频应用"
             AppPickerActivity.KIND_GAME -> "选择游戏应用"
-            else -> "选择导航应用"
+            else -> "选择相机应用"
         })
         i.putExtra(AppPickerActivity.EXTRA_CURRENT, when (kind) {
             AppPickerActivity.KIND_VIDEO -> t.video
