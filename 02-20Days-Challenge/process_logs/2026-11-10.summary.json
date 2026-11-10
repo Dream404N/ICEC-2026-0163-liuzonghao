@@ -1,10 +1,10 @@
 {
   "date": "2026-11-10",
-  "rounds": 3,
-  "source_calls": 21,
-  "source_ok": 18,
-  "source_failed": 3,
+  "rounds": 4,
+  "source_calls": 28,
+  "source_ok": 24,
+  "source_failed": 4,
   "new_items": 0,
-  "merkle_root": "a6e283cc69dd84ca625db234dec0c46937ca256bfb91e1a35a17a95927a65ece",
-  "generated_at": "2026-11-10 15:26"
+  "merkle_root": "5ee12d2a4c8e7ee9ecb596c91b928b566ab8131906b19ae9a8c00592107f9e5c",
+  "generated_at": "2026-11-10 18:07"
 }
