@@ -25,3 +25,6 @@ venv/
 config.json
 *api_key*
 **/data/thumbs/
+
+# 项目四：本机调试状态不入库（云端 state/ 与 process_logs/ 必须入库）
+02-20Days-Challenge/.state/

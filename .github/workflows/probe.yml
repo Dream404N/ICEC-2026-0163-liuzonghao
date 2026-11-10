@@ -1,0 +1,57 @@
+name: campus-radar-probe
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: campus-radar-probe
+  cancel-in-progress: false
+
+jobs:
+  round:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync state before this round
+        run: git pull --rebase origin ${{ github.ref_name }}
+
+      - name: Run one probe round
+        run: |
+          set -o pipefail
+          python 02-20Days-Challenge/src/probe.py | tee /tmp/round.json
+
+      - name: Commit logs, state and generated calendar
+        run: |
+          git config user.name "ICEC Radar Bot"
+          git config user.email "radar@users.noreply.github.com"
+          git add 02-20Days-Challenge/process_logs \
+                  02-20Days-Challenge/state \
+                  02-20Days-Challenge/public
+          if git diff --staged --quiet; then
+            echo "nothing new this round"
+            exit 0
+          fi
+          MSG=$(python -c "
+          import json
+          d = json.load(open('/tmp/round.json'))
+          m = 'probe: %s %s chain=%s' % (d['date'], d['minute'], d['hash'][:8])
+          if d.get('merkle_root'):
+              m += ' merkle=' + d['merkle_root']
+          print(m)
+          ")
+          git commit -m "$MSG"
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Verify the whole chain
+        run: python 02-20Days-Challenge/src/verify.py

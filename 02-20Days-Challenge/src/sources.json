@@ -1,0 +1,18 @@
+{
+  "note": "只列公开可匿名访问的页面。不登录、不读微信、不碰学习通、不采集个人信息。2026-11-10 逐个实测可达性后写入。",
+  "interval_min": 30,
+  "timeout_sec": 15,
+  "user_agent": "ICEC-P04-Campus-Radar/1.0 (student coursework; public pages only)",
+  "sources": [
+    {"name": "szcp_tzgg", "label": "学校通知公告", "url": "https://www.szcp.edu.cn/_html/tzgg/", "encoding": "utf-8"},
+    {"name": "szcp_kydt", "label": "科研动态", "url": "https://www.szcp.edu.cn/_html/kydt/", "encoding": "utf-8"},
+    {"name": "szcp_scjy", "label": "双创教育", "url": "https://www.szcp.edu.cn/_html/scjy/", "encoding": "utf-8"},
+    {"name": "ssti_tzgg", "label": "技师学院通知公告", "url": "https://www.ssti.net.cn/_html/tzgg/", "encoding": "utf-8"},
+    {"name": "hrss_sz", "label": "深圳人社局", "url": "https://hrss.sz.gov.cn/", "encoding": "utf-8"},
+    {"name": "cet_neea", "label": "全国大学英语四六级", "url": "https://cet.neea.edu.cn/", "encoding": "utf-8"},
+    {"name": "ncre_neea", "label": "全国计算机等级考试", "url": "https://ncre.neea.edu.cn/", "encoding": "utf-8"}
+  ],
+  "excluded": [
+    {"name": "eea_gd", "url": "https://eea.gd.gov.cn/", "reason": "2026-11-10 实测连接失败，暂不纳入；后续若恢复可再加，故障历史不删除"}
+  ]
+}

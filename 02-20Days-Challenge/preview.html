@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>校园节点雷达 · 成品版式预览</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--line:#e3e6ea;--text:#1c1f23;--muted:#6b7280;--accent:#2563a8;--accent-bg:#eaf2fb;--warn:#9a5b00;--warn-bg:#fff5e2;--err:#b03a3a;--err-bg:#fdecec}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+.page{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+.banner{background:var(--warn-bg);border:1px solid #f0d9a8;color:var(--warn);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:22px}
+h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 22px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.metric .k{color:var(--muted);font-size:12px}
+.metric .v{font-size:24px;font-weight:600;margin-top:4px;line-height:1.2}
+.cols{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h2{font-size:14px;font-weight:600;margin:0 0 14px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px}
+.cal .wd{color:var(--muted);padding:4px 0}
+.cal .d{padding:8px 0;border-radius:6px;color:var(--muted)}
+.cal .d.on{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.cal .d.due{background:var(--accent);color:#fff;font-weight:600}
+.cal .d.empty{color:transparent}
+.legend{font-size:12px;color:var(--muted);margin-top:12px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0;padding-top:0}
+.row .t{font-weight:500}
+.row .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.tag{flex:none;font-size:12px;padding:2px 8px;border-radius:5px;height:fit-content;background:var(--accent-bg);color:var(--accent)}
+.tag.hot{background:var(--warn-bg);color:var(--warn)}
+.heart{margin-top:14px}
+.heart .card{padding-bottom:14px}
+.grid7{display:grid;grid-template-columns:repeat(48,1fr);gap:2px;margin-top:10px}
+.tick{height:16px;border-radius:2px;background:#e8eaed}
+.tick.new{background:var(--accent)}
+.tick.fail{background:var(--err)}
+.hrow{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
+.foot{margin-top:20px;color:var(--muted);font-size:12px;line-height:1.8}
+.foot b{color:var(--text);font-weight:600}
+@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.grid7{grid-template-columns:repeat(24,1fr)}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="banner">版式预览 · 下方数字均为示例，不是真实运行数据。真实数据由 GitHub Actions 每 30 分钟自动生成，成品见仓库 <code>public/index.html</code>。</div>
+
+<h1>校园节点雷达</h1>
+<p class="sub">自动盯着学校与考试网站，把「哪天之前要做什么」送进你的日历。</p>
+
+<div class="metrics">
+  <div class="metric"><div class="k">监控的公开页面</div><div class="v">7</div></div>
+  <div class="metric"><div class="k">本周新增通知</div><div class="v">3</div></div>
+  <div class="metric"><div class="k">进行中的截止项</div><div class="v">3</div></div>
+  <div class="metric"><div class="k">已连续运行</div><div class="v">7 天</div></div>
+</div>
+
+<div class="cols">
+  <div class="card">
+    <h2>你的手机日历（导入一次，自动更新）</h2>
+    <div class="cal">
+      <div class="wd">一</div><div class="wd">二</div><div class="wd">三</div><div class="wd">四</div><div class="wd">五</div><div class="wd">六</div><div class="wd">日</div>
+      <div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div><div class="d">10</div><div class="d">11</div><div class="d">12</div><div class="d">13</div>
+      <div class="d">14</div><div class="d due">15</div><div class="d">16</div><div class="d">17</div><div class="d">18</div><div class="d">19</div><div class="d due">20</div>
+      <div class="d">21</div><div class="d">22</div><div class="d">23</div><div class="d">24</div><div class="d">25</div><div class="d due">26</div><div class="d">27</div>
+      <div class="d">28</div><div class="d">29</div><div class="d">30</div><div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div>
+    </div>
+    <div class="legend">蓝色日期 = 有事情要截止。提前一天弹提醒，不用装 App，Android / iOS / Windows / Linux 的日历都认。</div>
+  </div>
+
+  <div class="card">
+    <h2>电脑网页 · 本周抓到的新通知</h2>
+    <div class="row">
+      <div><div class="t">就业信息核对</div><div class="meta">11-12 · 学校通知公告 · 11 月 20 日前完成</div></div>
+      <div class="tag">剩 8 天</div>
+    </div>
+    <div class="row">
+      <div><div class="t">见习岗位报名</div><div class="meta">11-13 · 深圳人社局 · 报名截至 11 月 15 日</div></div>
+      <div class="tag hot">剩 3 天</div>
+    </div>
+    <div class="row">
+      <div><div class="t">期末补考安排</div><div class="meta">11-14 · 教学动态 · 材料提交 11 月 26 日</div></div>
+      <div class="tag">剩 14 天</div>
+    </div>
+    <div class="legend">每 30 分钟自动看一次；有新通知就自己加进来，看失败了也会如实记账。</div>
+  </div>
+</div>
+
+<div class="heart">
+  <div class="card">
+    <h2>运行日志 · 今天看了 48 次</h2>
+    <div class="grid7">
+      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick fail"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+    </div>
+    <div class="hrow"><span>灰 = 无变化　蓝 = 发现新通知　红 = 抓取失败</span><span>每格一次，7 天共 336 格</span></div>
+  </div>
+</div>
+
+<p class="foot">
+<b>交付时一共三样东西：</b>① 一份 <code>.ics</code> 日历订阅 + 一个网页，这是给同学用的产品；② 7 本日志，证明程序真的无人值守跑了 7 天；③ 一个 <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改。<br>
+<b>不碰的东西：</b>不读微信、不登录学习通、不采集任何个人信息；只抓公开网页，日志里只有时间、耗时、状态和内容指纹。
+</p>
+
+</div>
+</body>
+</html>

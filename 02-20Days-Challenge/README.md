@@ -1,0 +1,51 @@
+# 校园节点雷达 · 项目四
+
+自动盯着学校与考试网站，把「哪天之前要做什么」送进一份日历订阅；同时留下一条改不动的运行证据链。
+
+**先看样张**：`preview.html`（双击即可打开，数据是示例，已标注）。
+**看真实数据**：`public/index.html`、`public/calendar.ics`，由 GitHub Actions 每 30 分钟更新。
+
+## 怎么用
+
+1. 打开 `public/index.html`，看当前收录了哪些公告、哪些有明确截止日。
+2. 把 `public/calendar.ics` 导入手机或电脑的日历，到点前会提前一天提醒。Android / iOS / Windows / Linux 都认，不用装 App、不用登录。
+3. 想验证日志有没有被补写或篡改，跑：
+
+   ```bash
+   python src/verify.py
+   ```
+
+   它会逐日检查哈希链、重算 Merkle root，并列出缺勤轮次。
+
+## 目录
+
+| 路径 | 内容 |
+|---|---|
+| `src/sources.json` | 公开页面清单，逐个实测可达后写入；连不上的源记在 `excluded` |
+| `src/probe.py` | 单轮入口：抓取、解析、抽截止日、记日志、生成日历与网页 |
+| `src/chain.py` | 哈希链、Merkle root、脱敏、每日汇总 |
+| `src/verify.py` | 一键验真，独立可跑 |
+| `state/` | 跨轮状态（已见链接、已收录条目），每次新 runner 靠它延续 |
+| `process_logs/` | 每天一个 `.jsonl` + 一个 `.summary.json`，只追加不回填 |
+| `public/` | 生成的日历订阅与实时网页 |
+| `iterations/` | 三次由日志触发的迭代记录 |
+| `feedback/` | 8 位同学的脱敏反馈 |
+| `../.github/workflows/probe.yml` | 云端调度，每 30 分钟一轮 |
+
+## 日志里记什么
+
+每轮一条 JSON：日期与分钟、计划时间、每个源的状态码 / 耗时 / 字节数 / 解析到的链接数 / 错误指纹、本轮新增条目数、上一轮哈希、本轮哈希。
+
+**不记**：IP、主机名、绝对路径、请求正文、任何个人标识符、精确毫秒。报错只留脱敏后的 8 位指纹。
+
+## 证据链怎么闭合
+
+- 每条记录带 `prev_hash`，改任意一行，后面全部对不上；
+- 每天 23:30 之后那轮把当天所有记录两两归约成 Merkle root，写进 `*.summary.json`，并把完整值写进该轮 commit message；GitHub 服务端时间提供第三方时间锚；
+- `verify.py` 重算全链，精确报出断在第几天第几条。
+
+缺勤不补写。cron 排队延迟造成的缺口会如实显示，这本身就是真实性的佐证。
+
+## 依赖
+
+零第三方依赖，Python 3.8+ 标准库即可。所有重复执行都在 GitHub Actions 上，本机不需要运行任何东西。
