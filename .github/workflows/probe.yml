@@ -1,8 +1,10 @@
 name: campus-radar-probe
 
 on:
+  # 每 3 小时一轮，刻意放在第 17 分钟避开整点排队高峰。
+  # 学校公告一天通常只更新 1~2 条，30 分钟一轮只会刷出大量「无变化」。
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
 permissions:

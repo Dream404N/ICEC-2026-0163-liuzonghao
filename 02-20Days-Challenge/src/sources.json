@@ -1,6 +1,6 @@
 {
   "note": "只列公开可匿名访问的页面。不登录、不读微信、不碰学习通、不采集个人信息。2026-11-10 逐个实测可达性后写入。",
-  "interval_min": 30,
+  "interval_min": 180,
   "timeout_sec": 15,
   "user_agent": "ICEC-P04-Campus-Radar/1.0 (student coursework; public pages only)",
   "sources": [

@@ -5,7 +5,7 @@
 检查三件事：
   1. 每一天的哈希链是否连续，改过哪一行会精确报出来；
   2. 每日 summary 里的 Merkle root 是否等于当天所有记录重算的结果；
-  3. 哪一天少跑了轮次（按 30 分钟一轮，允许 cron 排队延迟，只报缺口不补写）。
+  3. 哪一天少跑了轮次（按每 3 小时一轮共 8 轮，允许 cron 排队延迟，只报缺口不补写）。
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from chain import LOGDIR, entry_hash, last_hash, load_day, merkle_root, ZERO  # noqa: E402
 
-EXPECTED_ROUNDS_PER_DAY = 48
+EXPECTED_ROUNDS_PER_DAY = 8
 
 
 def main() -> int:

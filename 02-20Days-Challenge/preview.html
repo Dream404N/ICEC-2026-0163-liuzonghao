@@ -34,27 +34,27 @@ h1{font-size:22px;font-weight:600;margin:0 0 4px}
 .tag.hot{background:var(--warn-bg);color:var(--warn)}
 .heart{margin-top:14px}
 .heart .card{padding-bottom:14px}
-.grid7{display:grid;grid-template-columns:repeat(48,1fr);gap:2px;margin-top:10px}
+.grid7{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:10px}
 .tick{height:16px;border-radius:2px;background:#e8eaed}
 .tick.new{background:var(--accent)}
 .tick.fail{background:var(--err)}
 .hrow{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
 .foot{margin-top:20px;color:var(--muted);font-size:12px;line-height:1.8}
 .foot b{color:var(--text);font-weight:600}
-@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.grid7{grid-template-columns:repeat(24,1fr)}}
+@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.grid7{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 <div class="page">
 
-<div class="banner">版式预览 · 下方数字均为示例，不是真实运行数据。真实数据由 GitHub Actions 每 30 分钟自动生成，成品见仓库 <code>public/index.html</code>。</div>
+<div class="banner">版式预览 · 下方数字均为示例，不是真实运行数据。真实数据由 GitHub Actions 每 3 小时自动生成，成品见仓库 <code>public/index.html</code>。</div>
 
 <h1>校园节点雷达</h1>
-<p class="sub">自动盯着学校与考试网站，把「哪天之前要做什么」送进你的日历。</p>
+<p class="sub">自动盯着学校与考试网站，<b>只挑需要你动手、且有期限的那几件</b>送进日历。公示、结果、新闻一律不收。</p>
 
 <div class="metrics">
   <div class="metric"><div class="k">监控的公开页面</div><div class="v">7</div></div>
-  <div class="metric"><div class="k">本周新增通知</div><div class="v">3</div></div>
+  <div class="metric"><div class="k">关心的通知</div><div class="v">3</div></div>
   <div class="metric"><div class="k">进行中的截止项</div><div class="v">3</div></div>
   <div class="metric"><div class="k">已连续运行</div><div class="v">7 天</div></div>
 </div>
@@ -86,27 +86,24 @@ h1{font-size:22px;font-weight:600;margin:0 0 4px}
       <div><div class="t">期末补考安排</div><div class="meta">11-14 · 教学动态 · 材料提交 11 月 26 日</div></div>
       <div class="tag">剩 14 天</div>
     </div>
-    <div class="legend">每 30 分钟自动看一次；有新通知就自己加进来，看失败了也会如实记账。</div>
+    <div class="legend">每 3 小时自动看一次；已过滤 21 条公示 / 结果 / 新闻类公告。想换关心的事，改 <code>interests.json</code> 即可。</div>
   </div>
 </div>
 
 <div class="heart">
   <div class="card">
-    <h2>运行日志 · 今天看了 48 次</h2>
+    <h2>运行日志 · 今天看了 8 次</h2>
     <div class="grid7">
-      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick fail"></div><div class="tick"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div>
+      <div class="tick fail"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div>
     </div>
-    <div class="hrow"><span>灰 = 无变化　蓝 = 发现新通知　红 = 抓取失败</span><span>每格一次，7 天共 336 格</span></div>
+    <div class="hrow"><span>灰 = 无变化　蓝 = 发现新通知　红 = 抓取失败</span><span>每格一轮，7 天共 56 轮</span></div>
   </div>
 </div>
 
 <p class="foot">
 <b>交付时一共三样东西：</b>① 一份 <code>.ics</code> 日历订阅 + 一个网页，这是给同学用的产品；② 7 本日志，证明程序真的无人值守跑了 7 天；③ 一个 <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改。<br>
+<b>只做三件事：</b>抓公开页、生成日历、留运行日志。学习通、微信、课表、断网提醒这些扩展项一律不做，不把摊子铺大。<br>
 <b>不碰的东西：</b>不读微信、不登录学习通、不采集任何个人信息；只抓公开网页，日志里只有时间、耗时、状态和内容指纹。
 </p>
 

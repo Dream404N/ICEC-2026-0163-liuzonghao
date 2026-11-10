@@ -2,7 +2,8 @@
 
     python 02-20Days-Challenge/src/probe.py
 
-由 GitHub Actions 每 30 分钟调用一次；本机不常驻、不自启。
+由 GitHub Actions 每 3 小时调用一次；本机不常驻、不自启。
+公告一天通常只更新 1~2 条，低频更可靠，也不会刷出一堆「无变化」的空日志。
 零第三方依赖，只用 Python 标准库。状态全部落在仓库文件里，
 因为每次都是全新 runner，内存里的东西留不到下一轮。
 
@@ -26,6 +27,23 @@ from chain import (PUBLICDIR, STATEDIR, append_round, canonical, fingerprint,
 
 HERE = Path(__file__).resolve().parent
 CONFIG = json.loads((HERE / "sources.json").read_text(encoding="utf-8"))
+INTERESTS = json.loads((HERE / "interests.json").read_text(encoding="utf-8"))
+
+
+def relevance(title):
+    """确定性过滤：只留下需要学生动手的事，公示/结果/新闻一律不看。
+
+    先判排除词再判关注词，返回 (是否相关, 理由)。规则可改 interests.json，
+    不用动代码，也不用大模型打分。
+    """
+    t = title or ""
+    for w in INTERESTS["exclude"]:
+        if w in t:
+            return False, "排除词:" + w
+    for w in INTERESTS["include"]:
+        if w in t:
+            return True, "关注词:" + w
+    return False, "未命中"
 
 _RE_LINK = re.compile(
     r'href=["\']([^"\']*\d{4,}\.html?)["\'][^>]*>(.*?)</a>(.{0,240})',
@@ -112,9 +130,13 @@ def parse_links(page_text):
 
 def render(items, day_rows, summary):
     PUBLICDIR.mkdir(parents=True, exist_ok=True)
-    due = [i for i in items if i.get("due") and i["due"] >= now().strftime("%Y-%m-%d")]
+    def rel(i):
+        return i["relevant"] if "relevant" in i else relevance(i["title"])[0]
+    kept = [i for i in items if rel(i)]
+    filtered = len(items) - len(kept)
+    due = [i for i in kept if i.get("due") and i["due"] >= now().strftime("%Y-%m-%d")]
     due.sort(key=lambda x: x["due"])
-    recent = sorted(items, key=lambda x: x.get("found_at", ""), reverse=True)[:20]
+    recent = sorted(kept, key=lambda x: x.get("found_at", ""), reverse=True)[:20]
 
     lines = ["BEGIN:VCALENDAR", "VERSION:2.0",
              "PRODID:-//ICEC P04//Campus Radar//ZH", "CALSCALE:GREGORIAN",
@@ -145,7 +167,7 @@ def render(items, day_rows, summary):
             html_lib.escape(left), html_lib.escape(left[:12]))
 
     ticks = []
-    for r in day_rows[-48:]:
+    for r in day_rows[-8:]:
         cls = "fail" if any(s.get("status") != 200 for s in r.get("sources", [])) else \
               "new" if r.get("new_items", 0) > 0 else ""
         ticks.append('<div class="tick %s"></div>' % cls)
@@ -161,17 +183,18 @@ def render(items, day_rows, summary):
 .card h2{font-size:14px;font-weight:600;margin:0 0 14px}.row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
 .row:first-of-type{border-top:0;padding-top:0}.t{font-weight:500}.meta{color:var(--muted);font-size:12px;margin-top:2px}
 .tag{flex:none;font-size:12px;padding:2px 8px;border-radius:5px;height:fit-content;background:var(--accent-bg);color:var(--accent)}
-.grid7{display:grid;grid-template-columns:repeat(48,1fr);gap:2px;margin-top:10px}.tick{height:16px;border-radius:2px;background:#e8eaed}
+.grid7{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:10px}.tick{height:16px;border-radius:2px;background:#e8eaed}
 .tick.new{background:var(--accent)}.tick.fail{background:var(--err)}.foot{color:var(--muted);font-size:12px}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 .metric{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
 .metric .k{color:var(--muted);font-size:12px}.metric .v{font-size:24px;font-weight:600;margin-top:4px}
 </style></head><body><div class="page">
 <h1>校园节点雷达</h1>
-<p class="sub">真实运行数据 · 由 GitHub Actions 每 30 分钟自动生成 · 最后更新 __STAMP__</p>
+<p class="sub">真实运行数据 · 由 GitHub Actions 每 3 小时自动生成 · 最后更新 __STAMP__</p>
+<p class="sub">只保留需要你动手、且有期限的事；已按 interests.json 过滤掉 __FILTERED__ 条公示 / 结果 / 新闻类公告。</p>
 <div class="metrics">
 <div class="metric"><div class="k">监控公开页</div><div class="v">__NSRC__</div></div>
-<div class="metric"><div class="k">累计收录公告</div><div class="v">__NITEM__</div></div>
+<div class="metric"><div class="k">关心的公告</div><div class="v">__NITEM__</div></div>
 <div class="metric"><div class="k">进行中的截止项</div><div class="v">__NDUE__</div></div>
 <div class="metric"><div class="k">今日已跑轮次</div><div class="v">__NROUND__</div></div>
 </div>
@@ -184,7 +207,8 @@ def render(items, day_rows, summary):
     sub = {
         "__STAMP__": now().strftime("%Y-%m-%d %H:%M"),
         "__NSRC__": str(len(CONFIG["sources"])),
-        "__NITEM__": str(len(items)),
+        "__NITEM__": str(len(kept)),
+        "__FILTERED__": str(filtered),
         "__NDUE__": str(len(due)),
         "__NROUND__": str(len(day_rows)),
         "__DUE__": "".join(row(i) for i in due[:12]) or '<p class="foot">暂未识别到带明确截止日的公告。</p>',
@@ -205,6 +229,7 @@ def main():
     baseline = not seen
     known = {i["key"] for i in items}
     new_items = 0
+    relevant_new = 0
     source_rows = []
 
     for src in CONFIG["sources"]:
@@ -221,14 +246,18 @@ def main():
                 continue
             known.add(key)
             due = find_due(link["title"], link["tail"])
+            rel, why = relevance(link["title"])
             items.append({
                 "key": key, "source": src["label"], "title": link["title"],
                 "url": link["url"], "due": due,
                 "found_at": stamp.strftime("%Y-%m-%d %H:%M"),
                 "is_new": not baseline,
+                "relevant": rel, "why": why,
             })
             if not baseline:
                 new_items += 1
+                if rel:
+                    relevant_new += 1
         seen[src["name"]] = [l["url"] for l in found]
         source_rows.append({
             "name": src["name"], "status": status, "ms": ms, "bytes": size,
@@ -236,16 +265,22 @@ def main():
         })
 
     ok = sum(1 for s in source_rows if s["status"] == 200)
+    def is_rel(i):
+        return i["relevant"] if "relevant" in i else relevance(i["title"])[0]
+    filtered_total = sum(1 for i in items if not is_rel(i))
+    slot_start = stamp.hour - stamp.hour % 3
     record = {
         "seq": len(load_day_rows(date)) + 1,
         "date": date,
         "minute": stamp.strftime("%H:%M"),
-        "planned_minute": stamp.strftime("%H:00") if stamp.minute < 30 else stamp.strftime("%H:30"),
+        "slot_3h": "%02d:00-%02d:00" % (slot_start, slot_start + 3),
         "baseline": baseline,
         "calls": len(source_rows),
         "ok": ok,
         "failed": len(source_rows) - ok,
         "new_items": new_items,
+        "relevant_new": relevant_new,
+        "filtered_total": filtered_total,
         "items_total": len(items),
         "sources": source_rows,
     }
@@ -254,14 +289,17 @@ def main():
     save_state("items.json", items[-2000:])
 
     day_rows = load_day_rows(date)
-    summary = write_daily_summary(date) if stamp.hour >= 23 and stamp.minute >= 30 else None
+    # 每轮都滚动重算当日 Merkle root：不受时区、频率或 cron 延迟影响，
+    # 当天最后一轮的终值即为日终锚。
+    summary = write_daily_summary(date)
     n_due = render(items, day_rows, summary)
     out = {
         "date": date, "minute": record["minute"], "baseline": baseline,
         "ok": ok, "failed": len(source_rows) - ok, "new_items": new_items,
+        "relevant_new": relevant_new, "filtered_total": filtered_total,
         "items_total": len(items), "due_in_calendar": n_due,
         "hash": record["hash"],
-        "merkle_root": (summary or {}).get("merkle_root", ""),
+        "merkle_root": summary["merkle_root"],
     }
     print(canonical(out))
     return 0
