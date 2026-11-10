@@ -1,0 +1,2 @@
+timestamp_iso,elapsed_s,scenario,seq,battery_pct,voltage_mv,current_ma,batt_temp_c,charge_uah,status,power_w,cpu_avg_mhz,cpu_load_pct,gpu_mhz,thermal_max_c,thermal_max_type,soc_thermal_c,foreground_pkg,screen_on,charging,data_source,thermal_status,is_final
+2026-11-08T23:01:25+08:00,0,IDLE,0,100,4401,29.0,30.5,4295000,full,0.128,1788,0.0,0,0.0,,0.0,,0,1,batt=api_now;thz=none;cpu=sysfs_file;gpu=none;fg=none;ch=root,NONE,0

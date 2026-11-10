@@ -1,0 +1,24 @@
+[23:19:58] 设备: Xiaomi 23078RKD5C (Android 13, SDK 33, SoC mt6985, ABI arm64-v8a)
+[23:19:58] 执行通道: root 只读直读（系统节点 + dumpsys）
+[23:19:58] 目标应用: 视频=抖音极速版 游戏=Phigros 导航=高德地图
+[23:19:58] 计划: SVIDEO，每工况 30 分钟，每 5 分钟采样
+[23:19:58] ===== [1/1] 开始 短视频 · 30 分钟 · 被测 抖音极速版 =====
+[23:19:59] [自动] 拉起短视频 com.ss.android.ugc.aweme.lite 成功
+[23:20:04] 采样 #1  t=0min  电量 48%  1224 mA  30.8 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:20:04]      进程 pid=24117 cpu=-1% pss=766MB fps=-1 卡顿=-1.0% 流量↓-1KB
+[23:25:04] 采样 #2  t=5min  电量 47%  653 mA  31.8 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:25:04]      进程 pid=24117 cpu=1% pss=1170MB fps=53 卡顿=3.8% 流量↓158071KB
+[23:30:04] 采样 #3  t=10min  电量 45%  737 mA  32.3 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:30:04]      进程 pid=24117 cpu=1% pss=1193MB fps=50 卡顿=0.1% 流量↓220482KB
+[23:35:05] 采样 #4  t=15min  电量 44%  398 mA  32.3 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:35:05]      进程 pid=24117 cpu=1% pss=1286MB fps=54 卡顿=0.2% 流量↓55306KB
+[23:40:05] 采样 #5  t=20min  电量 43%  452 mA  32.6 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:40:05]      进程 pid=24117 cpu=1% pss=1352MB fps=51 卡顿=0.3% 流量↓53740KB
+[23:45:05] 采样 #6  t=25min  电量 41%  521 mA  32.7 ℃  前台 com.ss.android.ugc.aweme.lite
+[23:45:05]      进程 pid=24117 cpu=1% pss=1344MB fps=54 卡顿=0.3% 流量↓15770KB
+[23:45:05] 工况 短视频 采样点已全部完成，补记收尾样本
+[23:45:07] [自动] 已结束目标应用并 wakeup 屏幕
+[23:45:07] CSV  → T02_SVIDEO_20261109_234507.csv（7 行）
+[23:45:08] 报告 → T02_SVIDEO_20261109_234507_report.md
+[23:45:08] 已导出 2 个文件到 Download/PowerProbe/
+[23:45:11] 全部工况完成，产物已归档

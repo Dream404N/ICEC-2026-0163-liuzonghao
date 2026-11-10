@@ -1,0 +1,24 @@
+[00:09:34] 设备: Xiaomi 23078RKD5C (Android 13, SDK 33, SoC mt6985, ABI arm64-v8a)
+[00:09:34] 执行通道: root 只读直读（系统节点 + dumpsys）
+[00:09:34] 目标应用: 视频=抖音极速版 游戏=Phigros 导航=高德地图
+[00:09:34] 计划: GAME，每工况 30 分钟，每 5 分钟采样
+[00:09:34] ===== [1/1] 开始 高帧率游戏 · 30 分钟 · 被测 Phigros =====
+[00:09:35] [自动] 拉起游戏 com.PigeonGames.Phigros 成功
+[00:09:39] 采样 #1  t=0min  电量 39%  2714 mA  28.5 ℃  前台 com.PigeonGames.Phigros
+[00:09:39]      进程 pid=18614 cpu=-1% pss=35MB fps=-1 卡顿=-1.0% 流量↓-1KB
+[00:14:40] 采样 #2  t=5min  电量 37%  865 mA  32.9 ℃  前台 com.PigeonGames.Phigros
+[00:14:40]      进程 pid=18614 cpu=1% pss=374MB fps=-1 卡顿=-1.0% 流量↓54KB
+[00:19:40] 采样 #3  t=10min  电量 34%  1494 mA  35.2 ℃  前台 com.PigeonGames.Phigros
+[00:19:40]      进程 pid=18614 cpu=1% pss=381MB fps=-1 卡顿=-1.0% 流量↓68KB
+[00:24:41] 采样 #4  t=15min  电量 31%  830 mA  36.0 ℃  前台 com.PigeonGames.Phigros
+[00:24:41]      进程 pid=18614 cpu=1% pss=382MB fps=-1 卡顿=-1.0% 流量↓37KB
+[00:29:40] 采样 #5  t=20min  电量 29%  702 mA  36.2 ℃  前台 com.PigeonGames.Phigros
+[00:29:40]      进程 pid=18614 cpu=1% pss=395MB fps=-1 卡顿=-1.0% 流量↓26KB
+[00:34:40] 采样 #6  t=25min  电量 27%  776 mA  36.7 ℃  前台 com.PigeonGames.Phigros
+[00:34:40]      进程 pid=18614 cpu=1% pss=399MB fps=-1 卡顿=-1.0% 流量↓43KB
+[00:34:40] 工况 高帧率游戏 采样点已全部完成，补记收尾样本
+[00:34:44] [自动] 已结束目标应用并 wakeup 屏幕
+[00:34:44] CSV  → T02_GAME_20261110_003444.csv（7 行）
+[00:34:44] 报告 → T02_GAME_20261110_003444_report.md
+[00:34:44] 已导出 2 个文件到 Download/PowerProbe/
+[00:34:47] 全部工况完成，产物已归档
