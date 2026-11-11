@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-12",
+  "rounds": 1,
+  "source_calls": 7,
+  "source_ok": 6,
+  "source_failed": 1,
+  "new_items": 0,
+  "merkle_root": "9bf03ed93368c01857f0205e79ff30b3c4b1eddda92f2ef324f1915e54e98dd2",
+  "generated_at": "2026-11-12 00:04"
+}
