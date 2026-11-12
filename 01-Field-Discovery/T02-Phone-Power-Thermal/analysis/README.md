@@ -2,14 +2,28 @@
 
 把 `raw_data/` 里的原始 CSV 变成图表和结论。**原始 CSV 不做任何手工修改**，所有加工都在这一步完成，保证可复现。
 
-## 用法
+## 本次定稿实际用的是 `summarize_real.py`
+
+```bash
+python summarize_real.py        # 零第三方依赖，无需 pip install
+```
+
+输出 `summary.md`（如实结论稿）与 `figures/discharge.svg`（电量曲线）。
+只读真实 CSV，三个完整工况出曲线与描述性统计，相机录像工况只有 2 点、单列端点对比，
+**不插值、不补点、不做统计检验**。局限与理由见 `../DATA_QUALITY.md`。
+
+下方 `analyze_t02.py` 是早期写的完整版流程，依赖 numpy / pandas / matplotlib 且假定 4 工况齐整；
+因相机工况采样密度不足、起始温度不齐，**本次不运行**。若将来补齐 7 点后要跑它，
+请把 `--out` 指到别的目录，避免覆盖本次定稿的 `summary.md`。
+
+## `analyze_t02.py` 用法（本次未运行）
 
 ```bash
 pip install -r requirements.txt
 python analyze_t02.py --raw ../raw_data --out .
 ```
 
-## 输出
+## `analyze_t02.py` 的目标输出（本次未生成）
 
 | 文件 | 内容 |
 |---|---|
