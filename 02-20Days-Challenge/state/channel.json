@@ -1,0 +1,7 @@
+{
+  "status": "reachable",
+  "http": 200,
+  "fingerprint": "",
+  "probed_at": "2026-11-13 23:28",
+  "note": "仅探测域名可达性，不代表推送成功；SendKey 不参与本请求"
+}
