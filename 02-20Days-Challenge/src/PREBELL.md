@@ -34,7 +34,8 @@ Server酱 → 微信
 
 - `POST https://api.github.com/repos/Dream404N/ICEC-2026-0163-LZH/actions/workflows/prebell.yml/dispatches`
 - Headers：`Accept: application/vnd.github+json`、`Authorization: Bearer <token>`、`X-GitHub-Api-Version: 2022-11-28`
-- Body（JSON 类型）：`{"ref":"master","inputs":{"period":"3","source":"cronjob"}}`
+- Body（JSON 类型）：`{"ref":"main","inputs":{"period":"3","source":"cronjob"}}`
+  （分支必须是 **`main`**——仓库默认分支是 main，填 `master` 会直接 422 `No ref found`）
 - 时区保持 **UTC**，表达式按上表填
 
 token 用 fine-grained PAT，只给这一个仓库的 `Actions: Read and write`，其余全 No access。
@@ -46,12 +47,18 @@ cron-job.org 免费、无 SLA。它的执行历史同时记录「计划时刻」
 
 ## 你要先做这几件事
 
-1. 打开 <https://sct.ftqq.com/>，用微信扫码登录，关注「方糖」服务号，复制 **SendKey**。
-2. 进本仓库 **Settings → Secrets and variables → Actions**，新建 Secret：
-   - Name：`PREBELL_SENDKEY`
-   - Value：粘贴刚才复制的 SendKey（只在网页表单里出现一次）
-3. 在 Actions 里手动跑一次 `prebell.yml`（`workflow_dispatch`，`mode` 选 `probe` 做连通性探测、`test-push` 发一条真实测试消息），**你确认微信真的收到**才算通道打通。失败会记 HTTP 状态与 8 位错误指纹，并自动降级，绝不写「推送成功」。
+**已完成（11-13 深夜，有日志可查）**：
+
+1. ~~扫码注册 Server酱、拿 SendKey~~ —— 已配好，存在仓库 Secrets `PREBELL_SENDKEY`（只在此表单出现一次，不入库）。
+2. ~~跑一次连通性探测~~ —— Actions 从境外 runner 探到 `sctapi.ftqq.com` **HTTP 200 / reachable**
+   （`state/channel.json`）。这条推翻了本仓库此前「Actions 连不上国内站点」的悲观预期。
+3. ~~发一条真实测试消息~~ —— `process_logs/2026-11-13.jsonl` 里 `event=test_push`、
+   `push.status=ok`、`http=200`、`biz_code=0`、`attempts=1`、`ms=3989`。
+
+**还差你来做**：
+
 4. 按上面那张表在 cron-job.org 建 3 个 job，各点一次「Test run」：确认返回 204、Actions 里多出一个 run、日志里 `trigger_source` 是 `cronjob`。
+   **branch 填 `main`**（填 `master` 会 422，仓库默认分支是 main）。
 5. 对照 `src/timetable-source.png` 逐格核对 `src/timetable.json`。**闹钟按这张表准时响，表错了就准时推错课。**
 
 SendKey 只存在于 GitHub Secrets。代码只读 `os.environ`，不写进 `state/`、`process_logs/`、`public/`、commit message 或任何文档；异常里的 URL 会被 `chain.scrub()` 抹成 `[url]`。
@@ -83,7 +90,7 @@ python src/prebell.py --dry-run --period 3 --source cronjob   # 模拟闹钟踢�
 
 这是**初稿**，`review.status = "unverified"`。请对照原图逐格核对，把结果写进 `review.changes`
 （每条记 `cell_id`、字段、原值、改为、依据），再把 `status` 改为 `verified`、`meta.proofread` 改为 `true`。
-这次校对就是三次真实迭代的第 1 次，diff 会留痕。校对前程序仍会推送，但**每条消息和网页都会带「课表未校对」声明**。
+这次校对会作为一次真实迭代留痕（已在 `iterations/` 的 `003`、`004` 之后）。校对前程序仍会推送，但**每条消息和网页都会带「课表未校对」声明**。
 
 ## 周次怎么算
 
@@ -130,6 +137,10 @@ python src/prebell.py --dry-run --period 3 --source cronjob   # 模拟闹钟踢�
 `src/verify.py` 一键验真。日志字段含 `task`、`trigger_source`（cronjob/manual）、
 `planned_push_at`、`actual_minute`、`late_by_min`、`schedule_slot`、`phase`、`course_hit`、
 `push`、`channel_state`。
+
+验真查两件事，缺一不可：**该响的有没有响**（课表里有这一节却没有对应记录 → `该响没响`），
+**响了有没有真推成功**（有记录但 `push.status != ok` → `响了但没推成功`，附带原因）。
+只查前者会把「推送失败 / 迟到超阈值放弃 / 渠道降级 / 额度用尽」统统算成齐，等于假报通过。
 
 **诚实边界**：
 - 计划时刻不是猜的：它来自课表算出的 `src/schedule.json`（96 条，整学期一次性展开），

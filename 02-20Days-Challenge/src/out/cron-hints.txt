@@ -13,6 +13,6 @@ period=4  北京 14:50（第四大节 15:10）  ->  cron: 50 6 * * 1,2,3,4
            出现在：周一、周二、周三、周四
 
 # 对应的 workflow 触发 body：
-#   {"ref":"master","inputs":{"period":"1","source":"cronjob"}}
-#   {"ref":"master","inputs":{"period":"3","source":"cronjob"}}
-#   {"ref":"master","inputs":{"period":"4","source":"cronjob"}}
+#   {"ref":"main","inputs":{"period":"1","source":"cronjob"}}
+#   {"ref":"main","inputs":{"period":"3","source":"cronjob"}}
+#   {"ref":"main","inputs":{"period":"4","source":"cronjob"}}

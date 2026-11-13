@@ -205,7 +205,7 @@ def render_hints(hints, total, term_weeks):
     lines.append("")
     lines.append("# 对应的 workflow 触发 body：")
     for h in hints:
-        lines.append('#   {"ref":"master","inputs":{"period":"%d","source":"cronjob"}}' % h["period"])
+        lines.append('#   {"ref":"main","inputs":{"period":"%d","source":"cronjob"}}' % h["period"])
     return "\n".join(lines) + "\n"
 
 

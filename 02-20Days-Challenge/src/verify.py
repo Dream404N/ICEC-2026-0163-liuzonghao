@@ -7,7 +7,8 @@
   2. 每日 summary 里的 Merkle root 是否等于当天所有记录重算的结果；
   3. 该响的闹钟有没有响：11-17 起，期望值不再写死，而是从
      src/schedule.json（由 resolve.py 从课表整学期算出的表）按日期取，
-     缺哪一节、多出哪一节都点名；
+     缺哪一节、多出哪一节都点名；**响了但没推成功**（推送失败、迟到超阈值放弃、
+     渠道降级、额度用尽）同样点名——只看「有没有记录」会把失败算成齐。
   4. 迟到情况：actual - planned 的分布，超过阈值的次数。
 
 期望轮次按日期分段，因为 11-17 前后是两套调度：
@@ -105,7 +106,10 @@ def main() -> int:
         else:
             want = set(by_date.get(day, []))
             got = {r.get("schedule_slot") for r in rows if r.get("schedule_slot")}
+            ok = {r.get("schedule_slot") for r in rows
+                  if r.get("schedule_slot") and (r.get("push") or {}).get("status") == "ok"}
             missing = sorted(want - got)
+            failed = sorted((got & want) - ok)
             extra = sorted(got - want)
             if not want:
                 # 这天本来就不上课：闹钟不该响，响了也只该是 no_class 一类的记录
@@ -115,10 +119,23 @@ def main() -> int:
                 problems.append(f"{day}: 该响没响 {', '.join(missing)}")
             else:
                 note = "齐"
+            if failed:
+                # 响是响了，但推送没成功（失败 / 迟到超阈值 / 渠道降级 / 额度用尽）。
+                # 只查「有没有记录」会把这类算成齐，等于假报通过，必须单独点名。
+                why = {}
+                for r in rows:
+                    sid = r.get("schedule_slot")
+                    if sid in failed:
+                        why[sid] = (r.get("reason")
+                                    or (r.get("push") or {}).get("status") or "unknown")
+                note += " | 未推成功 " + "、".join(
+                    "%s(%s)" % (s.replace(day + "-", ""), why.get(s)) for s in failed)
+                problems.append("%s: 响了但没推成功 %s"
+                                % (day, ", ".join("%s=%s" % (s, why.get(s)) for s in failed)))
             if extra:
                 note += " | 多 " + "、".join(e.replace(day + "-", "") for e in extra)
                 problems.append(f"{day}: 推送了课表里没有的 {', '.join(extra)}")
-            counter = f"{len(got & want):>3}/{len(want):<3}"
+            counter = f"{len(ok & want):>3}/{len(want):<3}"
 
         lates = [r.get("late_by_min") for r in rows if isinstance(r.get("late_by_min"), int)]
         late_note = ""

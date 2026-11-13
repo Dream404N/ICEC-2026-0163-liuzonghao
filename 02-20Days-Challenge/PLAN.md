@@ -58,7 +58,7 @@ Server酱走官方公开接口，不在此边界。此前一刀切把推送也�
 | 评分项 | 对应交付 |
 |---|---|
 | 连续 ≥7 天 telemetry 日志（含脱敏时间戳、频次、耗时、报错）**25 分** | `process_logs/YYYY-MM-DD.jsonl`，每轮一条，含 `trigger_source`（cronjob/manual）/ `planned_push_at` / `late_by_min` / `push` / `schedule_slot` |
-| 基于日志的 ≥3 次 Git 迭代 diff **20 分** | `iterations/`：#1 外部闹钟与静态表（已落）、#2 课表逐格校对、#3 按真实反馈调文案，均由真实事件触发 |
+| 基于日志的 ≥3 次 Git 迭代 diff **20 分** | `iterations/`：`003` 外部闹钟与静态表、`004` 通道打通与验真补漏（均已落，均由真实事件触发）；后续 #5 课表逐格校对、#6 按真实延迟/失败调参、#7 按八位反馈改文案 |
 | 完整源码 + 8 位真实用户反馈 **15 分** | `src/prebell.py` / `weeks.py` / `timetable.json`、`feedback/F01–F08` |
 | Git 证据链与复盘 | 每轮滚动 Merkle root 写进 `*.summary.json` 与 commit message，`verify.py` 一键验真 |
 
@@ -67,14 +67,15 @@ Server酱走官方公开接口，不在此边界。此前一刀切把推送也�
 | 日期 | 动作 |
 |---|---|
 | 11-13 | 改选题口径 + `002-改选题说明.md`；人工转录 `timetable.json`（含 `unclear`）；写全套源码与 `prebell.yml`；`py_compile`；本机 dry-run 预览。晚些时候按使用者「频率太高」的反馈做**迭代 #1**：定时搬出 GitHub、整学期一次性算成 `src/schedule.json`（`003-外部闹钟与静态表.md`） |
-| 11-14 ~ 11-16 | **迭代 #2**：使用者对照 `timetable-source.png` 逐格校对，结果写进 `review.changes`；扫码注册 Server酱、把 SendKey 填进 Secrets；创建 cron-job.org 三个 job；跑连通性探测 + 一条真实测试消息，**微信真收到**才算通 |
+| 11-13 深夜 | 收到 SendKey → 写入仓库 Secrets；Actions 实测 **`sctapi.ftqq.com` HTTP 200 / reachable**（推翻「境外 runner 连不上国内站点」的旧结论）、**真实测试消息 `biz_code=0` 发到微信**；顺带修两个真 bug：文档分支名 `master`→`main`（照抄会 422 静默失败）、`verify.py` 把「推失败」判成「齐」（`004-通道打通与验真补漏.md`） |
+| 11-14 ~ 11-16 | **迭代 #5**：使用者对照 `timetable-source.png` 逐格校对，结果写进 `review.changes`；创建 cron-job.org 三个 job（branch 填 `main`）并各点一次 Test run |
 | 11-17 | 旧雷达满 7 天 → 停其 schedule；cron-job.org 三个 job 上线；**7 天窗口开始** |
-| 11-18 ~ 11-20 | **迭代 #3**：按首日真实 `late_by_min` / 漏响 / 推送失败日志调迟到阈值或降级策略，diff 附前后对比；向 8 位同学发推送截图并收反馈 |
+| 11-18 ~ 11-20 | **迭代 #6**：按首日真实 `late_by_min` / 漏响 / 推送失败日志调迟到阈值或降级策略，diff 附前后对比；向 8 位同学发推送截图并收反馈 |
 | 11-21 ~ 11-22 | 周末无课，不产生记录（设计如此，不是缺口）；按 F01–F08 真实反馈改文案 / 合并策略 / 兜底展示，diff 附反馈编号 |
 | 11-23 | `verify.py` 全链校验、脱敏核查、报告（评分点对应到具体 commit 与日志行） |
 | 11-24 | 封仓 |
 
-三次迭代是**由日志与反馈触发**，不是预先排好的剧本。若某类故障没发生，就按实际发生的那类写，不编造。
+每次迭代都是**由日志与反馈触发**，不是预先排好的剧本。若某类故障没发生，就按实际发生的那类写，不编造。
 
 ## 8 位同学反馈怎么收
 
