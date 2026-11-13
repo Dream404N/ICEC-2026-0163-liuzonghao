@@ -52,17 +52,20 @@ python src/verify.py                # 一键验真（需 clone 后已有云端�
 | `src/timetable.json` | 人工转录的真实课表（初稿，含 `unclear` 与 `review.changes`） |
 | `src/timetable-source.png` | 课表原图，校对依据 |
 | `src/weeks.py` | 周次表达式解析 + 六个样例自检 |
-| `src/prebell.py` | 单轮入口：算周次 → 判重 → 推送 → 记日志 → 生成兜底 |
+| `src/prebell.py` | 单轮入口：查表 → 判重 → 推送 → 记日志 → 生成兜底 |
+| `src/resolve.py` | 把课表整学期一次性展开成推送时刻表（离线，不在 CI 里跑） |
+| `src/schedule.json` | 整学期 96 条推送的确定性产物；课表改了重跑 `resolve.py` |
+| `src/schedule.md` | 同上，人读版；`src/out/cron-hints.txt` 是给 cron-job.org 抄的 |
 | `src/config.example.json` | 非敏感默认值模板（**不叫 config.json**，避免被机械拦截） |
 | `src/PREBELL.md` | 字段说明、校对流程、SendKey 配置步骤、合规边界 |
 | `src/chain.py` | 哈希链、Merkle root、脱敏、每日汇总（PreBell 与旧雷达共用） |
-| `src/verify.py` | 一键验真，按日期分段取期望轮次、汇总漏轮与格内偏移 |
+| `src/verify.py` | 一键验真，期望条数从 `schedule.json` 推导，缺哪一节直接点名 |
 | `state/` | 跨轮状态：`pushed.json` 去重、`channel.json` 连通性 |
 | `process_logs/` | 每天一个 `.jsonl` + 一个 `.summary.json`，只追加不回填 |
 | `public/` | 兜底产物 `.ics` 与网页 |
-| `iterations/` | 三次由真实事件触发的迭代记录 |
+| `iterations/` | 由真实事件触发的迭代记录 |
 | `feedback/` | 8 位同学的脱敏反馈 |
-| `../.github/workflows/prebell.yml` | 新调度（11-17 前仅手动触发） |
+| `../.github/workflows/prebell.yml` | 执行体：只被 `workflow_dispatch` 触发，不带 `schedule` |
 | `../.github/workflows/probe.yml` | 旧雷达调度，11-17 后停用 schedule、文件保留 |
 
 ### 历史资产（雷达阶段，原样保留）
@@ -73,10 +76,10 @@ python src/verify.py                # 一键验真（需 clone 后已有云端�
 
 ## 日志里记什么
 
-每轮一条 JSON：日期与分钟、5 分钟格近似槽位、格内偏移、与上一轮间隔、星期与估算周次、
-阶段（`before` / `in_window` / `after` / `weekend` / `out_of_term`）、命中的课程、
-周次冲突、解析未识别片段、推送状态（HTTP / 耗时 / 8 位错误指纹）、当日已推条数、
-上一轮哈希与本轮哈希。
+每轮一条 JSON：日期与分钟、触发来源（`cronjob` / `manual`）、计划推送时刻与实际时刻、
+迟到多少分钟、查表命中的 `schedule_slot`、星期与估算周次、阶段（`alarm` / `in_window` /
+`too_late` / `weekend` / `out_of_term`）、命中的课程、推送状态（HTTP / 耗时 / 8 位错误指纹）、
+当日已推条数、上一轮哈希与本轮哈希。
 
 **不记**：IP、主机名、绝对路径、请求正文、SendKey、任何个人标识符、精确毫秒。
 报错只留脱敏后的 8 位指纹；含 SendKey 的 URL 会被 `chain.scrub()` 抹成 `[url]`。
@@ -85,10 +88,10 @@ python src/verify.py                # 一键验真（需 clone 后已有云端�
 
 - 每条记录带 `prev_hash`，改任意一行，后面全部对不上；
 - 每轮滚动重算当日 Merkle root，写进 `*.summary.json` 与 commit message；
-- `verify.py` 重算全链，精确报出断在第几天第几条，并汇总 `漏轮` 与格内偏移。
+- `verify.py` 重算全链，精确报出断在第几天第几条，并按课表算出**该响没响的是哪一节**。
 
-缺勤不补写。cron 排队延迟造成的缺口会如实显示，这本身就是真实性的佐证。
-`planned_slot_5m` 是按实际时刻向下对齐的**近似值**，GitHub 不暴露精确计划时刻，不假装知道。
+缺勤不补写。迟到多少如实记在 `late_by_min`，超过 15 分钟宁可记 `missed_too_late` 不发，
+也不发一条「课已经上到一半了」的噪音。计划时刻不是猜的——它来自课表，写在 `schedule.json` 里。
 
 ## 依赖
 

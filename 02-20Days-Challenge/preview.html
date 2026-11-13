@@ -34,14 +34,18 @@ h1{font-size:22px;font-weight:600;margin:0 0 4px}
 .tag.hot{background:var(--warn-bg);color:var(--warn)}
 .heart{margin-top:14px}
 .heart .card{padding-bottom:14px}
-.grid7{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:10px}
-.tick{height:16px;border-radius:2px;background:#e8eaed}
-.tick.new{background:var(--accent)}
-.tick.fail{background:var(--err)}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.slot{height:46px;border-radius:6px;background:#e8eaed;display:flex;flex-direction:column;
+align-items:center;justify-content:center;font-size:12px;color:#5a6270;line-height:1.3}
+.slot b{font-size:14px;font-weight:600;color:#1c1f23}
+.slot.new{background:var(--accent);color:#eef4fb}
+.slot.new b{color:#fff}
+.slot.fail{background:var(--err);color:#fff}
+.slot.fail b{color:#fff}
 .hrow{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:8px}
 .foot{margin-top:20px;color:var(--muted);font-size:12px;line-height:1.8}
 .foot b{color:var(--text);font-weight:600}
-@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.grid7{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -98,17 +102,18 @@ h1{font-size:22px;font-weight:600;margin:0 0 4px}
 
 <div class="heart">
   <div class="card">
-    <h2>运行日志 · 今天 12 轮（工作日窗口）</h2>
-    <div class="grid7">
-      <div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div>
-      <div class="tick"></div><div class="tick new"></div><div class="tick fail"></div><div class="tick"></div>
+    <h2>运行日志 · 今天 3 次闹钟（只有有课的大节才响）</h2>
+    <div class="slots">
+      <div class="slot new"><b>08:20</b><span>已推送</span></div>
+      <div class="slot"><b>13:10</b><span>该周无课</span></div>
+      <div class="slot new"><b>14:50</b><span>已推送</span></div>
     </div>
-    <div class="hrow"><span>灰 = 空轮　蓝 = 已推送　红 = 推送失败</span><span>周末各 1 条心跳，保证 7 天不断链</span></div>
+    <div class="hrow"><span>蓝 = 已推送　灰 = 该周没课，不打扰</span><span>cron-job.org 按课表踢，一周 10 次</span></div>
   </div>
 </div>
 
 <p class="foot">
-<b>交付三样东西：</b>① 微信推送（产品主体）+ 推送失败时的 <code>.ics</code> / 网页兜底；② 7 本日志，证明程序真的无人值守跑了 7 天；③ <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改。<br>
+<b>交付三样东西：</b>① 微信推送（产品主体）+ 推送失败时的 <code>.ics</code> / 网页兜底；② 按课表触发的日志，证明程序真的无人值守在跑（没课的日子没有记录，这是设计不是缺口）；③ <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改，缺了哪一节直接点名。<br>
 <b>口径变更：</b>本页曾声明「学习通、微信、课表一律不做」，因 2026-11-13 改选题已更新。旧口径作废清单与原因见 <code>iterations/002-改选题说明.md</code>；已提交的历史记录（001）不回填、不修饰。<br>
 <b>不碰的东西：</b>不读微信本地数据库 / 聊天记录 / 群消息、不逆向、不登录微信客户端，只调官方公开接口把消息<b>送进</b>微信；不做 OCR、不假装读 xlsx；不碰学习通 / 教务登录态；不采集个人信息；SendKey 只在 Actions Secrets。
 </p>

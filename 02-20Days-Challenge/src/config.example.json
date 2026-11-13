@@ -2,10 +2,13 @@
   "_comment": "本文件是可入库的非敏感默认值模板。SendKey 绝不写在这里，也不写进任何仓库文件；只放在 GitHub 仓库 Settings → Secrets and variables → Actions，变量名 PREBELL_SENDKEY。请勿把本文件改名为 config.json（会被 .gitignore 与同步脚本双重拦截）。",
   "sendkey_env": "PREBELL_SENDKEY",
   "push_lead_minutes": 20,
+  "late_limit_minutes": 15,
   "daily_push_limit": 5,
   "timeout_sec": 10,
   "push_service": "Server酱 Turbo 官方公开接口",
-  "quota_note": "免费会员每天 5 条、每分钟最多 50 条。4 大节各 1 条共 4 条，余 1 条留给连通性测试；失败不重发，避免重试打爆额度。",
+  "how_it_runs": "定时在 cron-job.org，不在 GitHub Actions：它到点用 workflow_dispatch 把大节号踢进来，GitHub 只负责执行与记账。本课程表只用到 3 个大节，所以一周只醒 10 次。",
+  "late_limit_note": "比计划推送时刻晚超过 15 分钟就不发，记 missed_too_late；晚了但没超阈值照发，文案与日志都标实际送达时刻。只有 cron-job.org 排队和 Actions 启动慢会导致迟到，不补写、不重发。",
+  "quota_note": "免费会员每天 5 条、每分钟最多 50 条。实际一天最多 3 大节 = 3 条，余量留给连通性测试；失败不重发，避免重试打爆额度。",
   "anchor_note": "学期第 1 周周一写在 timetable.json 的 anchor.first_monday，当前为估算值 2026-09-07、verified=false；核对前所有推送与日历都带估算声明。",
   "scope_note": "本程序只向微信推送消息，不读取微信本地数据库、聊天记录或群消息，不逆向、不登录微信客户端。"
 }

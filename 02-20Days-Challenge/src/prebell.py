@@ -1,19 +1,16 @@
 """PreBell（预备铃）· 单轮入口。
 
-    python src/prebell.py                # 正常一轮（由 GitHub Actions 调用）
+    python src/prebell.py --period 3 --source cronjob   # 外部闹钟踢一脚（生产路径）
+    python src/prebell.py                # 不带参数：按当前时刻猜该发哪一节（手动兜底）
     python src/prebell.py --dry-run      # 本机预览：不推送、不写受保护目录
     python src/prebell.py --probe        # 连通性探测（不带 SendKey）
     python src/prebell.py --test-push    # 发一条真实测试消息
 
-做什么：算「今天第几周 / 下一大节 / 本周有没有这节课」→ 查重与节流 →
-Server酱官方接口推微信 → 复用 chain.py 追加一条改不动的日志 → 生成 .ics / 网页兜底。
-
-诚实原则（与课题 02、09 一致）：
-  - SendKey 只从环境变量读，缺失就记 skipped/no_key，绝不硬编码兜底；
-  - 推送失败如实记 HTTP 状态与 8 位错误指纹，绝不写「成功」，也不重发打爆额度；
-  - 周次锚点是估算就全链路标注，核对前不当真实提醒；
-  - 截图转录里看不清的字段标 unclear，推送文案带「课表未校对」声明；
-  - 缺勤轮次不补写，cron 排队延迟如实记录。
+定时不在 GitHub Actions，在 cron-job.org：它到点用 workflow_dispatch 把大节号踢进来。
+本脚本只做「查表 → 推送 → 记账」：
+  - 查的是 src/schedule.json（由 resolve.py 离线把整学期算好），不再现算周次；
+  - 表里查不到 = 本周这一节没课，记 no_class_this_week 就不打扰；
+  - 比计划时刻晚超过阈值就记 missed_too_late 不发，阈值在 config 里。
 """
 from __future__ import annotations
 
@@ -33,12 +30,13 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from chain import (  # noqa: E402
-    LOGDIR, STATEDIR, PUBLICDIR, append_round, canonical, fingerprint,
-    now, scrub, write_daily_summary,
+    STATEDIR, PUBLICDIR, append_round, canonical, fingerprint,
+    now, write_daily_summary,
 )
 from weeks import parse_cell_courses  # noqa: E402
 
 TIMETABLE = HERE / "timetable.json"
+SCHEDULE = HERE / "schedule.json"
 CONFIG = HERE / "config.example.json"
 DRY_OUT = HERE / "out"
 
@@ -46,6 +44,7 @@ SENDKEY_ENV = "PREBELL_SENDKEY"
 API_HOST = "https://sctapi.ftqq.com"
 DAILY_PUSH_LIMIT = 5
 PUSH_LEAD_MIN = 20
+LATE_LIMIT_MIN = 15
 TIMEOUT_SEC = 10
 
 
@@ -66,8 +65,21 @@ def config():
         "sendkey_env": c.get("sendkey_env", SENDKEY_ENV),
         "daily_push_limit": int(c.get("daily_push_limit", DAILY_PUSH_LIMIT)),
         "push_lead_minutes": int(c.get("push_lead_minutes", PUSH_LEAD_MIN)),
+        "late_limit_minutes": int(c.get("late_limit_minutes", LATE_LIMIT_MIN)),
         "timeout_sec": int(c.get("timeout_sec", TIMEOUT_SEC)),
     }
+
+
+def load_schedule():
+    """把 resolve.py 生成的整学期推送表读成 ({date-Pn: slot}, 原始载荷)。
+
+    表不存在就返回 (None, {})，由调用方记 schedule_missing 并停下——
+    绝不现场重算一个「差不多」的结果顶上，那样两边口径会悄悄分叉。
+    """
+    s = load_json(SCHEDULE, {})
+    if not s or "push_slots" not in s:
+        return None, {}
+    return {slot["id"]: slot for slot in s["push_slots"]}, s
 
 
 def state_dir(dry):
@@ -82,29 +94,6 @@ def save_state(name, data, dry):
     d = state_dir(dry)
     d.mkdir(parents=True, exist_ok=True)
     (d / name).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-
-def last_round_minute(day_str, dry):
-    """读上一轮日志的真实分钟，用于算 gap_from_prev_min。
-
-    这是可测的「中间有没有漏跑」，不依赖 GitHub 是否暴露计划时刻。
-    """
-    if dry:
-        return None
-    path = LOGDIR / (day_str + ".jsonl")
-    if not path.exists():
-        return None
-    last = None
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        try:
-            r = json.loads(line)
-            if r.get("minute"):
-                last = r["minute"]
-        except json.JSONDecodeError:
-            continue
-    return last
 
 
 def hhmm(dt):
@@ -147,30 +136,9 @@ def target_period(periods, cur_min):
     return None, "none"
 
 
-def hits_for(cells, weekday, period_id, week_no, term_weeks):
-    """找出该星期几、该大节、本周真正要上的课。
-
-    一格多课时同周命中多门 → 记 conflict，全部列出，不静默挑一门。
-    """
-    hits, conflicts, unknown = [], [], []
-    for cell in cells:
-        if cell.get("weekday") != weekday:
-            continue
-        if cell.get("period") != period_id:
-            continue
-        courses, unk, conf = parse_cell_courses(cell)
-        unknown.extend(unk)
-        for c in courses:
-            if week_no in c.get("weeks", []):
-                hits.append((cell, c))
-        for w in conf:
-            if w == week_no:
-                conflicts.append({
-                    "cell_id": cell.get("id"),
-                    "week": w,
-                    "course_ids": [c.get("course_id") for c in courses if w in c.get("weeks", [])],
-                })
-    return hits, conflicts, unknown
+def push_at_of(period, lead_min):
+    total = minutes_of(period["start"]) - lead_min
+    return "%02d:%02d" % (total // 60, total % 60)
 
 
 def end_time_of(periods, cell):
@@ -256,7 +224,7 @@ def probe_channel(timeout=TIMEOUT_SEC):
 
 # ---------------- 消息文案 ----------------
 
-def build_message(t, period, hits, week_no, cell, conflicts):
+def build_message(t, period, courses, week_no, conflicts, late_by=0, actual=""):
     anchor = t["anchor"]
     verified = bool(anchor.get("verified"))
     reviewed = bool(t["meta"].get("proofread"))
@@ -265,8 +233,8 @@ def build_message(t, period, hits, week_no, cell, conflicts):
         "### 下一大节 · %s–%s（%s）" % (p["start"], p["end"], p["sessions"]),
         "",
     ]
-    for _, c in hits:
-        lines.append("**%s**" % c.get("name", "（课程名待核对）"))
+    for c in courses:
+        lines.append("**%s**" % (c.get("name") or "（课程名待核对）"))
         lines.append("- 教室：%s" % (c.get("room") or "〈截图看不清，待核对〉"))
         lines.append("- 教师：%s" % (c.get("teacher") or "〈截图看不清，待核对〉"))
         lines.append("- 周次原文：`%s`" % (c.get("weeks_raw") or "〈未辨认〉"))
@@ -274,13 +242,18 @@ def build_message(t, period, hits, week_no, cell, conflicts):
         if c.get("unclear"):
             lines.append("- 待核对字段：%s" % "、".join(c["unclear"]))
         lines.append("")
-    if cell and cell.get("merged"):
+    if any(c.get("merged") for c in courses):
         lines.append("> 该格为跨行合并单元格，连上 4 节，按一条连续日程处理。")
         lines.append("")
     lines.append("- 本周：**%s第 %d 周**" % ("估算" if not verified else "", week_no))
+    if len(courses) > 1:
+        lines.append("- ⚠ 同一格有 %d 门课周次重叠，截图无法判定，已并列列出。" % len(courses))
     if conflicts:
-        lines.append("- ⚠ 同格有 %d 门课周次重叠，截图无法判定，已列入待核对清单。" % len(conflicts))
+        lines.append("- ⚠ 另有 %d 处同格周次冲突，见课表待核对清单。" % len(conflicts))
     lines.append("")
+    if late_by > 0:
+        lines.append("> 本条 %s 实际送达，比计划晚 %d 分钟（闹钟排队或启动慢，如实记录、不补写）。"
+                     % (actual, late_by))
     if not verified:
         lines.append("> ⚠ %s" % anchor["display_wording"])
     if not reviewed:
@@ -445,6 +418,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="本机预览：不推送、不写 process_logs/state/public")
     ap.add_argument("--probe", action="store_true", help="只做连通性探测（不带 SendKey）")
     ap.add_argument("--test-push", action="store_true", help="发一条真实测试消息")
+    ap.add_argument("--period", default="", help="外部闹钟指定大节号（1-4）；不给则按当前时刻猜")
+    ap.add_argument("--source", default="manual", help="触发来源：cronjob / manual，写进日志备查")
     args = ap.parse_args()
     dry = args.dry_run
 
@@ -452,6 +427,7 @@ def main():
     if not t:
         print("timetable.json 缺失或无法解析，已中止")
         return 1
+    schedule, schedule_payload = load_schedule()
     cfg = config()
     dt = now()
     today = dt.date()
@@ -472,7 +448,6 @@ def main():
     push_result = {"status": "skipped", "reason": "not_in_window"}
     phase = "weekend"
     period = None
-    hits, conflicts, unknown = [], [], []
     reason = ""
 
     # 连通性探测 / 测试消息是独立事件，不参与课前判断
@@ -509,21 +484,53 @@ def main():
         print(canonical(out))
         return 0
 
-    # 正常一轮
+    # 正常一轮：只查表，不重算
+    planned_at = None
+    late_by = None
+    slot = None
     if weekday > 5:
         phase = "weekend"
-        reason = "weekend_heartbeat"
+        reason = "weekend_no_class"
     elif not in_term:
         phase = "out_of_term"
         reason = "week_index_out_of_term"
+    elif schedule is None:
+        phase = "error"
+        reason = "schedule_missing"
     else:
-        period, phase = target_period(t["periods"], cur_min)
-        if phase == "in_window" and period:
-            hits, conflicts, unknown = hits_for(
-                t["cells"], weekday, period["id"], week_no, int(t["meta"].get("term_weeks", 18)))
+        if args.period:
+            try:
+                pid_int = int(args.period)
+            except ValueError:
+                print("--period 必须是整数：%s" % args.period)
+                return 2
+            if not (1 <= pid_int <= len(t["periods"])):
+                print("--period 超出范围：%s（本课表共 %d 大节）" % (args.period, len(t["periods"])))
+                return 2
+            period = t["periods"][pid_int - 1]
+            phase = "alarm"
+        else:
+            period, phase = target_period(t["periods"], cur_min)
+            if phase != "in_window":
+                reason = "missed_no_backfill" if phase == "after" else "waiting_for_window"
+                period = None
+
+        if period is not None:
             pid = str(period["id"])
-            if not hits:
+            planned_at = push_at_of(period, cfg["push_lead_minutes"])
+            late_by = cur_min - minutes_of(planned_at)
+            slot = schedule.get("%s-P%s" % (day_str, pid))
+
+            if slot is None:
+                # 表里没有 = 本周这一节没课。闹钟照响，但不打扰你。
+                # 先判这个再判迟到：本来就没课的日子，迟到几分钟无关紧要。
                 reason = "no_class_this_week"
+                push_result = {"status": "skipped", "reason": "no_class_this_week", "http": 0}
+            elif late_by > cfg["late_limit_minutes"]:
+                # 晚太多，课已经上一半了，再推就是噪音。照样记账，不补写。
+                phase = "too_late"
+                reason = "missed_too_late"
+                push_result = {"status": "skipped", "reason": "too_late", "http": 0}
             elif pid in day_state["periods"]:
                 reason = "already_pushed"
             elif int(day_state.get("count", 0)) >= cfg["daily_push_limit"]:
@@ -534,8 +541,8 @@ def main():
                 push_result = {"status": "skipped", "reason": "channel_failed", "http": 0,
                                "fingerprint": channel.get("fingerprint", "")}
             else:
-                cell = hits[0][0] if hits else None
-                title, desp = build_message(t, period, hits, week_no, cell, conflicts)
+                title, desp = build_message(t, period, slot["courses"], slot["week"], [],
+                                            late_by=late_by, actual=minute)
                 push_result = push(title, desp, cfg["timeout_sec"])
                 push_result["period"] = period["id"]
                 push_result["title_hash"] = fingerprint(title)
@@ -550,43 +557,32 @@ def main():
                 pushed[day_str] = day_state
                 save_state("pushed.json", pushed, dry)
                 reason = "pushed" if push_result["status"] == "ok" else "push_failed"
-        elif phase == "after":
-            reason = "missed_no_backfill"
-        else:
-            reason = "waiting_for_window"
 
     # 兜底产物（正常模式写 public/；dry-run 写 src/out/）
     n_ics = build_ics(t, out_dir)
     build_html(t, out_dir, channel, dt.strftime("%Y-%m-%d %H:%M"), week_no, phase, push_result)
 
-    prev_min = last_round_minute(day_str, dry)
-    gap_from_prev = None
-    if prev_min:
-        try:
-            gap_from_prev = cur_min - minutes_of(prev_min)
-        except (ValueError, IndexError):
-            gap_from_prev = None
-
     record = {
         "task": "prebell",
         "date": day_str,
         "minute": minute,
-        "planned_slot_5m": "%s:%02d" % (dt.strftime("%H"), (dt.minute // 5) * 5),
-        "planned_slot_note": "按实际时刻向下对齐到 5 分钟格的近似值；GitHub 不暴露精确计划时刻",
+        "trigger_source": args.source or "manual",
+        "trigger_period_arg": args.period or "",
+        "planned_push_at": planned_at,
         "actual_minute": minute,
-        "offset_in_slot_min": dt.minute % 5,
-        "offset_note": "相对 5 分钟格的偏移，不是 cron 排队延迟",
-        "gap_from_prev_min": gap_from_prev,
-        "gap_note": "与上一轮真实日志的分钟差；大于 5 分钟说明中间有轮次被排队或丢弃",
+        "late_by_min": late_by,
+        "late_note": "实际时刻减去计划推送时刻；负数是提前，正数是闹钟或启动延迟，如实记录不修正",
+        "late_limit_min": cfg["late_limit_minutes"],
+        "schedule_slot": slot["id"] if slot else None,
         "weekday": weekday,
         "week_index": week_no,
+        "slot_week": slot["week"] if slot else None,
         "week_index_estimated": not bool(t["anchor"].get("verified")),
         "in_term": in_term,
         "phase": phase,
         "target_period": period["id"] if period else None,
-        "course_hit": [c.get("course_id") for _, c in hits],
-        "conflicts": conflicts,
-        "parse_unknown": unknown,
+        "course_hit": [c.get("course_id") for c in (slot["courses"] if slot else [])],
+        "schedule_parse_unknown": len(schedule_payload.get("parse_unknown", [])),
         "reason": reason,
         "push": push_result,
         "channel_state": channel.get("status", "unknown"),

@@ -1,0 +1,3008 @@
+{
+  "meta": {
+    "generated_by": "src/resolve.py",
+    "generated_at": "2026-11-13 22:38",
+    "anchor_first_monday": "2026-09-07",
+    "anchor_verified": false,
+    "anchor_note": "学期第 1 周按 2026-09-07 估算、尚未核对；核对前请勿当作真实提醒使用。",
+    "term_weeks": 18,
+    "lead_minutes": 20,
+    "proofread": false,
+    "note": "整学期一次性展开，运行时只查表不重算。锚点未核对时所有日期为推导值。"
+  },
+  "cron_hints": [
+    {
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "push_at_cst": "08:20",
+      "cron_utc": "20 0 * * 1,4",
+      "weekdays_cn": [
+        "一",
+        "四"
+      ]
+    },
+    {
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "push_at_cst": "13:10",
+      "cron_utc": "10 5 * * 1,2,3,5",
+      "weekdays_cn": [
+        "一",
+        "二",
+        "三",
+        "五"
+      ]
+    },
+    {
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "push_at_cst": "14:50",
+      "cron_utc": "50 6 * * 1,2,3,4",
+      "weekdays_cn": [
+        "一",
+        "二",
+        "三",
+        "四"
+      ]
+    }
+  ],
+  "push_slots": [
+    {
+      "id": "2026-09-21-P1",
+      "date": "2026-09-21",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 3,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-09-21-P3",
+      "date": "2026-09-21",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 3,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-21-P4",
+      "date": "2026-09-21",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 3,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-mon4",
+          "name": "思想道德与法治36",
+          "room": "教学楼601",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3周,8周,11周,17周(讲课)",
+          "cell_id": "mon-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "capacity",
+            "enrolled"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-22-P3",
+      "date": "2026-09-22",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 3,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-22-P4",
+      "date": "2026-09-22",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 3,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-23-P3",
+      "date": "2026-09-23",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 3,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-23-P4",
+      "date": "2026-09-23",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 3,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "room": null,
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "cell_id": "wed-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-25-P3",
+      "date": "2026-09-25",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 3,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-28-P1",
+      "date": "2026-09-28",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 4,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-09-28-P3",
+      "date": "2026-09-28",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 4,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-29-P3",
+      "date": "2026-09-29",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 4,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-29-P4",
+      "date": "2026-09-29",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 4,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-09-30-P3",
+      "date": "2026-09-30",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 4,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-01-P1",
+      "date": "2026-10-01",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 4,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-02-P3",
+      "date": "2026-10-02",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 4,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-05-P1",
+      "date": "2026-10-05",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 5,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-10-05-P3",
+      "date": "2026-10-05",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 5,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-06-P3",
+      "date": "2026-10-06",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 5,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-06-P4",
+      "date": "2026-10-06",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 5,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-07-P3",
+      "date": "2026-10-07",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 5,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-08-P1",
+      "date": "2026-10-08",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 5,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-09-P3",
+      "date": "2026-10-09",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 5,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-12-P1",
+      "date": "2026-10-12",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 6,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-10-12-P3",
+      "date": "2026-10-12",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 6,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-13-P3",
+      "date": "2026-10-13",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 6,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-13-P4",
+      "date": "2026-10-13",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 6,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-14-P3",
+      "date": "2026-10-14",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 6,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-14-P4",
+      "date": "2026-10-14",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 6,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "room": null,
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "cell_id": "wed-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-15-P1",
+      "date": "2026-10-15",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 6,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-16-P3",
+      "date": "2026-10-16",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 6,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-19-P1",
+      "date": "2026-10-19",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 7,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-10-19-P3",
+      "date": "2026-10-19",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 7,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-20-P3",
+      "date": "2026-10-20",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 7,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-20-P4",
+      "date": "2026-10-20",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 7,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-21-P3",
+      "date": "2026-10-21",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 7,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-22-P1",
+      "date": "2026-10-22",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 7,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-23-P3",
+      "date": "2026-10-23",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 7,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-26-P1",
+      "date": "2026-10-26",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 8,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-10-26-P3",
+      "date": "2026-10-26",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 8,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-26-P4",
+      "date": "2026-10-26",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 8,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-mon4",
+          "name": "思想道德与法治36",
+          "room": "教学楼601",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3周,8周,11周,17周(讲课)",
+          "cell_id": "mon-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "capacity",
+            "enrolled"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-27-P3",
+      "date": "2026-10-27",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 8,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-27-P4",
+      "date": "2026-10-27",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 8,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-28-P3",
+      "date": "2026-10-28",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 8,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-10-30-P3",
+      "date": "2026-10-30",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 8,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-02-P1",
+      "date": "2026-11-02",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 9,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-11-02-P3",
+      "date": "2026-11-02",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 9,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-03-P3",
+      "date": "2026-11-03",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 9,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-03-P4",
+      "date": "2026-11-03",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 9,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-04-P3",
+      "date": "2026-11-04",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 9,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-04-P4",
+      "date": "2026-11-04",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 9,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "room": null,
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "cell_id": "wed-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-06-P3",
+      "date": "2026-11-06",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 9,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-09-P1",
+      "date": "2026-11-09",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 10,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-11-09-P3",
+      "date": "2026-11-09",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 10,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-10-P3",
+      "date": "2026-11-10",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 10,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-10-P4",
+      "date": "2026-11-10",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 10,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-11-P3",
+      "date": "2026-11-11",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 10,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-13-P3",
+      "date": "2026-11-13",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 10,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-16-P1",
+      "date": "2026-11-16",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 11,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-11-16-P3",
+      "date": "2026-11-16",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 11,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-16-P4",
+      "date": "2026-11-16",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 11,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-mon4",
+          "name": "思想道德与法治36",
+          "room": "教学楼601",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3周,8周,11周,17周(讲课)",
+          "cell_id": "mon-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "capacity",
+            "enrolled"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-17-P3",
+      "date": "2026-11-17",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 11,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "teacher": null,
+          "form": "理论",
+          "weeks_raw": "3-11周(理论)",
+          "cell_id": "tue-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "form"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-17-P4",
+      "date": "2026-11-17",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 11,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-18-P3",
+      "date": "2026-11-18",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 11,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-20-P3",
+      "date": "2026-11-20",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 11,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-23-P1",
+      "date": "2026-11-23",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 12,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-11-23-P3",
+      "date": "2026-11-23",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 12,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-24-P4",
+      "date": "2026-11-24",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 12,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-25-P3",
+      "date": "2026-11-25",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 12,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-25-P4",
+      "date": "2026-11-25",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 12,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "room": null,
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "cell_id": "wed-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-26-P1",
+      "date": "2026-11-26",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 12,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-27-P3",
+      "date": "2026-11-27",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 12,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-11-30-P1",
+      "date": "2026-11-30",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 13,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-11-30-P3",
+      "date": "2026-11-30",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 13,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-01-P4",
+      "date": "2026-12-01",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 13,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-02-P3",
+      "date": "2026-12-02",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 13,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-03-P1",
+      "date": "2026-12-03",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 13,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-04-P3",
+      "date": "2026-12-04",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 13,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-21-P1",
+      "date": "2026-12-21",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 16,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-12-21-P3",
+      "date": "2026-12-21",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 16,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-22-P4",
+      "date": "2026-12-22",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 16,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-23-P3",
+      "date": "2026-12-23",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 16,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-24-P1",
+      "date": "2026-12-24",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 16,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw",
+            "weeks_raw_attribution"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-25-P3",
+      "date": "2026-12-25",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 16,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-28-P1",
+      "date": "2026-12-28",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 17,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2026-12-28-P3",
+      "date": "2026-12-28",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 17,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-28-P4",
+      "date": "2026-12-28",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 17,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-mon4",
+          "name": "思想道德与法治36",
+          "room": "教学楼601",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3周,8周,11周,17周(讲课)",
+          "cell_id": "mon-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "capacity",
+            "enrolled"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-29-P4",
+      "date": "2026-12-29",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 17,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-30-P3",
+      "date": "2026-12-30",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 17,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2026-12-30-P4",
+      "date": "2026-12-30",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 17,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "room": null,
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "cell_id": "wed-4",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-01-P3",
+      "date": "2027-01-01",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 17,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-04-P1",
+      "date": "2027-01-04",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 18,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "teacher": "彭灵勇",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "mon-1-2",
+          "merged": true,
+          "unclear": []
+        }
+      ],
+      "needs_review": false
+    },
+    {
+      "id": "2027-01-04-P3",
+      "date": "2027-01-04",
+      "weekday": 1,
+      "weekday_cn": "星期一",
+      "week": 18,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "mon-3",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-05-P4",
+      "date": "2027-01-05",
+      "weekday": 2,
+      "weekday_cn": "星期二",
+      "week": 18,
+      "period": 4,
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "push_at": "14:50",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "room": "教学楼621",
+          "teacher": null,
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "cell_id": "tue-4",
+          "merged": false,
+          "unclear": [
+            "teacher"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-06-P3",
+      "date": "2027-01-06",
+      "weekday": 3,
+      "weekday_cn": "星期三",
+      "week": 18,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "room": null,
+          "teacher": "万毅",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "wed-3",
+          "merged": false,
+          "unclear": [
+            "room",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-07-P1",
+      "date": "2027-01-07",
+      "weekday": 4,
+      "weekday_cn": "星期四",
+      "week": 18,
+      "period": 1,
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "10:00",
+      "push_at": "08:20",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "ideology-practice",
+          "name": "思想道德与法治36",
+          "room": "教学楼701",
+          "teacher": null,
+          "form": "实践",
+          "weeks_raw": "18周(实践)",
+          "cell_id": "thu-1",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    },
+    {
+      "id": "2027-01-08-P3",
+      "date": "2027-01-08",
+      "weekday": 5,
+      "weekday_cn": "星期五",
+      "week": 18,
+      "period": 3,
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "push_at": "13:10",
+      "lead_minutes": 20,
+      "estimated": true,
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "room": null,
+          "teacher": null,
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "cell_id": "fri-3",
+          "merged": false,
+          "unclear": [
+            "teacher",
+            "room",
+            "enrolled",
+            "periods_raw"
+          ]
+        }
+      ],
+      "needs_review": true
+    }
+  ],
+  "parse_unknown": [
+    "thu-4: college-english-118-thu: <empty>"
+  ],
+  "conflicts": []
+}

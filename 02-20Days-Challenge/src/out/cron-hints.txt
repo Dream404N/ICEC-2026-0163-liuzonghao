@@ -1,0 +1,18 @@
+# 由 src/resolve.py 从 src/timetable.json 生成，勿手改。
+# 时区：UTC（北京 = UTC + 8）。cron-job.org 的 job 时区保持 UTC 即可。
+# 每组对应一个 job，body 里的 "period" 填下面的数字。
+# 课表变了就重跑 resolve.py，回来照抄这一段。
+#
+# 本表共 96 条推送，覆盖第 1-18 周。
+
+period=1  北京 08:20（第一大节 08:40）  ->  cron: 20 0 * * 1,4
+           出现在：周一、周四
+period=3  北京 13:10（第三大节 13:30）  ->  cron: 10 5 * * 1,2,3,5
+           出现在：周一、周二、周三、周五
+period=4  北京 14:50（第四大节 15:10）  ->  cron: 50 6 * * 1,2,3,4
+           出现在：周一、周二、周三、周四
+
+# 对应的 workflow 触发 body：
+#   {"ref":"master","inputs":{"period":"1","source":"cronjob"}}
+#   {"ref":"master","inputs":{"period":"3","source":"cronjob"}}
+#   {"ref":"master","inputs":{"period":"4","source":"cronjob"}}

@@ -1,34 +1,36 @@
 name: prebell
 
+# 定时不在这里。GitHub 的 schedule 最小粒度 5 分钟、高峰期排队能晚十几分钟，
+# 拿它当闹钟是错配。闹钟在 cron-job.org：到点用 workflow_dispatch 把大节号踢进来，
+# 这个 workflow 只负责执行、记账、出兜底产物。
+#
+# 三个 job（UTC，由 src/resolve.py 从课表反推，见 src/out/cron-hints.txt）：
+#   period=1  北京 08:20  ->  20 0 * * 1,4        周一, 周四
+#   period=3  北京 13:10  ->  10 5 * * 1,2,3,5     周一, 周二, 周三, 周五
+#   period=4  北京 14:50  ->  50 6 * * 1,2,3,4     周一, 周二, 周三, 周四
+# 一周共 10 次唤醒；没课的大节不配 job，本课程表只用 3 个大节。
+# 课表变了先跑 python src/resolve.py，照 src/out/cron-hints.txt 改 cron-job.org。
 on:
-  # 2026-11-13 阶段 1：只保留手动触发，旧的 campus-radar-probe 继续跑到 11-17 满 7 天。
-  # 2026-11-17 切换当天解除下面六行注释（旧 workflow 的 schedule 同时停用）。
-  # 所有 cron 均为 UTC；北京 = UTC+8，且窗口不跨日，星期不变。
-  #   '10,15,20,25 0 * * 1-5'  北京 08:10~08:25（覆盖 08:20 推送点）
-  #   '50,55 1 * * 1-5'        北京 09:50/09:55
-  #   '0,5 2 * * 1-5'          北京 10:00/10:05
-  #   '0,5,10 5 * * 1-5'       北京 13:00~13:10
-  #   '40,45,50 6 * * 1-5'     北京 14:40~14:50
-  #   '0 1 * * 0,6'            周末心跳：只写日志、不推微信，保证连续 7 天不断链
-  # schedule:
-  #   - cron: '10,15,20,25 0 * * 1-5'
-  #   - cron: '50,55 1 * * 1-5'
-  #   - cron: '0,5 2 * * 1-5'
-  #   - cron: '0,5,10 5 * * 1-5'
-  #   - cron: '40,45,50 6 * * 1-5'
-  #   - cron: '0 1 * * 0,6'
   workflow_dispatch:
     inputs:
       mode:
         description: 'round（默认正常一轮）| probe（连通性探测）| test-push（发一条测试消息）'
         required: false
         default: 'round'
+      period:
+        description: '大节号 1-4（cron-job.org 传入）；留空则按当前时刻判断该发哪一节'
+        required: false
+        default: ''
+      source:
+        description: '触发来源：cronjob / manual，写进日志备查'
+        required: false
+        default: 'manual'
 
 permissions:
   contents: write
 
 concurrency:
-  group: prebell-5m
+  group: prebell-round
   cancel-in-progress: false
 
 env:
@@ -53,11 +55,13 @@ jobs:
         run: |
           set -o pipefail
           MODE="${{ github.event.inputs.mode || 'round' }}"
+          PERIOD="${{ github.event.inputs.period }}"
+          SOURCE="${{ github.event.inputs.source || 'manual' }}"
           SRC=02-20Days-Challenge/src/prebell.py
           case "$MODE" in
             probe)      python "$SRC" --probe     | tee /tmp/round.json ;;
             test-push)  python "$SRC" --test-push | tee /tmp/round.json ;;
-            *)          python "$SRC"             | tee /tmp/round.json ;;
+            *)          python "$SRC" --period "$PERIOD" --source "$SOURCE" | tee /tmp/round.json ;;
           esac
 
       - name: Commit logs, state and fallback output
@@ -75,8 +79,14 @@ jobs:
           import json
           d = json.load(open('/tmp/round.json'))
           m = 'prebell: %s %s' % (d['date'], d['minute'])
+          if d.get('trigger_source'):
+              m += ' src=' + d['trigger_source']
           if d.get('event'):
               m += ' ' + d['event']
+          if d.get('reason'):
+              m += ' ' + d['reason']
+          if d.get('late_by_min') is not None and d['late_by_min'] > 0:
+              m += ' late=%smin' % d['late_by_min']
           if d.get('hash'):
               m += ' chain=' + d['hash'][:8]
           if d.get('merkle_root'):
