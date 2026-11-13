@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>预备铃 · 本周课表</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--line:#e3e6ea;--text:#1c1f23;--muted:#6b7280;--accent:#2563a8;--accent-bg:#eaf2fb;--warn:#9a5b00;--warn-bg:#fff5e2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+.page{max-width:980px;margin:0 auto;padding:28px 20px 60px}h1{font-size:22px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 18px}.banner{background:var(--warn-bg);border:1px solid #f0d9a8;color:var(--warn);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:14px}
+.card h2{font-size:14px;font-weight:600;margin:0 0 12px}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}thead th{background:#f8f9fb}
+tbody th{background:#fafbfc;width:120px}tbody th span{color:var(--muted);font-size:12px;font-weight:400}
+.room{color:var(--accent);font-size:12px}.empty{color:#c8ccd2}.note{color:var(--muted);font-size:12px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}.tag{display:inline-block;background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:5px;font-size:12px}
+</style></head><body><div class="page">
+<h1>预备铃 · 本周课表</h1>
+<p class="sub">课表微信提醒的兜底页 · 数据来自人工转录的 timetable.json · 生成于 2026-11-13 14:21</p>
+<div class="banner">⚠ 学期第 1 周按 2026-09-07 估算、尚未核对；核对前请勿当作真实提醒使用。<br>⚠ 课表由一张截图人工转录，尚未逐格校对；请以原课表为准。</div>
+<div class="card"><h2>估算第 10 周 · 本周有课情况</h2><table>
+<thead><tr><th>节次</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th></tr></thead><tbody><tr><th>第一大节<br><span>08:40–10:00</span></th><td>机械制图与计算机辅助设计02<span class='room'> @ 天工楼361</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td></tr><tr><th>第二大节<br><span>10:20–11:40</span></th><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td></tr><tr><th>第三大节<br><span>13:30–14:50</span></th><td>工程数学11<span class='room'> @ 教学楼525</span></td><td>职业生涯规划04<span class='room'> @ 教学楼734</span></td><td>智能制造与数字化认知02<span class='room'> @ 教室待核对</span></td><td><span class='empty'>—</span></td><td>体育1 38<span class='room'> @ 教室待核对</span></td></tr><tr><th>第四大节<br><span>15:10–16:30</span></th><td><span class='empty'>—</span></td><td>大学英语118<span class='room'> @ 教学楼621</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td><td><span class='empty'>—</span></td></tr></tbody></table>
+<p class="note">「—」表示该周这一节没有课。周次由估算锚点推导，核对前请勿当作真实提醒。</p></div>
+<div class="card"><h2>本轮状态</h2>
+<p>日期 2026-11-13 14:21 ｜ 阶段 before ｜ 微信推送 skipped</p></div>
+<div class="card"><h2>待核对清单（迭代 #1 用）</h2><ul><li>thu-1：同格内 3周,17周(实践) / 8-9周,11周(讲课) / 10周(讲课) 三段周次归属哪门课、对应教师是谁</li><li>thu-1：课容量与选课人数是否为同一门课</li><li>mon-3：teacher</li><li>tue-3：teacher</li><li>tue-3：form</li><li>wed-3：room</li><li>wed-3：periods_raw</li><li>fri-3：teacher</li><li>fri-3：room</li><li>fri-3：enrolled</li><li>fri-3：periods_raw</li><li>mon-4：teacher</li><li>mon-4：同格后半段 4-7周,12-13周,16周(讲课) 是否属于另一门课</li><li>mon-4：capacity</li><li>mon-4：enrolled</li><li>tue-4：teacher</li><li>wed-4：teacher</li><li>wed-4：room</li><li>wed-4：periods_raw</li><li>thu-4：weeks_raw</li><li>thu-4：form</li><li>thu-4：teacher</li><li>thu-4：periods_raw</li></ul>
+<p class="note">对照 <code>src/timetable-source.png</code> 逐格核对，结果写回 <code>review.changes</code>。</p></div>
+<p class="note">微信推送走 Server酱官方公开接口；本程序不读取微信本地数据、不逆向、不登录客户端。</p>
+</div></body></html>

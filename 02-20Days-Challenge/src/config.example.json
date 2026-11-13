@@ -1,0 +1,11 @@
+{
+  "_comment": "本文件是可入库的非敏感默认值模板。SendKey 绝不写在这里，也不写进任何仓库文件；只放在 GitHub 仓库 Settings → Secrets and variables → Actions，变量名 PREBELL_SENDKEY。请勿把本文件改名为 config.json（会被 .gitignore 与同步脚本双重拦截）。",
+  "sendkey_env": "PREBELL_SENDKEY",
+  "push_lead_minutes": 20,
+  "daily_push_limit": 5,
+  "timeout_sec": 10,
+  "push_service": "Server酱 Turbo 官方公开接口",
+  "quota_note": "免费会员每天 5 条、每分钟最多 50 条。4 大节各 1 条共 4 条，余 1 条留给连通性测试；失败不重发，避免重试打爆额度。",
+  "anchor_note": "学期第 1 周周一写在 timetable.json 的 anchor.first_monday，当前为估算值 2026-09-07、verified=false；核对前所有推送与日历都带估算声明。",
+  "scope_note": "本程序只向微信推送消息，不读取微信本地数据库、聊天记录或群消息，不逆向、不登录微信客户端。"
+}

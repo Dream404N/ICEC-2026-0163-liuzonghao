@@ -1,0 +1,90 @@
+name: prebell
+
+on:
+  # 2026-11-13 阶段 1：只保留手动触发，旧的 campus-radar-probe 继续跑到 11-17 满 7 天。
+  # 2026-11-17 切换当天解除下面六行注释（旧 workflow 的 schedule 同时停用）。
+  # 所有 cron 均为 UTC；北京 = UTC+8，且窗口不跨日，星期不变。
+  #   '10,15,20,25 0 * * 1-5'  北京 08:10~08:25（覆盖 08:20 推送点）
+  #   '50,55 1 * * 1-5'        北京 09:50/09:55
+  #   '0,5 2 * * 1-5'          北京 10:00/10:05
+  #   '0,5,10 5 * * 1-5'       北京 13:00~13:10
+  #   '40,45,50 6 * * 1-5'     北京 14:40~14:50
+  #   '0 1 * * 0,6'            周末心跳：只写日志、不推微信，保证连续 7 天不断链
+  # schedule:
+  #   - cron: '10,15,20,25 0 * * 1-5'
+  #   - cron: '50,55 1 * * 1-5'
+  #   - cron: '0,5 2 * * 1-5'
+  #   - cron: '0,5,10 5 * * 1-5'
+  #   - cron: '40,45,50 6 * * 1-5'
+  #   - cron: '0 1 * * 0,6'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'round（默认正常一轮）| probe（连通性探测）| test-push（发一条测试消息）'
+        required: false
+        default: 'round'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prebell-5m
+  cancel-in-progress: false
+
+env:
+  # SendKey 只存在于仓库 Secrets；代码只读 os.environ，绝不入库。
+  PREBELL_SENDKEY: ${{ secrets.PREBELL_SENDKEY }}
+
+jobs:
+  round:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync state before this round
+        run: git pull --rebase origin ${{ github.ref_name }}
+
+      - name: Run one PreBell round
+        run: |
+          set -o pipefail
+          MODE="${{ github.event.inputs.mode || 'round' }}"
+          SRC=02-20Days-Challenge/src/prebell.py
+          case "$MODE" in
+            probe)      python "$SRC" --probe     | tee /tmp/round.json ;;
+            test-push)  python "$SRC" --test-push | tee /tmp/round.json ;;
+            *)          python "$SRC"             | tee /tmp/round.json ;;
+          esac
+
+      - name: Commit logs, state and fallback output
+        run: |
+          git config user.name "ICEC PreBell Bot"
+          git config user.email "prebell@users.noreply.github.com"
+          git add 02-20Days-Challenge/process_logs \
+                  02-20Days-Challenge/state \
+                  02-20Days-Challenge/public
+          if git diff --staged --quiet; then
+            echo "nothing new this round"
+            exit 0
+          fi
+          MSG=$(python -c "
+          import json
+          d = json.load(open('/tmp/round.json'))
+          m = 'prebell: %s %s' % (d['date'], d['minute'])
+          if d.get('event'):
+              m += ' ' + d['event']
+          if d.get('hash'):
+              m += ' chain=' + d['hash'][:8]
+          if d.get('merkle_root'):
+              m += ' merkle=' + d['merkle_root']
+          print(m)
+          ")
+          git commit -m "$MSG"
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Verify the whole chain
+        run: python 02-20Days-Challenge/src/verify.py

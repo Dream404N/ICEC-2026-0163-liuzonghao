@@ -47,64 +47,70 @@ h1{font-size:22px;font-weight:600;margin:0 0 4px}
 <body>
 <div class="page">
 
-<div class="banner">版式预览 · 下方数字均为示例，不是真实运行数据。真实数据由 GitHub Actions 每 3 小时自动生成，成品见仓库 <code>public/index.html</code>。</div>
+<div class="banner">版式预览 · 下方数字均为示例，不是真实运行数据。<b>学期第 1 周按 2026-09-07 估算、尚未核对；核对前请勿当作真实提醒使用。</b>真实数据由 GitHub Actions 生成，兜底产物见 <code>public/index.html</code>。</div>
 
-<h1>校园节点雷达</h1>
-<p class="sub">自动盯着学校与考试网站，<b>只挑需要你动手、且有期限的那几件</b>送进日历。公示、结果、新闻一律不收。</p>
+<h1>预备铃 · 课表微信提醒</h1>
+<p class="sub">每天上课前 20 分钟，往微信推一条「下一大节上什么课、在哪个教室、这周到底有没有这节课」。没课或这周不上就不打扰。</p>
 
 <div class="metrics">
-  <div class="metric"><div class="k">监控的公开页面</div><div class="v">7</div></div>
-  <div class="metric"><div class="k">关心的通知</div><div class="v">3</div></div>
-  <div class="metric"><div class="k">进行中的截止项</div><div class="v">3</div></div>
+  <div class="metric"><div class="k">每天课前窗口</div><div class="v">4</div></div>
+  <div class="metric"><div class="k">本周有课大节</div><div class="v">6</div></div>
+  <div class="metric"><div class="k">今日已推 / 上限</div><div class="v">1 / 5</div></div>
   <div class="metric"><div class="k">已连续运行</div><div class="v">7 天</div></div>
 </div>
 
 <div class="cols">
   <div class="card">
-    <h2>你的手机日历（导入一次，自动更新）</h2>
-    <div class="cal">
-      <div class="wd">一</div><div class="wd">二</div><div class="wd">三</div><div class="wd">四</div><div class="wd">五</div><div class="wd">六</div><div class="wd">日</div>
-      <div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div><div class="d">10</div><div class="d">11</div><div class="d">12</div><div class="d">13</div>
-      <div class="d">14</div><div class="d due">15</div><div class="d">16</div><div class="d">17</div><div class="d">18</div><div class="d">19</div><div class="d due">20</div>
-      <div class="d">21</div><div class="d">22</div><div class="d">23</div><div class="d">24</div><div class="d">25</div><div class="d due">26</div><div class="d">27</div>
-      <div class="d">28</div><div class="d">29</div><div class="d">30</div><div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div><div class="d empty">·</div>
+    <h2>你微信里收到的（服务号消息）</h2>
+    <div style="background:#f5f6f8;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">方糖 · 08:20</div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px">
+        <div style="font-weight:600;margin-bottom:8px">预备铃｜08:40 第一大节有课</div>
+        <div style="font-size:13px;line-height:1.8">
+          <b>机械制图与计算机辅助设计02</b><br>
+          教室：天工楼361 ｜ 教师：彭灵勇<br>
+          周次原文：<code>3-13周,16-18周(混合)</code><br>
+          本周：估算第 10 周 · 命中该周次
+        </div>
+        <div style="background:var(--warn-bg);color:var(--warn);font-size:12px;padding:8px 10px;border-radius:6px;margin-top:10px">
+          ⚠ 学期第 1 周按 2026-09-07 估算、尚未核对；核对前请勿当作真实提醒使用。<br>
+          ⚠ 课表由一张截图人工转录，尚未逐格校对。
+        </div>
+      </div>
     </div>
-    <div class="legend">蓝色日期 = 有事情要截止。提前一天弹提醒，不用装 App，Android / iOS / Windows / Linux 的日历都认。</div>
+    <div class="legend">同一大节多门课合并成一条；本周无课不推；失败不重发，避免打爆免费 5 条/天。</div>
   </div>
 
   <div class="card">
-    <h2>电脑网页 · 本周抓到的新通知</h2>
-    <div class="row">
-      <div><div class="t">就业信息核对</div><div class="meta">11-12 · 学校通知公告 · 11 月 20 日前完成</div></div>
-      <div class="tag">剩 8 天</div>
-    </div>
-    <div class="row">
-      <div><div class="t">见习岗位报名</div><div class="meta">11-13 · 深圳人社局 · 报名截至 11 月 15 日</div></div>
-      <div class="tag hot">剩 3 天</div>
-    </div>
-    <div class="row">
-      <div><div class="t">期末补考安排</div><div class="meta">11-14 · 教学动态 · 材料提交 11 月 26 日</div></div>
-      <div class="tag">剩 14 天</div>
-    </div>
-    <div class="legend">每 3 小时自动看一次；已过滤 21 条公示 / 结果 / 新闻类公告。想换关心的事，改 <code>interests.json</code> 即可。</div>
+    <h2>本周课表（估算第 10 周）</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:#f8f9fb"><th style="border:1px solid var(--line);padding:7px 6px">节次</th><th style="border:1px solid var(--line);padding:7px 6px">一</th><th style="border:1px solid var(--line);padding:7px 6px">二</th><th style="border:1px solid var(--line);padding:7px 6px">三</th><th style="border:1px solid var(--line);padding:7px 6px">四</th><th style="border:1px solid var(--line);padding:7px 6px">五</th></tr></thead>
+      <tbody>
+        <tr><td style="border:1px solid var(--line);padding:7px 6px">08:40–10:00</td><td style="border:1px solid var(--line);padding:7px 6px">机械制图<br><span style="color:var(--accent)">天工楼361</span></td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px">思想道德与法治<br><span style="color:var(--accent)">教学楼701</span></td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td></tr>
+        <tr><td style="border:1px solid var(--line);padding:7px 6px">10:20–11:40</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">连上 4 节</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td></tr>
+        <tr><td style="border:1px solid var(--line);padding:7px 6px">13:30–14:50</td><td style="border:1px solid var(--line);padding:7px 6px">工程数学<br><span style="color:var(--accent)">教学楼525</span></td><td style="border:1px solid var(--line);padding:7px 6px">职业生涯规划<br><span style="color:var(--accent)">教学楼734</span></td><td style="border:1px solid var(--line);padding:7px 6px">智能制造认知</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td><td style="border:1px solid var(--line);padding:7px 6px">体育</td></tr>
+        <tr><td style="border:1px solid var(--line);padding:7px 6px">15:10–16:30</td><td style="border:1px solid var(--line);padding:7px 6px">思想道德与法治<br><span style="color:var(--accent)">教学楼601</span></td><td style="border:1px solid var(--line);padding:7px 6px">大学英语<br><span style="color:var(--accent)">教学楼621</span></td><td style="border:1px solid var(--line);padding:7px 6px">大学生心理健康</td><td style="border:1px solid var(--line);padding:7px 6px">大学英语</td><td style="border:1px solid var(--line);padding:7px 6px;color:#c8ccd2">—</td></tr>
+      </tbody>
+    </table>
+    <div class="legend">「—」= 该周这一节没课。周次由估算锚点推导，课表尚未逐格校对。</div>
   </div>
 </div>
 
 <div class="heart">
   <div class="card">
-    <h2>运行日志 · 今天看了 8 次</h2>
+    <h2>运行日志 · 今天 12 轮（工作日窗口）</h2>
     <div class="grid7">
-      <div class="tick"></div><div class="tick"></div><div class="tick new"></div><div class="tick"></div>
-      <div class="tick fail"></div><div class="tick"></div><div class="tick"></div><div class="tick new"></div>
+      <div class="tick"></div><div class="tick new"></div><div class="tick"></div><div class="tick"></div>
+      <div class="tick"></div><div class="tick new"></div><div class="tick fail"></div><div class="tick"></div>
     </div>
-    <div class="hrow"><span>灰 = 无变化　蓝 = 发现新通知　红 = 抓取失败</span><span>每格一轮，7 天共 56 轮</span></div>
+    <div class="hrow"><span>灰 = 空轮　蓝 = 已推送　红 = 推送失败</span><span>周末各 1 条心跳，保证 7 天不断链</span></div>
   </div>
 </div>
 
 <p class="foot">
-<b>交付时一共三样东西：</b>① 一份 <code>.ics</code> 日历订阅 + 一个网页，这是给同学用的产品；② 7 本日志，证明程序真的无人值守跑了 7 天；③ 一个 <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改。<br>
-<b>只做三件事：</b>抓公开页、生成日历、留运行日志。学习通、微信、课表、断网提醒这些扩展项一律不做，不把摊子铺大。<br>
-<b>不碰的东西：</b>不读微信、不登录学习通、不采集任何个人信息；只抓公开网页，日志里只有时间、耗时、状态和内容指纹。
+<b>交付三样东西：</b>① 微信推送（产品主体）+ 推送失败时的 <code>.ics</code> / 网页兜底；② 7 本日志，证明程序真的无人值守跑了 7 天；③ <code>verify.py</code>，任何人 clone 下来都能一键检查日志有没有被补写或篡改。<br>
+<b>口径变更：</b>本页曾声明「学习通、微信、课表一律不做」，因 2026-11-13 改选题已更新。旧口径作废清单与原因见 <code>iterations/002-改选题说明.md</code>；已提交的历史记录（001）不回填、不修饰。<br>
+<b>不碰的东西：</b>不读微信本地数据库 / 聊天记录 / 群消息、不逆向、不登录微信客户端，只调官方公开接口把消息<b>送进</b>微信；不做 OCR、不假装读 xlsx；不碰学习通 / 教务登录态；不采集个人信息；SendKey 只在 Actions Secrets。
 </p>
 
 </div>

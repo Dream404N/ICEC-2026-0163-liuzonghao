@@ -1,0 +1,334 @@
+{
+  "meta": {
+    "title_raw": "2026-2027 学年 1 学期 2026 智能机器人技术 C3 课表",
+    "source": "使用者通过微信提供的一张 Excel 截图；无 .xlsx 原文件，人工逐格转录",
+    "source_kind": "screenshot_manual_transcription",
+    "transcribed_by": "manual",
+    "transcribed_at": "2026-11-13",
+    "proofread": false,
+    "term_weeks": 18,
+    "weekdays": ["星期一", "星期二", "星期三", "星期四", "星期五"],
+    "note": "本文件为初稿。截图分辨率有限，部分教师姓名、教室号、括注周次无法确认，已用 null + unclear 标记，绝不猜测填充。请对照 src/timetable-source.png 逐格核对后再把 review.status 改为 verified。"
+  },
+  "anchor": {
+    "first_monday": "2026-09-07",
+    "status": "estimated",
+    "verified": false,
+    "verified_at": "",
+    "verified_by": "",
+    "note": "使用者 2026-11-13 明确表示『先估一个』，未与教务校历核对。所有由本锚点推导出的周次与具体日期均为估算；核对前不得当作真实提醒使用。",
+    "display_wording": "学期第 1 周按 2026-09-07 估算、尚未核对；核对前请勿当作真实提醒使用。"
+  },
+  "periods": [
+    {"id": 1, "label": "第一大节", "start": "08:40", "end": "10:00", "sessions": "第1节-第2节", "push_at": "08:20"},
+    {"id": 2, "label": "第二大节", "start": "10:20", "end": "11:40", "sessions": "第3节-第4节", "push_at": "10:00"},
+    {"id": 3, "label": "第三大节", "start": "13:30", "end": "14:50", "sessions": "第5节-第6节", "push_at": "13:10"},
+    {"id": 4, "label": "第四大节", "start": "15:10", "end": "16:30", "sessions": "第7节-第8节", "push_at": "14:50"}
+  ],
+  "cells": [
+    {
+      "id": "mon-1-2",
+      "weekday": 1,
+      "period": 1,
+      "span": 2,
+      "merged": true,
+      "merge_note": "截图中周一第一、第二大节为跨行合并单元格，表示连上 4 节（第1节-第4节）",
+      "raw_text": "机械制图与计算机辅助设计02 专业基础课(必修)3.0学分 3-13周,16-18周(混合) 彭灵勇 [0490] 第1节-第4节 天工楼361 课容量:46 选课人数:46 2026智能机器人技术C3",
+      "raw_text_note": "截图可见部分逐字转录",
+      "courses": [
+        {
+          "course_id": "mech-drawing-02",
+          "name": "机械制图与计算机辅助设计02",
+          "category_credit": "专业基础课(必修)3.0学分",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "teacher": "彭灵勇",
+          "room": "天工楼361",
+          "periods_raw": "第1节-第4节",
+          "capacity": 46,
+          "enrolled": 46,
+          "class": "2026智能机器人技术C3",
+          "unclear": [],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "medium", "room": "high"}
+        }
+      ],
+      "unclear": []
+    },
+    {
+      "id": "thu-1",
+      "weekday": 4,
+      "period": 1,
+      "span": 1,
+      "merged": false,
+      "raw_text": "思想道德与法治36 通识基础课(必修)3.0学分 18周(实践) 张蓉蕾[230] 第3节-第4节 教学楼701 3周,17周(实践) 4-7周,12-13周,16周(讲课) 8-9周,11周(讲课) 10周(讲课) 课容量:92 选课人数:92 2026智能机器人技术C3 2026智能光电制造技术C3 教学班701",
+      "raw_text_note": "此格在同一单元格内有多段周次与多位教师，截图文字密集、部分姓名与周次归属无法确认；仅转录可辨认片段，其余标 unclear。",
+      "courses": [
+        {
+          "course_id": "ideology-practice",
+          "name": "思想道德与法治36",
+          "category_credit": "通识基础课(必修)3.0学分",
+          "weeks_raw": "18周(实践)",
+          "form": "实践",
+          "teacher": null,
+          "room": "教学楼701",
+          "periods_raw": "第3节-第4节",
+          "capacity": 92,
+          "enrolled": 92,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher", "periods_raw"],
+          "confidence": {"name": "high", "weeks_raw": "medium", "teacher": "low", "room": "medium"}
+        },
+        {
+          "course_id": "ideology-lecture",
+          "name": "思想道德与法治36",
+          "category_credit": "通识基础课(必修)3.0学分",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "form": "讲课",
+          "teacher": null,
+          "room": "教学楼701",
+          "periods_raw": null,
+          "capacity": 92,
+          "enrolled": 92,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher", "periods_raw", "weeks_raw_attribution"],
+          "confidence": {"name": "high", "weeks_raw": "medium", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["同格内 3周,17周(实践) / 8-9周,11周(讲课) / 10周(讲课) 三段周次归属哪门课、对应教师是谁", "课容量与选课人数是否为同一门课"],
+      "conflicts": []
+    },
+    {
+      "id": "mon-3",
+      "weekday": 1,
+      "period": 3,
+      "span": 1,
+      "merged": false,
+      "raw_text": "工程数学11 通识基础课(必修)3.0学分 3-13周,16-18周(讲课) 第5节-第6节 教学楼525 课容量:46 选课人数:32 2026智能光电制造技术C3",
+      "raw_text_note": "教师姓名在截图中模糊，未转录",
+      "courses": [
+        {
+          "course_id": "eng-math-11",
+          "name": "工程数学11",
+          "category_credit": "通识基础课(必修)3.0学分",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "teacher": null,
+          "room": "教学楼525",
+          "periods_raw": "第5节-第6节",
+          "capacity": 46,
+          "enrolled": 32,
+          "class": "2026智能光电制造技术C3",
+          "unclear": ["teacher"],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["teacher"]
+    },
+    {
+      "id": "tue-3",
+      "weekday": 2,
+      "period": 3,
+      "span": 1,
+      "merged": false,
+      "raw_text": "职业生涯规划04 通识基础课(必修)1.0学分 3-11周(理论) 第5节-第6节 教学楼734 课容量:46 选课人数:46 2026智能机器人技术C3",
+      "raw_text_note": "括注教学形式在截图中较模糊，按可见字形转录为『理论』",
+      "courses": [
+        {
+          "course_id": "career-04",
+          "name": "职业生涯规划04",
+          "category_credit": "通识基础课(必修)1.0学分",
+          "weeks_raw": "3-11周(理论)",
+          "form": "理论",
+          "teacher": null,
+          "room": "教学楼734",
+          "periods_raw": "第5节-第6节",
+          "capacity": 46,
+          "enrolled": 46,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher", "form"],
+          "confidence": {"name": "high", "weeks_raw": "medium", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["teacher", "form"]
+    },
+    {
+      "id": "wed-3",
+      "weekday": 3,
+      "period": 3,
+      "span": 1,
+      "merged": false,
+      "raw_text": "智能制造与数字化认知02 专业基础课(必修) 3-13周,16-18周(混合) [万毅][0742] 第5节 课容量:46 选课人数:46 2026智能机器人技术C3",
+      "raw_text_note": "截图中该格节次仅见『第5节』，与第三大节两节的常规不符，需核对",
+      "courses": [
+        {
+          "course_id": "smart-mfg-02",
+          "name": "智能制造与数字化认知02",
+          "category_credit": "专业基础课(必修)",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "teacher": "万毅",
+          "room": null,
+          "periods_raw": "第5节",
+          "capacity": 46,
+          "enrolled": 46,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["room", "periods_raw"],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "medium", "room": "low"}
+        }
+      ],
+      "unclear": ["room", "periods_raw"]
+    },
+    {
+      "id": "fri-3",
+      "weekday": 5,
+      "period": 3,
+      "span": 1,
+      "merged": false,
+      "raw_text": "体育1 38 通识基础课(必修)1.5学分 3-13周,16-18周(混合) 第5节 课容量:46 选课人数:0",
+      "raw_text_note": "教师、教室在截图中不可辨认；选课人数看起来是 0，需核对",
+      "courses": [
+        {
+          "course_id": "pe-1-38",
+          "name": "体育1 38",
+          "category_credit": "通识基础课(必修)1.5学分",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "teacher": null,
+          "room": null,
+          "periods_raw": "第5节",
+          "capacity": 46,
+          "enrolled": 0,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher", "room", "enrolled", "periods_raw"],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "low", "room": "low"}
+        }
+      ],
+      "unclear": ["teacher", "room", "enrolled", "periods_raw"]
+    },
+    {
+      "id": "mon-4",
+      "weekday": 1,
+      "period": 4,
+      "span": 1,
+      "merged": false,
+      "raw_text": "思想道德与法治36 通识基础课(必修)3.0学分 3周,8周,11周,17周(讲课) 第7节-第8节 教学楼601 4-7周,12-13周,16周(讲课) 2026智能光电制造技术C3",
+      "raw_text_note": "此格同样有多段周次，教师姓名与后半段周次归属无法确认",
+      "courses": [
+        {
+          "course_id": "ideology-mon4",
+          "name": "思想道德与法治36",
+          "category_credit": "通识基础课(必修)3.0学分",
+          "weeks_raw": "3周,8周,11周,17周(讲课)",
+          "form": "讲课",
+          "teacher": null,
+          "room": "教学楼601",
+          "periods_raw": "第7节-第8节",
+          "capacity": null,
+          "enrolled": null,
+          "class": "2026智能光电制造技术C3",
+          "unclear": ["teacher", "capacity", "enrolled"],
+          "confidence": {"name": "high", "weeks_raw": "medium", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["teacher", "同格后半段 4-7周,12-13周,16周(讲课) 是否属于另一门课", "capacity", "enrolled"]
+    },
+    {
+      "id": "tue-4",
+      "weekday": 2,
+      "period": 4,
+      "span": 1,
+      "merged": false,
+      "raw_text": "大学英语118 通识基础课(必修)3.5学分 3-13周,16-18周(讲课) 第7节-第8节 教学楼621 课容量:92 选课人数:92 2026智能机器人技术C3",
+      "raw_text_note": "教师姓名模糊，未转录",
+      "courses": [
+        {
+          "course_id": "college-english-118-tue",
+          "name": "大学英语118",
+          "category_credit": "通识基础课(必修)3.5学分",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "teacher": null,
+          "room": "教学楼621",
+          "periods_raw": "第7节-第8节",
+          "capacity": 92,
+          "enrolled": 92,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher"],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["teacher"]
+    },
+    {
+      "id": "wed-4",
+      "weekday": 3,
+      "period": 4,
+      "span": 1,
+      "merged": false,
+      "raw_text": "大学生心理健康教育06 通识基础课(必修)2.0学分 3周,6周,9周,12周,17周(实践) 课容量:46 选课人数:46 2026智能机器人技术C3",
+      "raw_text_note": "教师、教室、节次在截图中不可辨认；周次表达式清晰",
+      "courses": [
+        {
+          "course_id": "mental-health-06",
+          "name": "大学生心理健康教育06",
+          "category_credit": "通识基础课(必修)2.0学分",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "form": "实践",
+          "teacher": null,
+          "room": null,
+          "periods_raw": null,
+          "capacity": 46,
+          "enrolled": 46,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["teacher", "room", "periods_raw"],
+          "confidence": {"name": "high", "weeks_raw": "high", "teacher": "low", "room": "low"}
+        }
+      ],
+      "unclear": ["teacher", "room", "periods_raw"]
+    },
+    {
+      "id": "thu-4",
+      "weekday": 4,
+      "period": 4,
+      "span": 1,
+      "merged": false,
+      "raw_text": "大学英语118 通识基础课(必修)3.5学分 第8节 教学楼621 课容量:92 选课人数:92",
+      "raw_text_note": "此格周次表达式在截图中不可辨认，仅转录可辨认字段",
+      "courses": [
+        {
+          "course_id": "college-english-118-thu",
+          "name": "大学英语118",
+          "category_credit": "通识基础课(必修)3.5学分",
+          "weeks_raw": null,
+          "form": null,
+          "teacher": null,
+          "room": "教学楼621",
+          "periods_raw": "第8节",
+          "capacity": 92,
+          "enrolled": 92,
+          "class": "2026智能机器人技术C3",
+          "unclear": ["weeks_raw", "form", "teacher", "periods_raw"],
+          "confidence": {"name": "high", "weeks_raw": "low", "teacher": "low", "room": "medium"}
+        }
+      ],
+      "unclear": ["weeks_raw", "form", "teacher", "periods_raw"]
+    }
+  ],
+  "overrides": [],
+  "review": {
+    "round": 1,
+    "status": "unverified",
+    "by": "",
+    "at": "",
+    "changes": [],
+    "pending_cells": [
+      "周二 / 第一大节、第二大节：截图中未见可辨认文字，请确认是空课还是被合并单元格覆盖",
+      "周三 / 第一大节、第二大节：同上",
+      "周四 / 第二大节、第三大节：同上",
+      "周五 / 第一大节、第二大节、第四大节：同上",
+      "thu-1、mon-4：一格内多段周次与多门课的归属关系",
+      "所有 null 字段：教师姓名、教室号、节次、课容量"
+    ],
+    "note": "迭代 #1：请对照 src/timetable-source.png 逐格核对。校对结果写进 changes（每条记 cell_id、字段、原值、改为、依据），并把 status 改为 verified。校对前程序仍会推送，但每条消息与网页都会带『课表未校对』声明。"
+  }
+}
