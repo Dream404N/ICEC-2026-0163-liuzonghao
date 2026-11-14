@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-14",
+  "summary": {
+    "date": "2026-11-14",
+    "timezone": "UTC+8",
+    "heartbeat": true,
+    "expected": 0,
+    "attempted": 0,
+    "sent": 0,
+    "failed": 0,
+    "skipped_late": 0,
+    "skipped_after_class": 0,
+    "duplicate": 0,
+    "skipped_early": 0,
+    "throttled": 0,
+    "no_schedule": 0,
+    "per_period": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0,
+      "P4": 0
+    },
+    "channels_used": [],
+    "latency_ms": {
+      "max": 0,
+      "avg": 0
+    },
+    "chain_head": "464c873b1073a010eb1975356755500dff7cca95bb13d3d2ed6836733d2491e5",
+    "chain_len": 8
+  },
+  "verify": {
+    "date": "2026-11-14",
+    "key_triplet_ok": false,
+    "chain_ok": false,
+    "count_ok": false,
+    "no_future_ts": false,
+    "records": 8,
+    "expected": 0,
+    "all_ok": false
+  }
+}

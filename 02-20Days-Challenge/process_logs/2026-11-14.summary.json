@@ -1,10 +1,28 @@
 {
+  "attempted": 0,
+  "chain_head": "464c873b1073a010eb1975356755500dff7cca95bb13d3d2ed6836733d2491e5",
+  "chain_len": 8,
+  "channels_used": [],
   "date": "2026-11-14",
-  "rounds": 8,
-  "source_calls": 56,
-  "source_ok": 48,
-  "source_failed": 8,
-  "new_items": 0,
-  "merkle_root": "e6d2f752b0f87b4085b56de9ccb77645c876d4f81b12f4204c0e9306ff65c032",
-  "generated_at": "2026-11-14 21:08"
+  "duplicate": 0,
+  "expected": 0,
+  "failed": 0,
+  "heartbeat": true,
+  "latency_ms": {
+    "avg": 0,
+    "max": 0
+  },
+  "no_schedule": 0,
+  "per_period": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0
+  },
+  "sent": 0,
+  "skipped_after_class": 0,
+  "skipped_early": 0,
+  "skipped_late": 0,
+  "throttled": 0,
+  "timezone": "UTC+8"
 }
