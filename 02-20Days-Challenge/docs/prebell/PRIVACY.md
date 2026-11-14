@@ -1,5 +1,10 @@
 # 密钥、脱敏与隐私
 
+> ⚠ **部分作废（2026-11-14）**：文中关于「WxPusher SPT / 企业微信 Webhook 两个 Secret」
+> 的描述属于 2.0 版。3.0 版只保留一个 Secret `PREBELL_SENDKEY`。
+> 「凭据只进 GitHub Actions Secrets、绝不入库、日志脱敏」这条**依然有效**。
+> 当前口径见 `docs/prebell/README.md`。
+
 ## 1. 官方硬约束
 
 - 官网 Step 0 要求**公开仓库**（assessment.html L202）。

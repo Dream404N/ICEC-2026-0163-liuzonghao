@@ -1,99 +1,89 @@
 # 预备铃 / PreBell · 项目四
 
-每天上课前 20 分钟往微信推一条「下一大节上什么课、在哪个教室、这周到底有没有这节课」；
-没课或这周不上就不打扰。微信发不出去就退回日历和网页，并把每轮跑没跑、推没推成功如实记成一条改不动的账。
+**一句话**：上课前 20 分钟，微信收到一条「下一节上什么课、在哪个教室」，顺带把今天剩下的课全列出来。
+手机不用装 App，电脑不用开机，你什么都不用点。
 
-**先看样张**：`preview.html`（双击即可打开，数据是示例，已标注）。
-**看真实产物**：`public/index.html`、`public/calendar.ics`（由 GitHub Actions 生成，仅作推送失败时的兜底）。
-**看字段与配置**：`src/PREBELL.md`。
+> 本文件对应 **3.0 版（2026-11-14）**。`src/PREBELL.md`、`docs/prebell/RUNBOOK.md`、
+> `PLAN.md` 里那些「5 分钟轮询」「30/5 分双时点」「每天 6 条」「6 个外部 cron job」
+> 都是 11-13 ~ 11-14 白天被推翻的旧方案，留作过程证据，**不要再照着做**。
 
-## 你要做的一件事
+## 你现在就能用的两样东西
 
-微信扫码登录 <https://sct.ftqq.com/> → 关注「方糖」服务号 → 复制 SendKey →
-在本仓库 **Settings → Secrets and variables → Actions** 新建 `PREBELL_SENDKEY` 并粘贴。
-然后手动跑一次 `prebell.yml` 做连通性探测与一条真实测试消息，确认微信真的收到。
-**SendKey 只存在于 Secrets**，代码只读环境变量，绝不入库。
+| | 文件 | 怎么用 |
+|---|---|---|
+| 课表网页 | `public/index.html` | 双击打开，看今天、看本周、翻上一周下一周 |
+| 手机日历 | `public/prebell.ics` | 下载导入手机自带日历，课前 20 分钟由**手机本地**提醒 |
 
-## 本机可以跑什么
+**`.ics` 是最可靠的一层**：不依赖网络、不依赖 GitHub、不依赖微信、不会排队迟到。
+微信推送只是增强。哪怕某轮定时任务丢了，日历照样响。
+
+## 微信提醒怎么来的
+
+`src/prebell/timetable.json` 是整张课表（课程名、周次、教室），`src/prebell/planner.py`
+一次把整学期展开成 140 条「真正有课」的提醒，写进 `schedule.json`。
+运行时只查表，不再现场猜周次。四条 GitHub Actions 定时：
+
+| 北京时间 | 大节 | 上课 | UTC cron |
+|---|---|---|---|
+| 08:20 | P1 | 08:40 | `20 0 * * 1-5` |
+| 10:00 | P2 | 10:20 | `0 2 * * 1-5` |
+| 13:10 | P3 | 13:30 | `10 5 * * 1-5` |
+| 14:50 | P4 | 15:10 | `50 6 * * 1-5` |
+
+本周没这一节 → 静默跳过，只写一条 `no_schedule` 日志，**不打扰你**。
+一大节多门课合并成一条；一天最多 4 条；同一节跑重了靠 `state/pushed.json` 去重。
+
+推送走 **Server酱 Turbo**（微信服务号 1:1 私聊）。SendKey 已在 GitHub Actions Secrets
+`PREBELL_SENDKEY`，2026-11-13 在境外 runner 上实测 HTTP 200 / `code:0` 真发到微信。
+
+## 你要做的事
+
+1. **打开 `public/index.html` 看一眼课表**，对照你微信发我的原图 `src/timetable-source.png`。
+   错了告诉我，改 `src/prebell/timetable.json` 后重跑 `python src/prebell/planner.py`，
+   网页、日历、推送表三份一起更新。
+2. **确认第 1 周周一是不是 2026-09-07**。这是估算锚点，错一周整张日期表整体平移。
+
+**就这两件。** 不用注册 cron-job.org、不用造 PAT、不用装 WxPusher App、不用填第二个 Secret、
+不用建 6 个定时 job —— 那些是旧方案留下的负担，这一版全部撤掉了。
+
+## 诚实边界
+
+- 锚点未核对、课表未逐格签字确认；网页和每条消息都会带这句警示。
+- 教师姓名是截图形近字辨读，置信度低，**不展示**，只留在 JSON 里作档案。
+- GitHub cron 高峰期会排队。迟到 ≤15 分钟照发并在消息里写明晚到几分钟；超 15 分钟
+  记 `skipped_late` 不发；上课后才醒记 `skipped_after_class`，**绝不补推、绝不回填历史**。
+- 周末和无课的工作日不推消息，也不写假的「心跳」日志凑连续天数。
+- 手工预览（`--preview`）只发消息、**不写** `process_logs`，不冒充无人值守证据。
+- 每轮日志带 `prev_hash`，`src/prebell/verify.py` 一键验真；被否掉的旧雷达
+  `probe.yml` 已停掉定时，历史日志保留不删。
+
+## 代码与复现
+
+| 文件 | 作用 |
+|---|---|
+| `src/prebell/timetable.json` | 课表原始数据（唯一需要人工维护的文件） |
+| `src/prebell/planner.py` | 按周次展开，生成 `schedule.json` / `public/index.html` / `public/prebell.ics` |
+| `src/prebell/run.py` | 单轮：查表 → 去重 → 推微信 → 写日志 |
+| `src/prebell/notifier.py` | 把「这一节 + 今天全部」渲染成一条消息 |
+| `src/prebell/channels.py` | Server酱单通道，凭据只从环境变量读 |
+| `src/prebell/ledger.py` / `verify.py` | 哈希链日志与验真 |
+| `.github/workflows/prebell-remind.yml` | 4 条 cron + 手动触发 |
+| `.github/workflows/prebell-daily.yml` | 每天 23:55 汇总与验真 |
 
 ```bash
-cd 02-20Days-Challenge
-python src/weeks.py                 # 六个周次表达式的解析样例
-python src/prebell.py --dry-run     # 本机预览，产物写到 src/out/
-python src/verify.py                # 一键验真（需 clone 后已有云端日志）
+cd 02-20Days-Challenge/src
+python prebell/planner.py              # 改课表后重跑，三份产物一起更新
+python prebell/planner.py --check      # 只校验不写文件
+python prebell/run.py --dry-run --date 2026-11-16 --period P1 \
+    --now 2026-11-16T00:20:09Z         # 本机预览，不联网不写真数据
+python -m unittest discover -s prebell/tests -t . -v
 ```
 
-`--dry-run` 不推送、不写 `process_logs/` `state/` `public/`。正常轮、连通性探测、测试消息
-都由 GitHub Actions 在云端执行；本机不跑常驻程序、不自启、不建定时任务。
+本机不跑常驻程序、不自启、不建定时任务；所有重复执行都在 GitHub Actions。
 
-## 课表数据
+## 历史资产（原样保留）
 
-只有一张 Excel 截图（已归档 `src/timetable-source.png`），**没有 .xlsx 原文件**。
-内容人工逐格转录成 `src/timetable.json`：每格保留 `raw_text`；看不清的字段一律 `null` + `unclear`，
-不猜、不填占位值。这是初稿，`review.status = "unverified"`，请对照原图校对一次（迭代 #1）。
-校对前程序仍会推送，但每条消息与网页都带「课表未校对」声明。
-
-学期第 1 周周一按 **2026-09-07 估算**、`verified: false`。推送文案、网页横幅、ICS 的
-`CATEGORIES:ESTIMATED-ANCHOR`、反馈表四处统一写「核对前请勿当作真实提醒使用」。
-核对只改这一个字段，全链标注自动消失。
-
-## 周次解析为什么是核心
-
-课表把「哪几周上课」塞在单元格文字里，写法混杂：`3-13周,16-18周(混合)`、
-`4-7周,12-13周,16周(讲课)`、`3周,6周,9周,12周,17周(实践)`。
-`src/weeks.py` 用确定性正则展开，范围 / 单周 / 逗号混排统一处理；括注教学形式只展示不推断；
-解析不了的片段进 `unknown` 并写进日志，不静默丢弃。一格多课按周号分流，
-同周撞车记 `conflicts` 显式上报；跨行合并单元格（`span:2`）按一条连续日程处理。
-
-## 目录
-
-| 路径 | 内容 |
-|---|---|
-| `src/timetable.json` | 人工转录的真实课表（初稿，含 `unclear` 与 `review.changes`） |
-| `src/timetable-source.png` | 课表原图，校对依据 |
-| `src/weeks.py` | 周次表达式解析 + 六个样例自检 |
-| `src/prebell.py` | 单轮入口：查表 → 判重 → 推送 → 记日志 → 生成兜底 |
-| `src/resolve.py` | 把课表整学期一次性展开成推送时刻表（离线，不在 CI 里跑） |
-| `src/schedule.json` | 整学期 96 条推送的确定性产物；课表改了重跑 `resolve.py` |
-| `src/schedule.md` | 同上，人读版；`src/out/cron-hints.txt` 是给 cron-job.org 抄的 |
-| `src/config.example.json` | 非敏感默认值模板（**不叫 config.json**，避免被机械拦截） |
-| `src/PREBELL.md` | 字段说明、校对流程、SendKey 配置步骤、合规边界 |
-| `src/chain.py` | 哈希链、Merkle root、脱敏、每日汇总（PreBell 与旧雷达共用） |
-| `src/verify.py` | 一键验真，期望条数从 `schedule.json` 推导，缺哪一节直接点名 |
-| `state/` | 跨轮状态：`pushed.json` 去重、`channel.json` 连通性 |
-| `process_logs/` | 每天一个 `.jsonl` + 一个 `.summary.json`，只追加不回填 |
-| `public/` | 兜底产物 `.ics` 与网页 |
-| `iterations/` | 由真实事件触发的迭代记录 |
-| `feedback/` | 8 位同学的脱敏反馈 |
-| `../.github/workflows/prebell.yml` | 执行体：只被 `workflow_dispatch` 触发，不带 `schedule` |
-| `../.github/workflows/probe.yml` | 旧雷达调度，11-17 后停用 schedule、文件保留 |
-
-### 历史资产（雷达阶段，原样保留）
-
-`src/probe.py`、`src/sources.json`、`src/interests.json`、`iterations/001-降频与订阅范围.md`
-以及 11-10～11-16 的全部日志，都是上一版「校园节点雷达」的真实过程数据，
-**不删、不改、不回填**。它们与 PreBell 共用同一条哈希链，但不计入 PreBell 的 7 天窗口。
-
-## 日志里记什么
-
-每轮一条 JSON：日期与分钟、触发来源（`cronjob` / `manual`）、计划推送时刻与实际时刻、
-迟到多少分钟、查表命中的 `schedule_slot`、星期与估算周次、阶段（`alarm` / `in_window` /
-`too_late` / `weekend` / `out_of_term`）、命中的课程、推送状态（HTTP / 耗时 / 8 位错误指纹）、
-当日已推条数、上一轮哈希与本轮哈希。
-
-**不记**：IP、主机名、绝对路径、请求正文、SendKey、任何个人标识符、精确毫秒。
-报错只留脱敏后的 8 位指纹；含 SendKey 的 URL 会被 `chain.scrub()` 抹成 `[url]`。
-
-## 证据链怎么闭合
-
-- 每条记录带 `prev_hash`，改任意一行，后面全部对不上；
-- 每轮滚动重算当日 Merkle root，写进 `*.summary.json` 与 commit message；
-- `verify.py` 重算全链，精确报出断在第几天第几条，并按课表算出**该响没响的是哪一节**。
-
-缺勤不补写。迟到多少如实记在 `late_by_min`，超过 15 分钟宁可记 `missed_too_late` 不发，
-也不发一条「课已经上到一半了」的噪音。计划时刻不是猜的——它来自课表，写在 `schedule.json` 里。
-
-## 依赖
-
-零第三方 Python 依赖，Python 3.8+ 标准库即可（`urllib` 发 POST）。
-所有重复执行都在 GitHub Actions 上，本机不需要运行任何东西。
+`src/prebell.py`、`src/resolve.py`、`src/weeks.py`、`src/chain.py`、`src/verify.py`、
+`src/timetable.json`、`preview.html`、`iterations/001–004`、`src/PREBELL.md` 与
+11-10 起的全部日志，都是被迭代掉的旧版本真实过程数据，**不删、不改、不回填**。
+它们不属于当前运行程序，也不计入 3.0 版的运行窗口。

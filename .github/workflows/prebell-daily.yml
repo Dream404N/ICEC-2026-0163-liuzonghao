@@ -1,8 +1,9 @@
 name: prebell-daily
 
-# 每日汇总 / 验真 / 公示。对精度不敏感，允许用 Actions 内置 schedule。
-# UTC 15:55 = 北京 23:55，当天收口；周末无课日也真实运行并产出 heartbeat 汇总。
-# 这条不计入 6 个外部 cron job，用途与 remind 不同。
+# 每日汇总 / 验真 / 公示。UTC 15:55 = 北京 23:55，当天收口。
+# 与 prebell-remind 的 4 条提醒 cron 相互独立；无课日也真实运行并产出汇总，
+# 但只写 summary，不往 process_logs/*.jsonl 里补任何「提醒事件」。
+# 空白的一天就是空白，不拿心跳凑连续天数。
 
 on:
   schedule:

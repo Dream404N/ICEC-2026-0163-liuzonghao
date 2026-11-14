@@ -1,10 +1,5 @@
 {
-  "depart": {
-    "title": "预备铃｜该准备出发了",
-    "body": "上课前 30 分钟提醒\n课程：{course}\n时间：{date} {class_start}（{period}）\n请准备好东西（课本、作业、随身物品），现在可以出发了。\n课表尚未与教务校历核对，时间为估算，仅供提醒参考。"
-  },
-  "enter": {
-    "title": "预备铃｜请进入教室",
-    "body": "上课前 5 分钟提醒\n课程：{course}\n时间：{date} {class_start}（{period}）\n请现在进入教室、就座，准备上课。\n课表尚未与教务校历核对，时间为估算，仅供提醒参考。"
-  }
+  "title": "预备铃｜{start} {first_course}",
+  "footer": "> 课表由一张截图转录，第 1 周 = 2026-09-07 为**估算**、尚未与教务校历核对。全学期课表与手机日历订阅见仓库 `02-20Days-Challenge/public/index.html`。",
+  "no_course_label": "（课程名待核对）"
 }

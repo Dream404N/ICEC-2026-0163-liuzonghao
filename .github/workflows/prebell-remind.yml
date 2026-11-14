@@ -1,34 +1,46 @@
 name: prebell-remind
 
-# 提醒执行体：只接 workflow_dispatch，不带 schedule。
-# 原因：GitHub Actions 的 cron 最小粒度 5 分钟、高峰期排队可晚十几分钟，
-# 拿它当「课前 5 分钟」的闹钟是错配。闹钟在外部 cron 服务，这里只负责执行与记账。
+# 上课前 20 分钟提醒。定时直接用 GitHub Actions 自带 cron：
+# 使用者不需要注册第三方定时网站、不需要造 PAT、不需要建任何 job，推完即自动记账。
+# UTC 时区；北京 = UTC+8，四条都在 UTC 当天，日期与北京一致。
+#
+#   P1 北京 08:20 → 20 0 * * 1-5     第一大节 08:40
+#   P2 北京 10:00 → 0  2 * * 1-5     第二大节 10:20
+#   P3 北京 13:10 → 10 5 * * 1-5     第三大节 13:30
+#   P4 北京 14:50 → 50 6 * * 1-5     第四大节 15:10
+#
+# 一周 20 次唤醒，但「本周没课」的大节不会推消息，只写一条 no_schedule 日志。
+# 一天最多 4 条，Server酱免费额度留有余量。真正不会漏的是 public/prebell.ics（手机本地日历）。
 
 on:
+  schedule:
+    - cron: '20 0 * * 1-5'
+    - cron: '0 2 * * 1-5'
+    - cron: '10 5 * * 1-5'
+    - cron: '50 6 * * 1-5'
   workflow_dispatch:
     inputs:
       period:
-        description: 上课大节
-        required: true
-        type: choice
-        options: [P1, P3, P4]
-      stage:
-        description: 提醒阶段（depart=课前30分 / enter=课前5分）
-        required: true
-        type: choice
-        options: [depart, enter]
+        description: 手动指定大节 P1/P2/P3/P4（留空则按当前时刻自动判断）
+        required: false
+        default: ''
+        type: string
+      preview_date:
+        description: 手工预览某天全天课表（YYYY-MM-DD，留空为正常一轮；不写日志）
+        required: false
+        default: ''
       source:
-        description: 触发来源（写入日志，供面试溯源）
+        description: 触发来源（写入日志）
         required: true
-        default: cron
+        default: manual
         type: choice
-        options: [cron, manual, test]
+        options: [manual, test]
 
 permissions:
   contents: write
 
 concurrency:
-  group: prebell-${{ inputs.period }}-${{ inputs.stage }}
+  group: prebell-remind
   cancel-in-progress: false
 
 jobs:
@@ -47,28 +59,34 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 执行一条提醒（成功失败都如实写日志）
+      - name: 执行一轮提醒（成功失败都如实写日志）
         continue-on-error: true
         env:
           PREBELL_SENDKEY: ${{ secrets.PREBELL_SENDKEY }}
-          PREBELL_WXPUSHER_SPT: ${{ secrets.PREBELL_WXPUSHER_SPT }}
         working-directory: 02-20Days-Challenge/src
         run: |
-          python prebell/run.py \
-            --period "${{ inputs.period }}" \
-            --stage "${{ inputs.stage }}" \
-            --source "${{ inputs.source }}"
+          set -e
+          SRC=cron
+          if [ "${{ github.event_name }}" != "schedule" ]; then SRC="${{ inputs.source }}"; fi
+          if [ -n "${{ inputs.preview_date }}" ]; then
+            python prebell/run.py --preview "${{ inputs.preview_date }}"
+            echo "手工预览完成，未写入自动运行日志"
+          else
+            ARGS=""
+            if [ -n "${{ inputs.period }}" ]; then ARGS="--period ${{ inputs.period }}"; fi
+            python prebell/run.py $ARGS --source "$SRC"
+          fi
 
       - name: 提交当日日志与去重状态
         run: |
           git config user.name "prebell-bot"
           git config user.email "prebell-bot@users.noreply.github.com"
           mkdir -p 02-20Days-Challenge/process_logs 02-20Days-Challenge/state
-          git add 02-20Days-Challenge/process_logs 02-20Days-Challenge/state
+          git add 02-20Days-Challenge/process_logs 02-20Days-Challenge/state 02-20Days-Challenge/public
           if git diff --staged --quiet; then
             echo "无新增日志"
           else
-            git commit -m "实测日志 $(date -u +%F) remind ${{ inputs.period }}-${{ inputs.stage }}"
+            git commit -m "实测日志 $(date -u +%F) prebell-remind"
             git pull --rebase origin main
             git push origin HEAD:main
           fi

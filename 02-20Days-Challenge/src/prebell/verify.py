@@ -17,8 +17,10 @@ def load_schedule(path=None):
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def verify_day(root, day, schedule=None):
+def verify_day(root, day, schedule=None, now=None):
+    """now 仅用于单元测试注入模拟时刻；云端一律用真实时间，绝不回填。"""
     schedule = schedule or load_schedule()
+    ref = now or datetime.now(model.CST)
     rows = ledger.read_records(root, day)
     valid_keys = {e["key"] for e in schedule["entries"] if e["date"] == day}
 
@@ -37,7 +39,7 @@ def verify_day(root, day, schedule=None):
     for r in rows:
         try:
             t = datetime.strptime(r.get("ts", "")[:16], "%Y-%m-%d %H:%M").replace(tzinfo=model.CST)
-            if t > datetime.now(model.CST) + timedelta(minutes=1):
+            if t > ref + timedelta(minutes=1):
                 no_future = False
         except ValueError:
             no_future = False

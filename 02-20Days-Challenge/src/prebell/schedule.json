@@ -1,4697 +1,2992 @@
 {
-  "generated_at": "2026-11-14T15:48:58+08:00",
+  "generated_at": "2026-11-14T23:29:06+08:00",
   "plan_from": "2026-09-07",
   "plan_to": "2027-01-10",
-  "based_on": "estimated",
   "anchor": {
     "first_monday": "2026-09-07",
     "status": "estimated",
     "verified": false,
-    "note": "学期第 1 周周一为估算值，未与教务校历核对。"
+    "note": "学期第 1 周周一为估算值，未与教务校历核对。若实际开学周不同，整张日期表整体平移，网页与 .ics 都会跟着错。"
   },
-  "count_per_week": 20,
-  "total_entries": 360,
-  "entries": [
-    {
-      "key": "2026-09-07-P1-depart",
-      "date": "2026-09-07",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-07-P1-enter",
-      "date": "2026-09-07",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-07-P3-depart",
-      "date": "2026-09-07",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-07-P3-enter",
-      "date": "2026-09-07",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-07-P4-depart",
-      "date": "2026-09-07",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-07-P4-enter",
-      "date": "2026-09-07",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-08-P3-depart",
-      "date": "2026-09-08",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-08-P3-enter",
-      "date": "2026-09-08",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-08-P4-depart",
-      "date": "2026-09-08",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-08-P4-enter",
-      "date": "2026-09-08",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-09-P3-depart",
-      "date": "2026-09-09",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-09-P3-enter",
-      "date": "2026-09-09",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-09-P4-depart",
-      "date": "2026-09-09",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-09-P4-enter",
-      "date": "2026-09-09",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-10-P1-depart",
-      "date": "2026-09-10",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-10-P1-enter",
-      "date": "2026-09-10",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-10-P4-depart",
-      "date": "2026-09-10",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-10-P4-enter",
-      "date": "2026-09-10",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-11-P3-depart",
-      "date": "2026-09-11",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-11-P3-enter",
-      "date": "2026-09-11",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P1-depart",
-      "date": "2026-09-14",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P1-enter",
-      "date": "2026-09-14",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P3-depart",
-      "date": "2026-09-14",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P3-enter",
-      "date": "2026-09-14",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P4-depart",
-      "date": "2026-09-14",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-14-P4-enter",
-      "date": "2026-09-14",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-15-P3-depart",
-      "date": "2026-09-15",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-15-P3-enter",
-      "date": "2026-09-15",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-15-P4-depart",
-      "date": "2026-09-15",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-15-P4-enter",
-      "date": "2026-09-15",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-16-P3-depart",
-      "date": "2026-09-16",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-16-P3-enter",
-      "date": "2026-09-16",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-16-P4-depart",
-      "date": "2026-09-16",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-16-P4-enter",
-      "date": "2026-09-16",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-17-P1-depart",
-      "date": "2026-09-17",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-17-P1-enter",
-      "date": "2026-09-17",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-17-P4-depart",
-      "date": "2026-09-17",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-17-P4-enter",
-      "date": "2026-09-17",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-18-P3-depart",
-      "date": "2026-09-18",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-18-P3-enter",
-      "date": "2026-09-18",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P1-depart",
-      "date": "2026-09-21",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P1-enter",
-      "date": "2026-09-21",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P3-depart",
-      "date": "2026-09-21",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P3-enter",
-      "date": "2026-09-21",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P4-depart",
-      "date": "2026-09-21",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-21-P4-enter",
-      "date": "2026-09-21",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-22-P3-depart",
-      "date": "2026-09-22",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-22-P3-enter",
-      "date": "2026-09-22",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-22-P4-depart",
-      "date": "2026-09-22",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-22-P4-enter",
-      "date": "2026-09-22",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-23-P3-depart",
-      "date": "2026-09-23",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-23-P3-enter",
-      "date": "2026-09-23",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-23-P4-depart",
-      "date": "2026-09-23",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-23-P4-enter",
-      "date": "2026-09-23",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-24-P1-depart",
-      "date": "2026-09-24",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-24-P1-enter",
-      "date": "2026-09-24",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-24-P4-depart",
-      "date": "2026-09-24",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-24-P4-enter",
-      "date": "2026-09-24",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-25-P3-depart",
-      "date": "2026-09-25",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-25-P3-enter",
-      "date": "2026-09-25",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P1-depart",
-      "date": "2026-09-28",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P1-enter",
-      "date": "2026-09-28",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P3-depart",
-      "date": "2026-09-28",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P3-enter",
-      "date": "2026-09-28",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P4-depart",
-      "date": "2026-09-28",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-28-P4-enter",
-      "date": "2026-09-28",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-29-P3-depart",
-      "date": "2026-09-29",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-29-P3-enter",
-      "date": "2026-09-29",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-29-P4-depart",
-      "date": "2026-09-29",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-29-P4-enter",
-      "date": "2026-09-29",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-30-P3-depart",
-      "date": "2026-09-30",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-30-P3-enter",
-      "date": "2026-09-30",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-09-30-P4-depart",
-      "date": "2026-09-30",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-09-30-P4-enter",
-      "date": "2026-09-30",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-01-P1-depart",
-      "date": "2026-10-01",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-01-P1-enter",
-      "date": "2026-10-01",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-01-P4-depart",
-      "date": "2026-10-01",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-01-P4-enter",
-      "date": "2026-10-01",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-02-P3-depart",
-      "date": "2026-10-02",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-02-P3-enter",
-      "date": "2026-10-02",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P1-depart",
-      "date": "2026-10-05",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P1-enter",
-      "date": "2026-10-05",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P3-depart",
-      "date": "2026-10-05",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P3-enter",
-      "date": "2026-10-05",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P4-depart",
-      "date": "2026-10-05",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-05-P4-enter",
-      "date": "2026-10-05",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-06-P3-depart",
-      "date": "2026-10-06",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-06-P3-enter",
-      "date": "2026-10-06",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-06-P4-depart",
-      "date": "2026-10-06",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-06-P4-enter",
-      "date": "2026-10-06",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-07-P3-depart",
-      "date": "2026-10-07",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-07-P3-enter",
-      "date": "2026-10-07",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-07-P4-depart",
-      "date": "2026-10-07",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-07-P4-enter",
-      "date": "2026-10-07",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-08-P1-depart",
-      "date": "2026-10-08",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-08-P1-enter",
-      "date": "2026-10-08",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-08-P4-depart",
-      "date": "2026-10-08",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-08-P4-enter",
-      "date": "2026-10-08",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-09-P3-depart",
-      "date": "2026-10-09",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-09-P3-enter",
-      "date": "2026-10-09",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P1-depart",
-      "date": "2026-10-12",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P1-enter",
-      "date": "2026-10-12",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P3-depart",
-      "date": "2026-10-12",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P3-enter",
-      "date": "2026-10-12",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P4-depart",
-      "date": "2026-10-12",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-12-P4-enter",
-      "date": "2026-10-12",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-13-P3-depart",
-      "date": "2026-10-13",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-13-P3-enter",
-      "date": "2026-10-13",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-13-P4-depart",
-      "date": "2026-10-13",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-13-P4-enter",
-      "date": "2026-10-13",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-14-P3-depart",
-      "date": "2026-10-14",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-14-P3-enter",
-      "date": "2026-10-14",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-14-P4-depart",
-      "date": "2026-10-14",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-14-P4-enter",
-      "date": "2026-10-14",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-15-P1-depart",
-      "date": "2026-10-15",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-15-P1-enter",
-      "date": "2026-10-15",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-15-P4-depart",
-      "date": "2026-10-15",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-15-P4-enter",
-      "date": "2026-10-15",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-16-P3-depart",
-      "date": "2026-10-16",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-16-P3-enter",
-      "date": "2026-10-16",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P1-depart",
-      "date": "2026-10-19",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P1-enter",
-      "date": "2026-10-19",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P3-depart",
-      "date": "2026-10-19",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P3-enter",
-      "date": "2026-10-19",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P4-depart",
-      "date": "2026-10-19",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-19-P4-enter",
-      "date": "2026-10-19",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-20-P3-depart",
-      "date": "2026-10-20",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-20-P3-enter",
-      "date": "2026-10-20",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-20-P4-depart",
-      "date": "2026-10-20",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-20-P4-enter",
-      "date": "2026-10-20",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-21-P3-depart",
-      "date": "2026-10-21",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-21-P3-enter",
-      "date": "2026-10-21",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-21-P4-depart",
-      "date": "2026-10-21",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-21-P4-enter",
-      "date": "2026-10-21",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-22-P1-depart",
-      "date": "2026-10-22",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-22-P1-enter",
-      "date": "2026-10-22",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-22-P4-depart",
-      "date": "2026-10-22",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-22-P4-enter",
-      "date": "2026-10-22",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-23-P3-depart",
-      "date": "2026-10-23",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-23-P3-enter",
-      "date": "2026-10-23",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P1-depart",
-      "date": "2026-10-26",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P1-enter",
-      "date": "2026-10-26",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P3-depart",
-      "date": "2026-10-26",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P3-enter",
-      "date": "2026-10-26",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P4-depart",
-      "date": "2026-10-26",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-26-P4-enter",
-      "date": "2026-10-26",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-27-P3-depart",
-      "date": "2026-10-27",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-27-P3-enter",
-      "date": "2026-10-27",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-27-P4-depart",
-      "date": "2026-10-27",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-27-P4-enter",
-      "date": "2026-10-27",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-28-P3-depart",
-      "date": "2026-10-28",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-28-P3-enter",
-      "date": "2026-10-28",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-28-P4-depart",
-      "date": "2026-10-28",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-28-P4-enter",
-      "date": "2026-10-28",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-29-P1-depart",
-      "date": "2026-10-29",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-29-P1-enter",
-      "date": "2026-10-29",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-29-P4-depart",
-      "date": "2026-10-29",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-29-P4-enter",
-      "date": "2026-10-29",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-10-30-P3-depart",
-      "date": "2026-10-30",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-10-30-P3-enter",
-      "date": "2026-10-30",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P1-depart",
-      "date": "2026-11-02",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P1-enter",
-      "date": "2026-11-02",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P3-depart",
-      "date": "2026-11-02",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P3-enter",
-      "date": "2026-11-02",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P4-depart",
-      "date": "2026-11-02",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-02-P4-enter",
-      "date": "2026-11-02",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-03-P3-depart",
-      "date": "2026-11-03",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-03-P3-enter",
-      "date": "2026-11-03",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-03-P4-depart",
-      "date": "2026-11-03",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-03-P4-enter",
-      "date": "2026-11-03",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-04-P3-depart",
-      "date": "2026-11-04",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-04-P3-enter",
-      "date": "2026-11-04",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-04-P4-depart",
-      "date": "2026-11-04",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-04-P4-enter",
-      "date": "2026-11-04",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-05-P1-depart",
-      "date": "2026-11-05",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-05-P1-enter",
-      "date": "2026-11-05",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-05-P4-depart",
-      "date": "2026-11-05",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-05-P4-enter",
-      "date": "2026-11-05",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-06-P3-depart",
-      "date": "2026-11-06",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-06-P3-enter",
-      "date": "2026-11-06",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P1-depart",
-      "date": "2026-11-09",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P1-enter",
-      "date": "2026-11-09",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P3-depart",
-      "date": "2026-11-09",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P3-enter",
-      "date": "2026-11-09",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P4-depart",
-      "date": "2026-11-09",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-09-P4-enter",
-      "date": "2026-11-09",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-10-P3-depart",
-      "date": "2026-11-10",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-10-P3-enter",
-      "date": "2026-11-10",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-10-P4-depart",
-      "date": "2026-11-10",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-10-P4-enter",
-      "date": "2026-11-10",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-11-P3-depart",
-      "date": "2026-11-11",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-11-P3-enter",
-      "date": "2026-11-11",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-11-P4-depart",
-      "date": "2026-11-11",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-11-P4-enter",
-      "date": "2026-11-11",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-12-P1-depart",
-      "date": "2026-11-12",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-12-P1-enter",
-      "date": "2026-11-12",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-12-P4-depart",
-      "date": "2026-11-12",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-12-P4-enter",
-      "date": "2026-11-12",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-13-P3-depart",
-      "date": "2026-11-13",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-13-P3-enter",
-      "date": "2026-11-13",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P1-depart",
-      "date": "2026-11-16",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P1-enter",
-      "date": "2026-11-16",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P3-depart",
-      "date": "2026-11-16",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P3-enter",
-      "date": "2026-11-16",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P4-depart",
-      "date": "2026-11-16",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-16-P4-enter",
-      "date": "2026-11-16",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-17-P3-depart",
-      "date": "2026-11-17",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-17-P3-enter",
-      "date": "2026-11-17",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-17-P4-depart",
-      "date": "2026-11-17",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-17-P4-enter",
-      "date": "2026-11-17",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-18-P3-depart",
-      "date": "2026-11-18",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-18-P3-enter",
-      "date": "2026-11-18",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-18-P4-depart",
-      "date": "2026-11-18",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-18-P4-enter",
-      "date": "2026-11-18",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-19-P1-depart",
-      "date": "2026-11-19",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-19-P1-enter",
-      "date": "2026-11-19",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-19-P4-depart",
-      "date": "2026-11-19",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-19-P4-enter",
-      "date": "2026-11-19",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-20-P3-depart",
-      "date": "2026-11-20",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-20-P3-enter",
-      "date": "2026-11-20",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P1-depart",
-      "date": "2026-11-23",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P1-enter",
-      "date": "2026-11-23",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P3-depart",
-      "date": "2026-11-23",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P3-enter",
-      "date": "2026-11-23",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P4-depart",
-      "date": "2026-11-23",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-23-P4-enter",
-      "date": "2026-11-23",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-24-P3-depart",
-      "date": "2026-11-24",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-24-P3-enter",
-      "date": "2026-11-24",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-24-P4-depart",
-      "date": "2026-11-24",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-24-P4-enter",
-      "date": "2026-11-24",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-25-P3-depart",
-      "date": "2026-11-25",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-25-P3-enter",
-      "date": "2026-11-25",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-25-P4-depart",
-      "date": "2026-11-25",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-25-P4-enter",
-      "date": "2026-11-25",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-26-P1-depart",
-      "date": "2026-11-26",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-26-P1-enter",
-      "date": "2026-11-26",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-26-P4-depart",
-      "date": "2026-11-26",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-26-P4-enter",
-      "date": "2026-11-26",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-27-P3-depart",
-      "date": "2026-11-27",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-27-P3-enter",
-      "date": "2026-11-27",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P1-depart",
-      "date": "2026-11-30",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P1-enter",
-      "date": "2026-11-30",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P3-depart",
-      "date": "2026-11-30",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P3-enter",
-      "date": "2026-11-30",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P4-depart",
-      "date": "2026-11-30",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-11-30-P4-enter",
-      "date": "2026-11-30",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-01-P3-depart",
-      "date": "2026-12-01",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-01-P3-enter",
-      "date": "2026-12-01",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-01-P4-depart",
-      "date": "2026-12-01",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-01-P4-enter",
-      "date": "2026-12-01",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-02-P3-depart",
-      "date": "2026-12-02",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-02-P3-enter",
-      "date": "2026-12-02",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-02-P4-depart",
-      "date": "2026-12-02",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-02-P4-enter",
-      "date": "2026-12-02",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-03-P1-depart",
-      "date": "2026-12-03",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-03-P1-enter",
-      "date": "2026-12-03",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-03-P4-depart",
-      "date": "2026-12-03",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-03-P4-enter",
-      "date": "2026-12-03",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-04-P3-depart",
-      "date": "2026-12-04",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-04-P3-enter",
-      "date": "2026-12-04",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P1-depart",
-      "date": "2026-12-07",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P1-enter",
-      "date": "2026-12-07",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P3-depart",
-      "date": "2026-12-07",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P3-enter",
-      "date": "2026-12-07",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P4-depart",
-      "date": "2026-12-07",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-07-P4-enter",
-      "date": "2026-12-07",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-08-P3-depart",
-      "date": "2026-12-08",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-08-P3-enter",
-      "date": "2026-12-08",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-08-P4-depart",
-      "date": "2026-12-08",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-08-P4-enter",
-      "date": "2026-12-08",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-09-P3-depart",
-      "date": "2026-12-09",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-09-P3-enter",
-      "date": "2026-12-09",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-09-P4-depart",
-      "date": "2026-12-09",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-09-P4-enter",
-      "date": "2026-12-09",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-10-P1-depart",
-      "date": "2026-12-10",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-10-P1-enter",
-      "date": "2026-12-10",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-10-P4-depart",
-      "date": "2026-12-10",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-10-P4-enter",
-      "date": "2026-12-10",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-11-P3-depart",
-      "date": "2026-12-11",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-11-P3-enter",
-      "date": "2026-12-11",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P1-depart",
-      "date": "2026-12-14",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P1-enter",
-      "date": "2026-12-14",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P3-depart",
-      "date": "2026-12-14",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P3-enter",
-      "date": "2026-12-14",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P4-depart",
-      "date": "2026-12-14",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-14-P4-enter",
-      "date": "2026-12-14",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-15-P3-depart",
-      "date": "2026-12-15",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-15-P3-enter",
-      "date": "2026-12-15",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-15-P4-depart",
-      "date": "2026-12-15",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-15-P4-enter",
-      "date": "2026-12-15",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-16-P3-depart",
-      "date": "2026-12-16",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-16-P3-enter",
-      "date": "2026-12-16",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-16-P4-depart",
-      "date": "2026-12-16",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-16-P4-enter",
-      "date": "2026-12-16",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-17-P1-depart",
-      "date": "2026-12-17",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-17-P1-enter",
-      "date": "2026-12-17",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-17-P4-depart",
-      "date": "2026-12-17",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-17-P4-enter",
-      "date": "2026-12-17",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-18-P3-depart",
-      "date": "2026-12-18",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-18-P3-enter",
-      "date": "2026-12-18",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P1-depart",
-      "date": "2026-12-21",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P1-enter",
-      "date": "2026-12-21",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P3-depart",
-      "date": "2026-12-21",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P3-enter",
-      "date": "2026-12-21",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P4-depart",
-      "date": "2026-12-21",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-21-P4-enter",
-      "date": "2026-12-21",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-22-P3-depart",
-      "date": "2026-12-22",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-22-P3-enter",
-      "date": "2026-12-22",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-22-P4-depart",
-      "date": "2026-12-22",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-22-P4-enter",
-      "date": "2026-12-22",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-23-P3-depart",
-      "date": "2026-12-23",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-23-P3-enter",
-      "date": "2026-12-23",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-23-P4-depart",
-      "date": "2026-12-23",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-23-P4-enter",
-      "date": "2026-12-23",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-24-P1-depart",
-      "date": "2026-12-24",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-24-P1-enter",
-      "date": "2026-12-24",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-24-P4-depart",
-      "date": "2026-12-24",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-24-P4-enter",
-      "date": "2026-12-24",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-25-P3-depart",
-      "date": "2026-12-25",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-25-P3-enter",
-      "date": "2026-12-25",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P1-depart",
-      "date": "2026-12-28",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P1-enter",
-      "date": "2026-12-28",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P3-depart",
-      "date": "2026-12-28",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P3-enter",
-      "date": "2026-12-28",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P4-depart",
-      "date": "2026-12-28",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-28-P4-enter",
-      "date": "2026-12-28",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-29-P3-depart",
-      "date": "2026-12-29",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-29-P3-enter",
-      "date": "2026-12-29",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-29-P4-depart",
-      "date": "2026-12-29",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-29-P4-enter",
-      "date": "2026-12-29",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-30-P3-depart",
-      "date": "2026-12-30",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-30-P3-enter",
-      "date": "2026-12-30",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-30-P4-depart",
-      "date": "2026-12-30",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-30-P4-enter",
-      "date": "2026-12-30",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-31-P1-depart",
-      "date": "2026-12-31",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-31-P1-enter",
-      "date": "2026-12-31",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2026-12-31-P4-depart",
-      "date": "2026-12-31",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2026-12-31-P4-enter",
-      "date": "2026-12-31",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-01-P3-depart",
-      "date": "2027-01-01",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-01-P3-enter",
-      "date": "2027-01-01",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P1-depart",
-      "date": "2027-01-04",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P1-enter",
-      "date": "2027-01-04",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P3-depart",
-      "date": "2027-01-04",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P3-enter",
-      "date": "2027-01-04",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P4-depart",
-      "date": "2027-01-04",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 1,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-04-P4-enter",
-      "date": "2027-01-04",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 1,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-05-P3-depart",
-      "date": "2027-01-05",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-05-P3-enter",
-      "date": "2027-01-05",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-05-P4-depart",
-      "date": "2027-01-05",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 2,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-05-P4-enter",
-      "date": "2027-01-05",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 2,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-06-P3-depart",
-      "date": "2027-01-06",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-06-P3-enter",
-      "date": "2027-01-06",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-06-P4-depart",
-      "date": "2027-01-06",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 3,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-06-P4-enter",
-      "date": "2027-01-06",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 3,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-07-P1-depart",
-      "date": "2027-01-07",
-      "period": "P1",
-      "stage": "depart",
-      "class_start": "08:40",
-      "fire_at": "08:10",
-      "fire_utc": "00:10",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-07-P1-enter",
-      "date": "2027-01-07",
-      "period": "P1",
-      "stage": "enter",
-      "class_start": "08:40",
-      "fire_at": "08:35",
-      "fire_utc": "00:35",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-07-P4-depart",
-      "date": "2027-01-07",
-      "period": "P4",
-      "stage": "depart",
-      "class_start": "15:10",
-      "fire_at": "14:40",
-      "fire_utc": "06:40",
-      "dow": 4,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-07-P4-enter",
-      "date": "2027-01-07",
-      "period": "P4",
-      "stage": "enter",
-      "class_start": "15:10",
-      "fire_at": "15:05",
-      "fire_utc": "07:05",
-      "dow": 4,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
-    },
-    {
-      "key": "2027-01-08-P3-depart",
-      "date": "2027-01-08",
-      "period": "P3",
-      "stage": "depart",
-      "class_start": "13:30",
-      "fire_at": "13:00",
-      "fire_utc": "05:00",
-      "dow": 5,
-      "minutes_before": 30,
-      "message_key": "depart",
-      "course": null
-    },
-    {
-      "key": "2027-01-08-P3-enter",
-      "date": "2027-01-08",
-      "period": "P3",
-      "stage": "enter",
-      "class_start": "13:30",
-      "fire_at": "13:25",
-      "fire_utc": "05:25",
-      "dow": 5,
-      "minutes_before": 5,
-      "message_key": "enter",
-      "course": null
+  "anchor_verified": false,
+  "proofread": false,
+  "minutes_before": 20,
+  "periods": [
+    {
+      "id": "P1",
+      "label": "第一大节",
+      "start": "08:40",
+      "end": "10:00",
+      "sessions": "第1-2节",
+      "remind_at": "08:20"
+    },
+    {
+      "id": "P2",
+      "label": "第二大节",
+      "start": "10:20",
+      "end": "11:40",
+      "sessions": "第3-4节",
+      "remind_at": "10:00"
+    },
+    {
+      "id": "P3",
+      "label": "第三大节",
+      "start": "13:30",
+      "end": "14:50",
+      "sessions": "第5-6节",
+      "remind_at": "13:10"
+    },
+    {
+      "id": "P4",
+      "label": "第四大节",
+      "start": "15:10",
+      "end": "16:30",
+      "sessions": "第7-8节",
+      "remind_at": "14:50"
     }
   ],
-  "limits_note": "上课时刻源自估算锚点；无单双周/调休支持；9/10 课表格未核对，课程名一律显示「课程（课表未核对）」。"
+  "total_entries": 140,
+  "entries": [
+    {
+      "key": "2026-09-21-P1",
+      "date": "2026-09-21",
+      "week": 3,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-09-21-P3",
+      "date": "2026-09-21",
+      "week": 3,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-21-P4",
+      "date": "2026-09-21",
+      "week": 3,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-22-P3",
+      "date": "2026-09-22",
+      "week": 3,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-22-P4",
+      "date": "2026-09-22",
+      "week": 3,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-23-P3",
+      "date": "2026-09-23",
+      "week": 3,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-23-P4",
+      "date": "2026-09-23",
+      "week": 3,
+      "weekday": 3,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "room": "教学楼917",
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-24-P2",
+      "date": "2026-09-24",
+      "week": 3,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "实训",
+          "weeks_raw": "3周,17周,18周(实训)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-24-P4",
+      "date": "2026-09-24",
+      "week": 3,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-25-P2",
+      "date": "2026-09-25",
+      "week": 3,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-25-P3",
+      "date": "2026-09-25",
+      "week": 3,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-28-P1",
+      "date": "2026-09-28",
+      "week": 4,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-09-28-P3",
+      "date": "2026-09-28",
+      "week": 4,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-28-P4",
+      "date": "2026-09-28",
+      "week": 4,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-29-P3",
+      "date": "2026-09-29",
+      "week": 4,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-29-P4",
+      "date": "2026-09-29",
+      "week": 4,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-09-30-P3",
+      "date": "2026-09-30",
+      "week": 4,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-01-P2",
+      "date": "2026-10-01",
+      "week": 4,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-01-P4",
+      "date": "2026-10-01",
+      "week": 4,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-02-P2",
+      "date": "2026-10-02",
+      "week": 4,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-02-P3",
+      "date": "2026-10-02",
+      "week": 4,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-05-P1",
+      "date": "2026-10-05",
+      "week": 5,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-10-05-P3",
+      "date": "2026-10-05",
+      "week": 5,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-05-P4",
+      "date": "2026-10-05",
+      "week": 5,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-06-P3",
+      "date": "2026-10-06",
+      "week": 5,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-06-P4",
+      "date": "2026-10-06",
+      "week": 5,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-07-P3",
+      "date": "2026-10-07",
+      "week": 5,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-08-P2",
+      "date": "2026-10-08",
+      "week": 5,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-08-P4",
+      "date": "2026-10-08",
+      "week": 5,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-09-P2",
+      "date": "2026-10-09",
+      "week": 5,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-09-P3",
+      "date": "2026-10-09",
+      "week": 5,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-12-P1",
+      "date": "2026-10-12",
+      "week": 6,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-10-12-P3",
+      "date": "2026-10-12",
+      "week": 6,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-12-P4",
+      "date": "2026-10-12",
+      "week": 6,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-13-P3",
+      "date": "2026-10-13",
+      "week": 6,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-13-P4",
+      "date": "2026-10-13",
+      "week": 6,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-14-P3",
+      "date": "2026-10-14",
+      "week": 6,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-14-P4",
+      "date": "2026-10-14",
+      "week": 6,
+      "weekday": 3,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "room": "教学楼917",
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-15-P2",
+      "date": "2026-10-15",
+      "week": 6,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-15-P4",
+      "date": "2026-10-15",
+      "week": 6,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-16-P2",
+      "date": "2026-10-16",
+      "week": 6,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-16-P3",
+      "date": "2026-10-16",
+      "week": 6,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-19-P1",
+      "date": "2026-10-19",
+      "week": 7,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-10-19-P3",
+      "date": "2026-10-19",
+      "week": 7,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-19-P4",
+      "date": "2026-10-19",
+      "week": 7,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-20-P3",
+      "date": "2026-10-20",
+      "week": 7,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-20-P4",
+      "date": "2026-10-20",
+      "week": 7,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-21-P3",
+      "date": "2026-10-21",
+      "week": 7,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-22-P2",
+      "date": "2026-10-22",
+      "week": 7,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-22-P4",
+      "date": "2026-10-22",
+      "week": 7,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-23-P2",
+      "date": "2026-10-23",
+      "week": 7,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-23-P3",
+      "date": "2026-10-23",
+      "week": 7,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-26-P1",
+      "date": "2026-10-26",
+      "week": 8,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-10-26-P3",
+      "date": "2026-10-26",
+      "week": 8,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-26-P4",
+      "date": "2026-10-26",
+      "week": 8,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-27-P3",
+      "date": "2026-10-27",
+      "week": 8,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-27-P4",
+      "date": "2026-10-27",
+      "week": 8,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-28-P3",
+      "date": "2026-10-28",
+      "week": 8,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-29-P2",
+      "date": "2026-10-29",
+      "week": 8,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "形势与政策1.03",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "8-9周,11周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-29-P4",
+      "date": "2026-10-29",
+      "week": 8,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-30-P2",
+      "date": "2026-10-30",
+      "week": 8,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-10-30-P3",
+      "date": "2026-10-30",
+      "week": 8,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-02-P1",
+      "date": "2026-11-02",
+      "week": 9,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-11-02-P3",
+      "date": "2026-11-02",
+      "week": 9,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-02-P4",
+      "date": "2026-11-02",
+      "week": 9,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-03-P3",
+      "date": "2026-11-03",
+      "week": 9,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-03-P4",
+      "date": "2026-11-03",
+      "week": 9,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-04-P3",
+      "date": "2026-11-04",
+      "week": 9,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-04-P4",
+      "date": "2026-11-04",
+      "week": 9,
+      "weekday": 3,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "room": "教学楼917",
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-05-P2",
+      "date": "2026-11-05",
+      "week": 9,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "形势与政策1.03",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "8-9周,11周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-05-P4",
+      "date": "2026-11-05",
+      "week": 9,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-06-P2",
+      "date": "2026-11-06",
+      "week": 9,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-06-P3",
+      "date": "2026-11-06",
+      "week": 9,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-09-P1",
+      "date": "2026-11-09",
+      "week": 10,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-11-09-P3",
+      "date": "2026-11-09",
+      "week": 10,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-09-P4",
+      "date": "2026-11-09",
+      "week": 10,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-10-P3",
+      "date": "2026-11-10",
+      "week": 10,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-10-P4",
+      "date": "2026-11-10",
+      "week": 10,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-11-P3",
+      "date": "2026-11-11",
+      "week": 10,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-12-P2",
+      "date": "2026-11-12",
+      "week": 10,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "形势与政策1.03",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "10周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-12-P4",
+      "date": "2026-11-12",
+      "week": 10,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-13-P2",
+      "date": "2026-11-13",
+      "week": 10,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-13-P3",
+      "date": "2026-11-13",
+      "week": 10,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-16-P1",
+      "date": "2026-11-16",
+      "week": 11,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-11-16-P3",
+      "date": "2026-11-16",
+      "week": 11,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-16-P4",
+      "date": "2026-11-16",
+      "week": 11,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-17-P3",
+      "date": "2026-11-17",
+      "week": 11,
+      "weekday": 2,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "room": "教学楼734",
+          "form": "混合",
+          "weeks_raw": "3-11周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-17-P4",
+      "date": "2026-11-17",
+      "week": 11,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-18-P3",
+      "date": "2026-11-18",
+      "week": 11,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-19-P2",
+      "date": "2026-11-19",
+      "week": 11,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "形势与政策1.03",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "8-9周,11周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-19-P4",
+      "date": "2026-11-19",
+      "week": 11,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-20-P2",
+      "date": "2026-11-20",
+      "week": 11,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-20-P3",
+      "date": "2026-11-20",
+      "week": 11,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-23-P1",
+      "date": "2026-11-23",
+      "week": 12,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-11-23-P3",
+      "date": "2026-11-23",
+      "week": 12,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-23-P4",
+      "date": "2026-11-23",
+      "week": 12,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-24-P4",
+      "date": "2026-11-24",
+      "week": 12,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-25-P3",
+      "date": "2026-11-25",
+      "week": 12,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-25-P4",
+      "date": "2026-11-25",
+      "week": 12,
+      "weekday": 3,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "room": "教学楼917",
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-26-P2",
+      "date": "2026-11-26",
+      "week": 12,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-26-P4",
+      "date": "2026-11-26",
+      "week": 12,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-27-P2",
+      "date": "2026-11-27",
+      "week": 12,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-27-P3",
+      "date": "2026-11-27",
+      "week": 12,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-30-P1",
+      "date": "2026-11-30",
+      "week": 13,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-11-30-P3",
+      "date": "2026-11-30",
+      "week": 13,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-11-30-P4",
+      "date": "2026-11-30",
+      "week": 13,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-01-P4",
+      "date": "2026-12-01",
+      "week": 13,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-02-P3",
+      "date": "2026-12-02",
+      "week": 13,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-03-P2",
+      "date": "2026-12-03",
+      "week": 13,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-03-P4",
+      "date": "2026-12-03",
+      "week": 13,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-04-P2",
+      "date": "2026-12-04",
+      "week": 13,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-04-P3",
+      "date": "2026-12-04",
+      "week": 13,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-21-P1",
+      "date": "2026-12-21",
+      "week": 16,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-12-21-P3",
+      "date": "2026-12-21",
+      "week": 16,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-21-P4",
+      "date": "2026-12-21",
+      "week": 16,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-22-P4",
+      "date": "2026-12-22",
+      "week": 16,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-23-P3",
+      "date": "2026-12-23",
+      "week": 16,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-24-P2",
+      "date": "2026-12-24",
+      "week": 16,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "讲课",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-24-P4",
+      "date": "2026-12-24",
+      "week": 16,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-25-P2",
+      "date": "2026-12-25",
+      "week": 16,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-25-P3",
+      "date": "2026-12-25",
+      "week": 16,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-28-P1",
+      "date": "2026-12-28",
+      "week": 17,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2026-12-28-P3",
+      "date": "2026-12-28",
+      "week": 17,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-28-P4",
+      "date": "2026-12-28",
+      "week": 17,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "讲课",
+          "weeks_raw": "3周,8-11周,17周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-29-P4",
+      "date": "2026-12-29",
+      "week": 17,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-30-P3",
+      "date": "2026-12-30",
+      "week": 17,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-30-P4",
+      "date": "2026-12-30",
+      "week": 17,
+      "weekday": 3,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "room": "教学楼917",
+          "form": "实践",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-31-P2",
+      "date": "2026-12-31",
+      "week": 17,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "实训",
+          "weeks_raw": "3周,17周,18周(实训)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2026-12-31-P4",
+      "date": "2026-12-31",
+      "week": 17,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-01-P2",
+      "date": "2027-01-01",
+      "week": 17,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-01-P3",
+      "date": "2027-01-01",
+      "week": 17,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-04-P1",
+      "date": "2027-01-04",
+      "week": 18,
+      "weekday": 1,
+      "period": "P1",
+      "period_label": "第一大节",
+      "class_start": "08:40",
+      "class_end": "11:40",
+      "remind_at": "08:20",
+      "fire_utc": "00:20",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "room": "天工楼361",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+    },
+    {
+      "key": "2027-01-04-P3",
+      "date": "2027-01-04",
+      "week": 18,
+      "weekday": 1,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-04-P4",
+      "date": "2027-01-04",
+      "week": 18,
+      "weekday": 1,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东601",
+          "form": "实训",
+          "weeks_raw": "18周(实训)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-05-P4",
+      "date": "2027-01-05",
+      "week": 18,
+      "weekday": 2,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-06-P3",
+      "date": "2027-01-06",
+      "week": 18,
+      "weekday": 3,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "room": "天工楼375",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-07-P2",
+      "date": "2027-01-07",
+      "week": 18,
+      "weekday": 4,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "room": "教学楼东701",
+          "form": "实训",
+          "weeks_raw": "3周,17周,18周(实训)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-07-P4",
+      "date": "2027-01-07",
+      "week": 18,
+      "weekday": 4,
+      "period": "P4",
+      "period_label": "第四大节",
+      "class_start": "15:10",
+      "class_end": "16:30",
+      "remind_at": "14:50",
+      "fire_utc": "06:50",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "room": "教学楼621",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-08-P2",
+      "date": "2027-01-08",
+      "week": 18,
+      "weekday": 5,
+      "period": "P2",
+      "period_label": "第二大节",
+      "class_start": "10:20",
+      "class_end": "11:40",
+      "remind_at": "10:00",
+      "fire_utc": "02:00",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "room": "教学楼525",
+          "form": "讲课",
+          "weeks_raw": "3-13周,16-18周(讲课)"
+        }
+      ],
+      "span_note": null
+    },
+    {
+      "key": "2027-01-08-P3",
+      "date": "2027-01-08",
+      "week": 18,
+      "weekday": 5,
+      "period": "P3",
+      "period_label": "第三大节",
+      "class_start": "13:30",
+      "class_end": "14:50",
+      "remind_at": "13:10",
+      "fire_utc": "05:10",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "room": "文体中心204",
+          "form": "混合",
+          "weeks_raw": "3-13周,16-18周(混合)"
+        }
+      ],
+      "span_note": null
+    }
+  ],
+  "limits_note": "第 1 周周一为估算值；不支持单双周与调休。课程名/周次/教室来自截图逐格转录，教师姓名不参与展示。"
 }

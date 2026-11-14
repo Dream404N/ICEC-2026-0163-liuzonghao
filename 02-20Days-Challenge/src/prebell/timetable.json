@@ -1,36 +1,230 @@
 {
   "meta": {
+    "title": "2026-2027 学年 1 学期 2026 智能机器人技术 C3 课表",
+    "source": "src/timetable-source.png（使用者通过微信发来的 Excel 截图）",
+    "transcription": "2026-11-14 依据原图 3 倍放大后逐格重读。课程名、周次、教室为主要依据；教师姓名为形近字辨读，置信度低，故不出现在推送与网页中。",
+    "transcribed_at": "2026-11-14",
+    "term_weeks": 18,
     "proofread": false,
-    "source_note": "照录仓库既有课表初稿，未与教务校历核对。所有由本表推导出的日期与周次均为估算，核对前不得当作真实提醒使用。"
+    "proofread_note": "本版已补齐 11-13 初稿标 unclear 的教室与周次，并补回被漏掉的周五第二大节。仍需使用者对照原图确认两处：周四第二大节一格内多门课的周次归属，以及第一周周一是否为 2026-09-07。",
+    "week_offset_note": "第 14、15 周全校课程普遍不排（常规课均为 3-13周,16-18周），与周四第二大节拼合后的空档一致，可作为锚点自洽性的旁证。"
   },
   "anchor": {
     "first_monday": "2026-09-07",
     "status": "estimated",
     "verified": false,
-    "note": "学期第 1 周周一为估算值，未与教务校历核对。"
+    "note": "学期第 1 周周一为估算值，未与教务校历核对。若实际开学周不同，整张日期表整体平移，网页与 .ics 都会跟着错。"
   },
   "periods": [
-    {"id": "P1", "label": "第一大节", "start": "08:40"},
-    {"id": "P2", "label": "第二大节", "start": "10:20", "note": "无独立课表格子；周一为跨行合并单元格（span=2）。本程序不为 P2 生成提醒。"},
-    {"id": "P3", "label": "第三大节", "start": "13:30"},
-    {"id": "P4", "label": "第四大节", "start": "15:10"}
+    {"id": "P1", "label": "第一大节", "start": "08:40", "end": "10:00", "sessions": "第1-2节", "remind_at": "08:20"},
+    {"id": "P2", "label": "第二大节", "start": "10:20", "end": "11:40", "sessions": "第3-4节", "remind_at": "10:00"},
+    {"id": "P3", "label": "第三大节", "start": "13:30", "end": "14:50", "sessions": "第5-6节", "remind_at": "13:10"},
+    {"id": "P4", "label": "第四大节", "start": "15:10", "end": "16:30", "sessions": "第7-8节", "remind_at": "14:50"}
   ],
-  "has_class_days": {
-    "P1": [1, 4],
-    "P3": [1, 2, 3, 5],
-    "P4": [1, 2, 3, 4],
-    "verified": false,
-    "note": "沿用既有课表初稿口径，未核对；数字为 ISO 星期（1=周一）。"
-  },
+  "cells": [
+    {
+      "id": "mon-p1",
+      "weekday": 1,
+      "period": "P1",
+      "courses": [
+        {
+          "name": "机械制图与计算机辅助设计02",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "room": "天工楼361",
+          "teacher_low_confidence": "彭灵勇",
+          "span": "第1节-第4节连堂（08:40-11:40），横跨第一、第二大节；只在 08:20 提醒一次"
+        }
+      ]
+    },
+    {
+      "id": "thu-p2",
+      "weekday": 4,
+      "period": "P2",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "weeks_raw": "3周,17周,18周(实训)",
+          "form": "实训",
+          "room": "教学楼东701",
+          "teacher_low_confidence": "张蓉香"
+        },
+        {
+          "name": "思想道德与法治36",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "form": "讲课",
+          "room": "教学楼东701",
+          "teacher_low_confidence": "张蓉香"
+        },
+        {
+          "name": "形势与政策1.03",
+          "weeks_raw": "8-9周,11周(讲课)",
+          "form": "讲课",
+          "room": "教学楼东701",
+          "teacher_low_confidence": "张蓉香"
+        },
+        {
+          "name": "形势与政策1.03",
+          "weeks_raw": "10周(讲课)",
+          "form": "讲课",
+          "room": "教学楼东701",
+          "teacher_low_confidence": "文育松"
+        }
+      ],
+      "note": "截图同一格内叠了多门课与多段周次，已按可辨认的周次切分；14、15 周无课。此格归属最需要人工复核。"
+    },
+    {
+      "id": "fri-p2",
+      "weekday": 5,
+      "period": "P2",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "room": "教学楼525",
+          "teacher_low_confidence": "汪志忠"
+        }
+      ],
+      "note": "11-13 初稿把这一格漏了，误判为「第二大节整学期无课」。放大图可见『第3节-第4节 教学楼525』。"
+    },
+    {
+      "id": "mon-p3",
+      "weekday": 1,
+      "period": "P3",
+      "courses": [
+        {
+          "name": "工程数学11",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "room": "教学楼525",
+          "teacher_low_confidence": "汪志忠"
+        }
+      ]
+    },
+    {
+      "id": "tue-p3",
+      "weekday": 2,
+      "period": "P3",
+      "courses": [
+        {
+          "name": "职业生涯规划04",
+          "weeks_raw": "3-11周(混合)",
+          "form": "混合",
+          "room": "教学楼734",
+          "teacher_low_confidence": "何红梅"
+        }
+      ]
+    },
+    {
+      "id": "wed-p3",
+      "weekday": 3,
+      "period": "P3",
+      "courses": [
+        {
+          "name": "智能制造与数字化认知02",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "room": "天工楼375",
+          "teacher_low_confidence": "何碧印"
+        }
+      ]
+    },
+    {
+      "id": "fri-p3",
+      "weekday": 5,
+      "period": "P3",
+      "courses": [
+        {
+          "name": "体育1 38",
+          "weeks_raw": "3-13周,16-18周(混合)",
+          "form": "混合",
+          "room": "文体中心204",
+          "teacher_low_confidence": "高士君"
+        }
+      ]
+    },
+    {
+      "id": "mon-p4",
+      "weekday": 1,
+      "period": "P4",
+      "courses": [
+        {
+          "name": "思想道德与法治36",
+          "weeks_raw": "3周,8-11周,17周(讲课)",
+          "form": "讲课",
+          "room": "教学楼东601",
+          "teacher_low_confidence": "张蓉香"
+        },
+        {
+          "name": "思想道德与法治36",
+          "weeks_raw": "18周(实训)",
+          "form": "实训",
+          "room": "教学楼东601",
+          "teacher_low_confidence": "张蓉香"
+        },
+        {
+          "name": "思想道德与法治36",
+          "weeks_raw": "4-7周,12-13周,16周(讲课)",
+          "form": "讲课",
+          "room": "教学楼东601",
+          "teacher_low_confidence": "张蓉香"
+        }
+      ]
+    },
+    {
+      "id": "tue-p4",
+      "weekday": 2,
+      "period": "P4",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "room": "教学楼621",
+          "teacher_low_confidence": "刘建峰"
+        }
+      ]
+    },
+    {
+      "id": "wed-p4",
+      "weekday": 3,
+      "period": "P4",
+      "courses": [
+        {
+          "name": "大学生心理健康教育06",
+          "weeks_raw": "3周,6周,9周,12周,17周(实践)",
+          "form": "实践",
+          "room": "教学楼917",
+          "teacher_low_confidence": "邓元元"
+        }
+      ]
+    },
+    {
+      "id": "thu-p4",
+      "weekday": 4,
+      "period": "P4",
+      "courses": [
+        {
+          "name": "大学英语1 18",
+          "weeks_raw": "3-13周,16-18周(讲课)",
+          "form": "讲课",
+          "room": "教学楼621",
+          "teacher_low_confidence": "刘建峰"
+        }
+      ],
+      "note": "11-13 初稿此格周次不可辨认；放大图可辨为 3-13周,16-18周(讲课)。"
+    }
+  ],
+  "empty_cells": [
+    "周二 P1/P2", "周三 P1/P2", "周四 P1", "周四 P3", "周五 P1", "周五 P4"
+  ],
   "review": {
     "status": "unverified",
-    "total_cells": 10,
-    "unclear_cells": 9,
-    "pending_cells": 6
-  },
-  "limits": {
-    "single_double_week": false,
-    "makeup_swap": false,
-    "note": "不支持单双周与调休；如与校历不符，需人工核对后重跑 planner.py。"
+    "pending": [
+      "第一周周一是否为 2026-09-07（决定整张日期表）",
+      "周四第二大节一格多课的周次归属",
+      "教师姓名（不参与推送，仅作档案）"
+    ]
   }
 }

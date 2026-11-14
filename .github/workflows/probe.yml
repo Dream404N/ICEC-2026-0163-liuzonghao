@@ -1,10 +1,11 @@
 name: campus-radar-probe
 
 on:
-  # 每 3 小时一轮，刻意放在第 17 分钟避开整点排队高峰。
-  # 学校公告一天通常只更新 1~2 条，30 分钟一轮只会刷出大量「无变化」。
-  schedule:
-    - cron: '17 */3 * * *'
+  # 2026-11-14 停用定时：这是已被否掉的「校园节点雷达」，继续每 3 小时跑
+  # 只会往 process_logs/ 里写废弃程序的记录，污染 PreBell 的 7 天溯源。
+  # 文件与历史日志保留作过程证据，需要时仍可手动触发查看。
+  # schedule:
+  #   - cron: '17 */3 * * *'
   workflow_dispatch:
 
 permissions:

@@ -1,5 +1,10 @@
 # 部署与运行手册
 
+> ⚠ **本文已作废（2026-11-14）**：属于 2.0 版（企业微信群机器人 / WxPusher 主备双通道、
+> 6 个外部 cron job、30/5 分双时点、每天 6 条）。3.0 版只需一个 `PREBELL_SENDKEY`，
+> 定时直接在 GitHub Actions，无需注册第三方网站或造 PAT。
+> 当前口径见 `docs/prebell/README.md` 与 `02-20Days-Challenge/README.md`。本文保留作过程证据。
+
 ## 1. 目录与 protected 边界
 
 ```

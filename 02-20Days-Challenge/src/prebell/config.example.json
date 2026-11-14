@@ -2,19 +2,16 @@
   "tz_offset_hours": 8,
   "plan_from": "2026-09-07",
   "plan_to": "2027-01-10",
-  "stages": {
-    "depart": {"minutes_before": 30, "late_tolerance_min": 10},
-    "enter": {"minutes_before": 5, "late_tolerance_min": 3}
-  },
+  "minutes_before": 20,
+  "late_tolerance_min": 15,
   "hard_stop_at_class_start": true,
+  "max_push_per_day": 4,
   "backfill": false,
-  "max_push_per_day": 6,
-  "channel": "primary",
-  "fallback_channel_enabled": true,
-  "primary": {"type": "serverchan_turbo", "env_var": "PREBELL_SENDKEY"},
-  "fallback": {"type": "wxpusher_spt", "env_var": "PREBELL_WXPUSHER_SPT"},
+  "channel": "serverchan_turbo",
+  "env_var": "PREBELL_SENDKEY",
   "timeout_sec": 10,
-  "quota_note": "max_push_per_day=6 是程序自身上限。主通道 Server酱 Turbo 免费 5 条/天（官方 FAQ），周一 6 条会差 1 条，由备用 WxPusher SPT（免费、同为 1:1 个人通知）兜住；两条都不是群消息。若订阅 Server酱（8 元/1 月或 39 元/12 月，1000 条/天），可把 fallback_channel_enabled 设为 false，6 条全走微信服务号。第三方额度以官方页为准，实际发送与报错一律记入 process_logs/。",
-  "secret_note": "SendKey 与 SPT 只放 GitHub Actions Secrets，绝不写入本文件或任何仓库文件；两者一旦泄漏，他人都能给你发消息。",
-  "scope_note": "本程序只做 1:1 个人通知，默认不往群推送；不读取微信本地数据库、聊天记录或群消息，不逆向、不登录微信客户端。如需覆盖本地配置，请复制为 config.json（已被 .gitignore 排除）。"
+  "quota_note": "Server酱 Turbo 免费 5 条/天（官方 FAQ，以官方页为准）。本程序一天最多推 4 条（四个大节各至多一条），留 1 条余量给手工测试；同一大节多门课合并成一条，本周无课不推。",
+  "secret_note": "SendKey 只放 GitHub Actions Secrets，绝不写入本文件或任何仓库文件；泄漏后他人能给你发消息。本机调试时用环境变量临时传入。",
+  "scope_note": "只做 1:1 个人微信通知；不读取微信本地数据库、聊天记录、群消息，不逆向、不登录微信客户端。如需本机覆盖配置，复制为 config.json（已被 .gitignore 排除）。",
+  "reliability_note": "GitHub Actions 的 cron 高峰期可能排队延迟。迟到 ≤15 分钟照发并如实标注，超过则记 skipped_late 不发；微信提醒是增强，真正不会漏的是 public/prebell.ics —— 导入手机日历后由手机本地提醒，不依赖任何服务器。"
 }

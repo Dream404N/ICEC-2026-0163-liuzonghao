@@ -1,10 +1,10 @@
-"""纯标准库自检：不联网、不推送、不写 protected 目录（全部用临时目录）。"""
+"""纯标准库自检：不联网、不真推送、不写 protected 目录（全部用临时目录）。"""
 import json
 import os
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timedelta
+from datetime import timedelta
 from pathlib import Path
 from unittest import mock
 
@@ -14,16 +14,16 @@ from prebell import channels, ledger, model, notifier, planner, state as state_s
 from prebell import run as runner
 
 HERE = Path(__file__).resolve().parents[1]  # src/prebell/
+DAY = "2026-11-16"  # 第 11 周周一，三大节都有课
 
 
 class PrebellTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        self.day = datetime.now(model.CST).date().isoformat()
         self.config = json.loads((HERE / "config.example.json").read_text(encoding="utf-8"))
         self.messages = notifier.load_messages()
-        self.schedule = self._schedule(self.day)
+        self.schedule = planner.build()
         self.calls = []
 
         def fake_sender(title, content):
@@ -36,179 +36,192 @@ class PrebellTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def _schedule(self, day):
-        starts = {"P1": "08:40", "P3": "13:30", "P4": "15:10"}
-        entries = []
-        for period in model.PERIODS:
-            for stage in model.STAGES:
-                mb = self.config["stages"][stage]["minutes_before"]
-                fire = model.fire_at_of(starts[period], mb)
-                entries.append({
-                    "key": model.make_key(day, period, stage), "date": day,
-                    "period": period, "stage": stage, "class_start": starts[period],
-                    "fire_at": fire, "course": None,
-                })
-        return {"entries": entries}
+    def entries_of(self, day=DAY):
+        return [e for e in self.schedule["entries"] if e["date"] == day]
 
-    def _now(self, entry, extra_seconds=9):
-        return model.utc_datetime(entry["date"], entry["fire_at"]) + timedelta(seconds=extra_seconds)
+    def now_at(self, entry, extra_seconds=9):
+        return model.utc_datetime(entry["date"], entry["remind_at"]) + timedelta(seconds=extra_seconds)
 
-    def _call(self, entry, now=None, sender=None):
+    def call(self, entry, now=None, sender=None):
         return runner.run_once(
             root=self.root, day=entry["date"], period=entry["period"],
-            stage=entry["stage"], source="test",
-            now_utc=now or self._now(entry), config=self.config,
-            schedule=self.schedule, sender=sender or self.sender,
-            messages=self.messages,
+            source="test", now_utc=now or self.now_at(entry),
+            config=self.config, schedule=self.schedule,
+            sender=sender or self.sender, messages=self.messages,
         )
 
-    def test_key_triplet(self):
-        a = model.make_key("2026-11-16", "P1", "depart")
-        b = model.make_key("2026-11-16", "P1", "enter")
-        self.assertEqual(a, "2026-11-16-P1-depart")
-        self.assertNotEqual(a, b)
+    # ---- 课表数据 ----
+    def test_week_expressions(self):
+        self.assertEqual(model.parse_weeks("3-13周,16-18周(混合)"),
+                         list(range(3, 14)) + [16, 17, 18])
+        self.assertEqual(model.parse_weeks("3周,6周,9周,12周,17周(实践)"),
+                         [3, 6, 9, 12, 17])
+        self.assertEqual(model.parse_weeks("4-7周,12-13周,16周(讲课)"),
+                         [4, 5, 6, 7, 12, 13, 16])
+        self.assertEqual(model.parse_weeks("18周(实训)"), [18])
         with self.assertRaises(ValueError):
-            model.make_key("2026-11-16", "P1", "unknown")
+            model.parse_weeks("3-13周,看不清")
 
-    def test_fire_times(self):
-        self.assertEqual(model.fire_at_of("08:40", 30), "08:10")
-        self.assertEqual(model.fire_at_of("08:40", 5), "08:35")
-        self.assertEqual(model.fire_at_of("15:10", 5), "15:05")
-        self.assertEqual(model.utc_datetime("2026-11-16", "15:05").strftime("%H:%M"), "07:05")
+    def test_week_index(self):
+        self.assertEqual(model.week_index("2026-11-16", "2026-09-07"), 11)
+        self.assertEqual(model.week_index("2026-09-07", "2026-09-07"), 1)
 
-    def test_planner_build(self):
-        data = planner.build()
+    def test_schedule_has_real_courses(self):
+        data = self.schedule
         keys = [e["key"] for e in data["entries"]]
-        self.assertEqual(len(keys), len(set(keys)))
-        self.assertEqual(data["count_per_week"], 20)
-        self.assertEqual(data["based_on"], "estimated")
-        pairs = {}
+        self.assertEqual(len(keys), len(set(keys)), "唯一键重复")
+        self.assertTrue(data["entries"])
         for e in data["entries"]:
-            pairs.setdefault((e["date"], e["period"]), set()).add(e["stage"])
-        self.assertTrue(all(v == set(model.STAGES) for v in pairs.values()))
+            self.assertTrue(e["courses"], "%s 是空壳提醒" % e["key"])
+            for c in e["courses"]:
+                self.assertTrue(c.get("name"), "%s 缺课程名" % e["key"])
+                self.assertTrue(c.get("room"), "%s 缺教室" % e["key"])
+            self.assertTrue(1 <= e["week"] <= 18)
 
-    def test_templates_hit_keywords(self):
-        _, depart = notifier.render("depart", self.schedule["entries"][0], self.messages)
-        _, enter = notifier.render("enter", self.schedule["entries"][1], self.messages)
-        self.assertIn("准备好东西", depart)
-        self.assertIn("可以出发", depart)
-        self.assertIn("进入教室", enter)
-        self.assertIn(notifier.UNKNOWN_COURSE, depart)
+    def test_known_days_and_gaps(self):
+        by_date = {}
+        for e in self.schedule["entries"]:
+            by_date.setdefault(e["date"], set()).add(e["period"])
+        self.assertEqual(by_date[DAY], {"P1", "P3", "P4"})
+        self.assertIn("P2", by_date["2026-11-20"], "周五第二大节的工程数学不能漏")
+        self.assertNotIn("2026-12-07", by_date, "第 14 周应停课")
+        self.assertNotIn("2026-12-14", by_date, "第 15 周应停课")
+        self.assertNotIn("2026-11-21", by_date, "周六无课")
 
-    def test_six_pushes_not_merged(self):
-        for entry in self.schedule["entries"]:
-            rec = self._call(entry)
-            self.assertEqual(rec["result"], "ok", rec["action"])
-        self.assertEqual(len(self.calls), 6, "6 条提醒必须各自独立推送，不能合并")
-        self.assertEqual(len({c[0] for c in self.calls}), 2, "两套标题都要用到")
-        rows = ledger.read_records(self.root, self.day)
-        self.assertEqual(len(rows), 6)
-        self.assertEqual(len({r["key"] for r in rows}), 6)
+    def test_key_is_two_part(self):
+        self.assertEqual(model.make_key(DAY, "P1"), "2026-11-16-P1")
+        with self.assertRaises(ValueError):
+            model.make_key(DAY, "P9")
 
-    def test_duplicate_not_pushed(self):
-        entry = self.schedule["entries"][0]
-        self.assertEqual(self._call(entry)["action"], "send")
-        second = self._call(entry)
-        self.assertEqual(second["action"], "duplicate")
+    # ---- 消息 ----
+    def test_message_contains_whole_day(self):
+        entries = self.entries_of()
+        title, body = notifier.render(entries[0], entries, self.messages)
+        self.assertIn("08:40", title)
+        self.assertIn("机械制图", body)
+        self.assertIn("天工楼361", body)
+        self.assertIn("工程数学11", body, "一条消息里必须给出今天其余的课")
+        self.assertIn("思想道德与法治36", body)
+        self.assertLessEqual(len(title), 32)
+
+    def test_late_is_disclosed(self):
+        entries = self.entries_of()
+        _, body = notifier.render(entries[0], entries, self.messages, late_by_min=7)
+        self.assertIn("晚到", body)
+        self.assertIn("7 分钟", body)
+
+    def test_preview_does_not_write_log(self):
+        out = runner.preview(DAY, config=self.config, schedule=self.schedule,
+                             messages=self.messages, sender=self.sender)
+        self.assertEqual(out["courses"], 3)
+        self.assertEqual(out["result"]["status"], "ok")
+        self.assertFalse(ledger.log_path(self.root, DAY).exists(),
+                         "手工预览不能冒充自动运行日志")
+        self.assertIn("不计入自动运行日志", self.calls[0][1])
+
+    # ---- 单轮行为 ----
+    def test_all_periods_push_once(self):
+        entries = self.entries_of()
+        for e in entries:
+            self.assertEqual(self.call(e)["result"], "ok")
+        self.assertEqual(len(self.calls), len(entries))
+        rows = ledger.read_records(self.root, DAY)
+        self.assertEqual(len({r["key"] for r in rows}), len(entries))
+
+    def test_no_class_day_is_silent(self):
+        rec = runner.run_once(
+            root=self.root, day="2026-11-21", period="P1", source="cron",
+            now_utc=model.utc_datetime("2026-11-21", "08:20"),
+            config=self.config, schedule=self.schedule,
+            sender=self.sender, messages=self.messages)
+        self.assertEqual(rec["action"], "no_schedule")
+        self.assertEqual(len(self.calls), 0)
+
+    def test_week_without_this_course_is_silent(self):
+        # 第 14 周（12-07 周一）全校停课
+        rec = runner.run_once(
+            root=self.root, day="2026-12-07", period="P1", source="cron",
+            now_utc=model.utc_datetime("2026-12-07", "08:20"),
+            config=self.config, schedule=self.schedule,
+            sender=self.sender, messages=self.messages)
+        self.assertEqual(rec["action"], "no_schedule")
+        self.assertEqual(len(self.calls), 0)
+
+    def test_duplicate_not_pushed_twice(self):
+        e = self.entries_of()[0]
+        self.assertEqual(self.call(e)["action"], "send")
+        self.assertEqual(self.call(e)["action"], "duplicate")
         self.assertEqual(len(self.calls), 1)
 
-    def test_late_skipped(self):
-        entry = next(e for e in self.schedule["entries"] if e["stage"] == "depart")
-        now = self._now(entry, extra_seconds=12 * 60)
-        rec = self._call(entry, now=now)
-        self.assertEqual(rec["action"], "skipped_late")
-        self.assertTrue(rec["late"])
+    def test_late_and_after_class(self):
+        entries = self.entries_of()
+        # 08:20 的提醒点：迟到 17 分钟（08:37）已超 15 分钟容差，但还没到 08:40 上课
+        late = self.call(entries[0], now=self.now_at(entries[0], 17 * 60))
+        self.assertEqual(late["action"], "skipped_late")
+        # 换一节测上课后硬截止，避免被上一轮的去重状态判成 duplicate
+        after = self.call(entries[1], now=model.utc_datetime(DAY, "13:31"))
+        self.assertEqual(after["action"], "skipped_after_class")
         self.assertEqual(len(self.calls), 0)
 
-    def test_after_class_skipped(self):
-        entry = next(e for e in self.schedule["entries"] if e["stage"] == "enter")
-        now = model.utc_datetime(entry["date"], entry["class_start"]) + timedelta(minutes=1)
-        rec = self._call(entry, now=now)
-        self.assertEqual(rec["action"], "skipped_after_class")
-        self.assertEqual(len(self.calls), 0)
+    def test_early_skipped(self):
+        e = self.entries_of()[0]
+        rec = self.call(e, now=self.now_at(e, -10 * 60))
+        self.assertEqual(rec["action"], "skipped_early")
 
     def test_failure_recorded_and_scrubbed(self):
         def bad_sender(title, content):
             return {"status": "failed", "http_status": 500, "duration_ms": 30,
-                    "error": "POST https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=SECRET123 failed",
-                    "channel": "wecom_webhook"}
+                    "error": "POST https://sctapi.ftqq.com/SCT_SECRETKEY123.send?key=SECRET123 failed",
+                    "channel": "serverchan_turbo"}
 
-        rec = self._call(self.schedule["entries"][0], sender=bad_sender)
+        rec = self.call(self.entries_of()[0], sender=bad_sender)
         self.assertEqual(rec["result"], "error")
-        self.assertIsNotNone(rec["error"])
-        text = ledger.log_path(self.root, self.day).read_text(encoding="utf-8")
+        text = ledger.log_path(self.root, DAY).read_text(encoding="utf-8")
         self.assertNotIn("SECRET123", text)
         self.assertIn("[url]", text)
 
-    def test_hash_chain_and_verify_all_green(self):
-        for entry in self.schedule["entries"]:
-            self._call(entry)
-        rows = ledger.read_records(self.root, self.day)
+    def test_hash_chain_and_verify(self):
+        entries = self.entries_of()
+        for e in entries:
+            self.call(e)
+        rows = ledger.read_records(self.root, DAY)
         prev = "genesis"
         for r in rows:
             self.assertEqual(r["prev_hash"], prev)
             self.assertEqual(r["hash"], ledger.chain_hash(prev, r))
             prev = r["hash"]
-        ledger.rollup(self.root, self.day, expected=len(self.schedule["entries"]))
-        report = verify.verify_day(self.root, self.day, self.schedule)
+        ledger.rollup(self.root, DAY, expected=len(entries))
+        ref = model.utc_datetime(DAY, "16:00").astimezone(model.CST)
+        report = verify.verify_day(self.root, DAY, self.schedule, now=ref)
         self.assertTrue(report["all_ok"], report)
 
-    def test_personal_tokens_scrubbed(self):
-        self.assertNotIn("SPT_abc123XYZ", model.scrub_text("spt=SPT_abc123XYZ"))
-        self.assertIn("[token]", model.scrub_text("SPT_abc123XYZ"))
-        self.assertNotIn("AT_secret999", model.scrub_text("AT_secret999"))
+    # ---- 通道 / 产物 ----
+    def test_missing_key_fails_without_network(self):
+        env = {k: v for k, v in os.environ.items() if k != "PREBELL_SENDKEY"}
+        with mock.patch.dict(os.environ, env, clear=True):
+            res = channels.send_serverchan("标题", "正文", self.config)
+        self.assertEqual(res["status"], "failed")
+        self.assertIn("missing credential", res["error"])
 
-    def test_wxpusher_personal_payload(self):
-        captured = {}
+    def test_secrets_scrubbed(self):
+        # 只用虚构串做样本，绝不把真实 SendKey 写进仓库文件
+        for token in ("SCT000000FakeTestKeyForScrubCheck", "SCT_FAKE_KEY_123"):
+            clean = model.scrub_text(token)
+            self.assertNotIn(token, clean, "%s 没被抹掉" % token)
+            self.assertIn("[sendkey]", clean)
+        self.assertIn("[url]", model.scrub_text("https://example.com/a?key=abc"))
 
-        class Resp:
-            status = 200
-
-            def read(self):
-                return b'{"code":1000,"msg":"ok","success":true}'
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *args):
-                return False
-
-        def fake_open(req, timeout=None):
-            captured["url"] = req.full_url
-            captured["body"] = json.loads(req.data.decode("utf-8"))
-            return Resp()
-
-        with mock.patch.dict(os.environ, {"PREBELL_WXPUSHER_SPT": "SPT_testtoken"}):
-            with mock.patch("urllib.request.urlopen", fake_open):
-                res = channels.send_wxpusher("标题", "正文", self.config)
-        self.assertEqual(res["status"], "ok", res)
-        self.assertEqual(res["channel"], "wxpusher_spt")
-        self.assertIn("simple-push", captured["url"])
-        self.assertEqual(captured["body"]["spt"], "SPT_testtoken")
-        self.assertEqual(captured["body"]["contentType"], 1)
-        self.assertIn("标题", captured["body"]["content"])
-
-    def test_primary_quota_falls_back_to_personal_channel(self):
-        cfg = dict(self.config)
-        cfg["primary"] = {"type": "serverchan_turbo", "env_var": "PREBELL_SENDKEY"}
-        cfg["fallback"] = {"type": "wxpusher_spt", "env_var": "PREBELL_WXPUSHER_SPT"}
-        cfg["fallback_channel_enabled"] = True
-        seen = []
-
-        def fake(kind, status):
-            def f(title, content, config, timeout=10):
-                seen.append(kind)
-                return {"status": status, "http_status": 200, "duration_ms": 1,
-                        "error": "quota" if status == "failed" else None,
-                        "channel": kind}
-            return f
-
-        with mock.patch.object(channels, "send_serverchan", fake("serverchan_turbo", "failed")), \
-             mock.patch.object(channels, "send_wxpusher", fake("wxpusher_spt", "ok")):
-            res = channels.build_sender(cfg)("标题", "正文")
-        self.assertEqual(seen, ["serverchan_turbo", "wxpusher_spt"])
-        self.assertEqual(res["status"], "ok")
-        self.assertNotEqual(res["channel"], "wecom_webhook")
+    def test_ics_and_html(self):
+        ics = planner.render_ics(self.schedule)
+        self.assertIn("BEGIN:VCALENDAR", ics)
+        self.assertIn("BEGIN:VALARM", ics)
+        self.assertIn("TRIGGER:-PT20M", ics)
+        self.assertIn("机械制图", ics)
+        self.assertEqual(ics.count("BEGIN:VEVENT"), self.schedule["total_entries"])
+        html = planner.render_html(self.schedule)
+        self.assertIn("const DATA =", html)
+        self.assertIn("下载课表 .ics", html)
+        self.assertIn("<script>", html)
 
 
 if __name__ == "__main__":

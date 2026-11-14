@@ -1,49 +1,67 @@
-# 预备铃 · 课表微信提醒（从零重写版）
+# 预备铃 · 3.0 技术说明（2026-11-14）
 
-上课前 **30 分钟**推「准备好东西、可以出发」，上课前 **5 分钟**推「进入教室」。
-按课表每天定时，消息经 **Server酱 Turbo 微信服务号 1:1 通知**送达，备用 **WxPusher SPT 1:1 通知**兜住周一第 6 条。两条都不是群消息。纯 Python 标准库，零第三方依赖。
+> ⚠ 本目录的 `RUNBOOK.md`、`PRIVACY.md` 以及 `PLAN.md`、`src/PREBELL.md` 属于
+> **2.0 及更早版本**（双时点 30/5 分、每天 6 条、主备双通道、6 个外部 cron job）。
+> 它们留作过程证据，**已作废**；当前运行口径以本文件和 `02-20Days-Challenge/README.md` 为准。
 
-- 程序源码：`02-20Days-Challenge/src/prebell/`
-- 部署与排期：`docs/prebell/RUNBOOK.md`
-- 密钥与脱敏：`docs/prebell/PRIVACY.md`
+## 为什么有 3.0
 
-## 一、官网规则 → 程序契约
+2.0 版的 360 条「提醒」里 `course` 全是 `null`：planner 只按星期几机械排时点，
+不读周次、不带课程名，推的是「课程（课表未核对）」。
+一个会准时响、但不知道今天上什么课、也不知道这周有没有课的闹钟，不能日用。
+3.0 把这件事从头修掉。
 
-出处：`https://icec.openkub.com/assessment.html`（本机快照 `icec_assessment.html`，行号同文件）。
+| | 2.0 | 3.0 |
+|---|---|---|
+| 课表数据 | 只有 meta + `has_class_days`，无课程格子 | 11 个格子、课程名/周次/教室齐全 |
+| 周次 | 不判断，整学期每周都响 | 按 `weeks_raw` 展开，第 14/15 周停课不响 |
+| 推送表 | 360 条空壳 | 140 条真实有课提醒 |
+| 时点 | 每节 2 条（30 分 + 5 分） | 每节 1 条（课前 20 分） |
+| 每天上限 | 6 条 | 4 条（实际有课才推） |
+| 通道 | Server酱 + WxPusher 主备 | 只用 Server酱（已实测可达） |
+| 定时 | 外部 cron-job.org + PAT + 6 个 job | GitHub Actions 自带 4 条 cron |
+| 用户要做 | 注册网站、造 PAT、装 App、填 2 个 Secret、建 6 个 job | 打开网页看一眼课表 |
+| 兜底 | 无 | `public/prebell.ics` 手机本地日历（不依赖任何服务器） |
 
-| 官网条款 | 逐字要点 | 程序自动产出 | 落盘 | 评委怎么核 |
-|---|---|---|---|---|
-| L375 ① 25 分 | 连续不少于 7 天的程序自动化运行日志，含脱敏时间戳、调用频次、耗时与报错记录，每日同步至 `process_logs/` | `ledger.py` 写 JSONL + 哈希链；`prebell-daily.yml` 每日汇总并提交 | `process_logs/`（protected） | 日期无缺口 + 四类字段齐全 + 哈希链自洽 |
-| L645（英文版） | `JSONL/CSV` 与 `committed daily` | 同上，每日 commit `实测日志 YYYY-MM-DD` | 同上 | `git log` 每日一条 |
-| L375 ② 20 分 | 基于日志的至少 3 次 Git 迭代 Diff 记录 | `verify.py` 暴露问题 → 改码 → commit | `iterations/prebell/` + git log | ≥3 条 diff 能对上日志异常 |
-| L375 ③ 15 分 | 完整源码与 8 位真实用户使用反馈 | `src/prebell/*`、`feedback/` | `src/prebell/`、`feedback/` | 源码可运行 + 8 份真实反馈 |
-| L433 / L438 / L440 | 面试基于个人仓库代码与过程数据动态追问「采样边界、异常数据原因、排障细节」 | `run.py` 的 `source` / `skipped_*` / `error` / `latency_ms` 字段 | `process_logs/`、`iterations/` | 能回溯为何跳过、为何改码 |
-| L202 / L205–209 / L222–227 | 公开仓库、4 项标准目录、6 条 Git 命令 | 沿用仓库既有结构 | 顶层 4 项 | 目录结构与 `git commit -m "实测日志"` 口径 |
-| L159 | 鼓励合理使用 AI 工具，重点凭实测数据、运行日志与版本记录核验能力 | 全链路如实留痕 | 全仓库 | 数据自洽 |
-| L326 / L327 | 8 选 1 · 60 分 · 初定 10/23~11/24；强制跨多日连续过程数据 | 7 天窗口设计 | `process_logs/` | 连续性 |
+## 数据流
 
-**品行底线**（出处为 `admissions.html`，**不在考核页**）：`如实提交原始数据，严禁造假或代做`、`一票否决项`。
-程序侧对应：迟到/失败一律写 `skipped_*` / `error` 明细，不补推、不回填、不编造时间戳；课表估算与未核对字段原样保留。
+```
+timetable.json  ──planner.py──▶  schedule.json ──run.py──▶ 微信 + process_logs/
+     (人维护)         │                │                        │
+                     ├──▶ public/index.html（能打开的课表）      └── verify.py 验真
+                     └──▶ public/prebell.ics（手机日历）
+```
 
-### 出处勘误（写文档时必须分开）
-- 考核页 HTML 内**没有**「封仓 / 诚信 / 造假 / 代做 / 一票否决 / 严禁 / 如实 / 可能调整」字样。
-- 「封仓 2026-11-24」出自仓库顶层 `README.md:12`；品行底线出自 `admissions.html`。
-- 「初定」仅见 L326、L432；`JSONL/CSV` 与 `committed daily` 仅见英文版 L645。
-- 时间 banner L168：10/15 宣传 → 10/28 说明会 → 10/23 启动工坊 → 11/24 工坊结束并启动面试 → 12/01 公布名单。
+`planner.py` 是唯一生成器，三份产物同源。课表改了只重跑它，
+不存在「网页和推送各说各话」的可能。
 
-## 二、官网规则 vs 工程自选（不要混写）
+## 官网规则 → 程序契约
 
-| 官网规则 | 工程自选（官网未提） |
-|---|---|
-| 公开仓库、命名格式、4 项标准目录、6 条 Git 命令 | Server酱 Turbo + WxPusher SPT 双 1:1 通道、GitHub Secrets |
-| 项目四三项必交、7 天日志、3 次迭代、8 位反馈 | 任何 token / SendKey / SPT / GitHub Secrets |
-| 面试溯源、品行底线 | 外部 cron、`workflow_dispatch`、30/5 分钟双时点 |
-| 「初定」时间节点 | `state/`、`public/`、哈希链、ICS/网页兜底、`max_push_per_day` |
+出处 `https://icec.openkub.com/assessment.html`：项目四 60 分，必交三项
+① 连续 ≥7 天自动化运行日志（25 分）② 基于日志 ≥3 次 Git 迭代（20 分）
+③ 完整源码 + 8 位真实用户反馈（15 分）。品行底线出自 `admissions.html`（**不在考核页**）。
 
-## 三、当前交付状态（如实）
+| 官网要求 | 程序怎么满足 | 落盘 |
+|---|---|---|
+| 脱敏时间戳 / 调用频次 / 耗时 / 报错 | `ledger.py` 每轮写 `ts` `seq` `duration_ms` `error` | `process_logs/YYYY-MM-DD.jsonl` |
+| 跨多日连续过程数据、防摆拍 | `prev_hash` 哈希链 + 每日 23:55 汇总，缺勤不补 | `*.summary.json` |
+| 基于日志的迭代 diff | 真实日志暴露问题 → 改码 → `iterations/prebell/` 留痕 | git log |
+| 完整源码 + 8 位反馈 | `src/prebell/*`；`feedback/` 只给模板，**不预写、不代填** | `feedback/` |
 
-- ✅ 源码、静态提醒表（360 条 / 20 条·周）、两个 workflow、文档模板 —— 已完成，11 项本地自检全绿。
-- ⬜ **7 天真实运行日志尚未起跑**：`process_logs/`、`state/`、`public/` 是 protected 目录，只由云端 Actions 生成，本地不写、不伪造。
-- ⬜ **8 位真实用户反馈**：`feedback/` 只提供 `TEMPLATE.md`，8 份内容必须由真实用户填写，**不预写、不代填**。
-- ⬜ **3 次 Git 迭代**：`iterations/prebell/` 只提供说明，011–013 必须由真实日志观察驱动后再创建，**不预写**。
-- ⬜ 开工前置（用户侧外部动作）：官网要求公开仓库 + 姓名拼音全拼，现状顶层 README 声明 `Private` + 缩写名 `LZH`。
+**如实边界**：迟到/失败一律写 `skipped_*` / `error` 明细，不补推、不回填、不编造时间戳；
+课表估算锚点与未核对字段原样保留；无课日不写假心跳；手工预览不进日志。
+
+## 当前状态（2026-11-14 晚，如实）
+
+- ✅ 课表数据、生成器、单轮入口、网页、`.ics`、4 条 cron、19 项单测、dry-run 全链路
+- ✅ SendKey 已在 GitHub Secrets；2026-11-13 境外 runner 实测 `code:0` 真发到微信
+- ✅ 旧雷达 `probe.yml` 的 `schedule` 已停，不再污染日志
+- ⬜ **7 天自动运行日志尚未起跑**：`process_logs/` / `state/` 只由云端 Actions 生成，本地不写不伪造
+- ⬜ **8 位反馈**与**逐格课表签字确认**需要真人完成
+- ⬜ 官网要求公开仓库 + 姓名拼音全拼；现状仍是 `Private` + 缩写 `LZH`
+
+## 时间与额度
+
+- 推荐 11-16（周一）起跑 7 天窗口 11-16～11-22，留 2 天缓冲；最晚硬线 11-17。
+- 4 条 cron × 5 个工作日 = 20 次唤醒/周，每次约 30 秒，远低于私有库 2000 分钟/月。
+- Server酱 Turbo 免费 5 条/天（以官方页为准），程序一天最多 4 条，留 1 条余量。

@@ -10,6 +10,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from prebell import model
+
 
 def log_path(root, day):
     return Path(root) / "process_logs" / ("%s.jsonl" % day)
@@ -78,9 +80,8 @@ def rollup(root, day, expected):
         "skipped_early": count(lambda r: r.get("action") == "skipped_early"),
         "throttled": count(lambda r: r.get("action") == "throttled"),
         "no_schedule": count(lambda r: r.get("action") == "no_schedule"),
-        "per_stage": {
-            "depart": count(lambda r: r.get("stage") == "depart"),
-            "enter": count(lambda r: r.get("stage") == "enter"),
+        "per_period": {
+            p: count(lambda r, p=p: r.get("period") == p) for p in model.PERIODS
         },
         "channels_used": sorted({r["channel"] for r in rows if r.get("channel")}),
         "latency_ms": {
