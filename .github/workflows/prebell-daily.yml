@@ -1,0 +1,77 @@
+name: prebell-daily
+
+# 每日汇总 / 验真 / 公示。对精度不敏感，允许用 Actions 内置 schedule。
+# UTC 15:55 = 北京 23:55，当天收口；周末无课日也真实运行并产出 heartbeat 汇总。
+# 这条不计入 6 个外部 cron job，用途与 remind 不同。
+
+on:
+  schedule:
+    - cron: '55 15 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 汇总日期 YYYY-MM-DD（留空取 UTC 当天）
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prebell-daily
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: 检出 main 并保留完整提交历史
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 每日汇总 + 验真 + 生成公示
+        working-directory: 02-20Days-Challenge/src
+        run: |
+          DAY="${{ inputs.date }}"
+          if [ -z "$DAY" ]; then DAY=$(date -u +%F); fi
+          python - "$DAY" <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0, ".")
+          from prebell import ledger, verify
+          day = sys.argv[1]
+          root = Path("..")
+          sched = verify.load_schedule()
+          expected = sum(1 for e in sched["entries"] if e["date"] == day)
+          summary = ledger.rollup(root, day, expected)
+          report = verify.verify_day(root, day, sched)
+          pub = root / "public"
+          pub.mkdir(parents=True, exist_ok=True)
+          (pub / "prebell-verify.json").write_text(
+              json.dumps({"date": day, "summary": summary, "verify": report},
+                         ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({"summary": summary, "verify": report},
+                           ensure_ascii=False, indent=2))
+          PY
+
+      - name: 提交汇总、验真与公示
+        run: |
+          git config user.name "prebell-bot"
+          git config user.email "prebell-bot@users.noreply.github.com"
+          mkdir -p 02-20Days-Challenge/process_logs 02-20Days-Challenge/state 02-20Days-Challenge/public
+          git add 02-20Days-Challenge/process_logs 02-20Days-Challenge/state 02-20Days-Challenge/public
+          if git diff --staged --quiet; then
+            echo "无新增汇总"
+          else
+            git commit -m "实测日志 $(date -u +%F) 每日汇总与验真"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

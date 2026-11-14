@@ -1,0 +1,20 @@
+{
+  "tz_offset_hours": 8,
+  "plan_from": "2026-09-07",
+  "plan_to": "2027-01-10",
+  "stages": {
+    "depart": {"minutes_before": 30, "late_tolerance_min": 10},
+    "enter": {"minutes_before": 5, "late_tolerance_min": 3}
+  },
+  "hard_stop_at_class_start": true,
+  "backfill": false,
+  "max_push_per_day": 6,
+  "channel": "primary",
+  "fallback_channel_enabled": false,
+  "primary": {"type": "wecom_webhook", "env_var": "PREBELL_WECOM_WEBHOOK"},
+  "fallback": {"type": "serverchan_turbo", "env_var": "PREBELL_SENDKEY"},
+  "timeout_sec": 10,
+  "quota_note": "max_push_per_day=6 是本程序自身上限，不是第三方额度。主通道企业微信群机器人 Webhook 免费、按 20 条/分钟限流、无每日条数上限；备用 Server酱 Turbo 免费 5 条/天（官方 FAQ）。实际发送与报错一律记入 process_logs/。",
+  "secret_note": "Webhook URL 与 SendKey 只放 GitHub Actions Secrets，绝不写入本文件或任何仓库文件；官方明确警告 webhook 地址不能出现在 GitHub 等公开可查阅的地方。",
+  "scope_note": "本程序只向企业微信群推送消息，不读取微信本地数据库、聊天记录或群消息，不逆向、不登录微信客户端。如需改名，请复制为 config.json（已被 .gitignore 排除）。"
+}

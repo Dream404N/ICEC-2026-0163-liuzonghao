@@ -1,0 +1,74 @@
+name: prebell-remind
+
+# 提醒执行体：只接 workflow_dispatch，不带 schedule。
+# 原因：GitHub Actions 的 cron 最小粒度 5 分钟、高峰期排队可晚十几分钟，
+# 拿它当「课前 5 分钟」的闹钟是错配。闹钟在外部 cron 服务，这里只负责执行与记账。
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: 上课大节
+        required: true
+        type: choice
+        options: [P1, P3, P4]
+      stage:
+        description: 提醒阶段（depart=课前30分 / enter=课前5分）
+        required: true
+        type: choice
+        options: [depart, enter]
+      source:
+        description: 触发来源（写入日志，供面试溯源）
+        required: true
+        default: cron
+        type: choice
+        options: [cron, manual, test]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prebell-${{ inputs.period }}-${{ inputs.stage }}
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 检出 main 并保留完整提交历史
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 执行一条提醒（成功失败都如实写日志）
+        continue-on-error: true
+        env:
+          PREBELL_WECOM_WEBHOOK: ${{ secrets.PREBELL_WECOM_WEBHOOK }}
+          PREBELL_SENDKEY: ${{ secrets.PREBELL_SENDKEY }}
+        working-directory: 02-20Days-Challenge/src
+        run: |
+          python prebell/run.py \
+            --period "${{ inputs.period }}" \
+            --stage "${{ inputs.stage }}" \
+            --source "${{ inputs.source }}"
+
+      - name: 提交当日日志与去重状态
+        run: |
+          git config user.name "prebell-bot"
+          git config user.email "prebell-bot@users.noreply.github.com"
+          mkdir -p 02-20Days-Challenge/process_logs 02-20Days-Challenge/state
+          git add 02-20Days-Challenge/process_logs 02-20Days-Challenge/state
+          if git diff --staged --quiet; then
+            echo "无新增日志"
+          else
+            git commit -m "实测日志 $(date -u +%F) remind ${{ inputs.period }}-${{ inputs.stage }}"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

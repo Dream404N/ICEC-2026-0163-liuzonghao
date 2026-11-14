@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "proofread": false,
+    "source_note": "照录仓库既有课表初稿，未与教务校历核对。所有由本表推导出的日期与周次均为估算，核对前不得当作真实提醒使用。"
+  },
+  "anchor": {
+    "first_monday": "2026-09-07",
+    "status": "estimated",
+    "verified": false,
+    "note": "学期第 1 周周一为估算值，未与教务校历核对。"
+  },
+  "periods": [
+    {"id": "P1", "label": "第一大节", "start": "08:40"},
+    {"id": "P2", "label": "第二大节", "start": "10:20", "note": "无独立课表格子；周一为跨行合并单元格（span=2）。本程序不为 P2 生成提醒。"},
+    {"id": "P3", "label": "第三大节", "start": "13:30"},
+    {"id": "P4", "label": "第四大节", "start": "15:10"}
+  ],
+  "has_class_days": {
+    "P1": [1, 4],
+    "P3": [1, 2, 3, 5],
+    "P4": [1, 2, 3, 4],
+    "verified": false,
+    "note": "沿用既有课表初稿口径，未核对；数字为 ISO 星期（1=周一）。"
+  },
+  "review": {
+    "status": "unverified",
+    "total_cells": 10,
+    "unclear_cells": 9,
+    "pending_cells": 6
+  },
+  "limits": {
+    "single_double_week": false,
+    "makeup_swap": false,
+    "note": "不支持单双周与调休；如与校历不符，需人工核对后重跑 planner.py。"
+  }
+}
