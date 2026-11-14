@@ -57,9 +57,10 @@ def iso_utc(dt):
 
 
 def scrub_text(text):
-    """日志脱敏：webhook key、SendKey、URL 一律抹掉，绝不留进仓库。"""
+    """日志脱敏：SendKey / SPT / AppToken / Webhook key / URL 一律抹掉，绝不留进仓库。"""
     s = str(text)
     s = re.sub(r"key=[A-Za-z0-9_\-]+", "key=[redacted]", s)
     s = re.sub(r"sctp?[A-Za-z0-9]{8,}", "[sendkey]", s, flags=re.I)
+    s = re.sub(r"\b(?:SPT_|AT_)[A-Za-z0-9_\-]{6,}", "[token]", s, flags=re.I)
     s = re.sub(r"https?://\S+", "[url]", s)
     return s[:300]

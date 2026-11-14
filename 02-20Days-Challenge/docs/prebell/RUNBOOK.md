@@ -17,53 +17,67 @@
 本机 `git push` 被代理拦截，从工作区根运行 `python .workbuddy/sync_to_github.py "说明"`（Git Data API）。
 本地 dry-run 与自检一律把 `--root` 指向临时目录，不碰这三个目录。
 
-## 2. 微信通道：企业微信群机器人 Webhook
+## 2. 微信通道：1:1 通知给个人（不是群消息）
 
-官方接口（`https://developer.work.weixin.qq.com/document/path/91770`）：
+**需求变更**：用户要「通知给个人」。群机器人无论怎么配，消息都落在群会话，已从默认路径移除；
+`channels.py` 仍保留 `send_wecom()` 作为可选回退，但默认不发群。
 
-```
-POST https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=<YOUR_KEY>
-Content-Type: application/json
-{"msgtype": "text", "text": {"content": "..."}}
-```
+### 为什么不用企业微信自建应用
 
-- `content` 最长 2048 字节、必须 UTF-8；程序按字节截断到 2000。
-- 返回 `errcode == 0` 视为成功。
-- **每个消息推送不超过 20 条/分钟**；本程序最多 6 条/天，不会触发。
-- 官方警告原文：`一定要保护好消息推送的webhook地址，避免泄漏！不要分享到github、博客等可被公开查阅的地方`。
-  本仓库按官网要求必须公开，因此 Webhook URL **只能**放 GitHub Actions Secrets。
+自建应用本来是免费 1:1 通道（`POST /cgi-bin/message/send?access_token=...`，`touser` 指定成员），
+但 2022-06-20 后新建自建应用强制「企业可信 IP」：官方原文
+`仅配置的可信IP能调用企业微信接口`、`企业可信IP不支持添加IP段、不支持添加含*的IP`、
+`目前企业可信IP仅支持配置ipv4`，且会拦截第三方服务商 IP。
+GitHub Actions 托管 runner 出口 IP 动态，无法登记 → **排除**。
+出处：`open.work.weixin.qq.com/help2/pc/21711`、`work.weixin.qq.com/nl/act/p/32d807ad4c554975`。
 
-### 用户侧准备（一次性，约 10 分钟）
+### 默认两条通道（都是 1:1 个人通知）
 
-1. **注册企业微信**（手机 App，手机号 + 短信验证码）。个人可注册，**不需要营业执照、不需要 300 元认证**；
-   官方帮助中心 `open.work.weixin.qq.com/help2/pc/15422` 原文：`企业微信目前免费使用`，认证为可选项。
-   注册类型建议选「企业 / 组织」、企业名随意填，**不要选「个人组建团队」**：官方称团队形态也支持管理后台，
-   但第三方实测有「团队号无法登录管理后台」的分歧；进不去管理后台就开不了第 3 步的微信插件。
-2. **建内部群并添加「消息推送」**：注册后自带的「全员群」即可，或自己发起群聊 → 群设置 →
-   「消息推送 / 群机器人」→ 添加 → 复制 Webhook URL。**必须是内部群**：官方社区技术支持原文
-   `外部群是不支持添加群机器人的`，即不能拉个人微信好友进群来收机器人消息。
-3. **开微信插件（要让消息出现在普通微信里，此步必做，不是可选）**：企业微信管理后台 →
-   「我的企业 → 微信插件」→ 勾选 `允许成员在微信插件中接收和回复聊天消息` → 取邀请关注二维码 →
-   用**个人微信扫码关注**（二维码有效期 7 天）。官方社区口径：`企业微信内部群消息只能在企业微信环境查看，
-   在企业微信客户端接收或关注微信插件接收`。接收开关还要同时满足：微信插件 → 设置 →「接收应用消息」开；
-   管理后台「成员使用微信插件时需要使用企业微信客户端」不勾；企业微信手机端 → 设置 → 新消息通知 →
-   「仅在企业微信中接收消息」不勾。**需上线前实测**（第三方报告 Mac 版微信可能不显示插件消息）。
-4. **填 GitHub Secret**：仓库 → Settings → Secrets and variables → Actions → New repository secret：
-   - `PREBELL_WECOM_WEBHOOK` = 完整 Webhook URL（**必填**）
-   - `PREBELL_SENDKEY` = Server酱 SendKey（**可选**，仅当 `fallback_channel_enabled=true`）
-5. **不要把 Webhook URL 发给我、贴进聊天、写进任何文件**。官方原文：`不要分享到github、博客等可被公开查阅的地方`，
-   而本仓库按要求必须公开。填完只需回一句「填好了」；我不需要看到密钥。
+| | 主通道 Server酱 Turbo | 备用 WxPusher 极简推送 SPT |
+|---|---|---|
+| 送达 | 微信服务号会话，1:1 私聊 | 1:1 个人通知（App / 微信 ClawBot） |
+| 接口 | `POST https://sctapi.ftqq.com/<SendKey>.send`，form `title` / `desp` | `POST https://wxpusher.zjiecode.com/api/send/message/simple-push`，JSON `content` / `summary` / `contentType:1` / `spt` |
+| 成功 | `code == 0` | `code == 1000` |
+| 额度 | 免费 **5 条/天**、每分钟 50 条（官方 FAQ） | 免费；接口约每 10 秒 20 次调用；无 5 条/天限制 |
+| 门槛 | 微信扫码登录 `sct.ftqq.com` → 复制 SendKey | 微信扫码得 `SPT_xxx`；需装 WxPusher App 或绑定微信 ClawBot |
 
-本地连通性自测（URL 只留在本机环境变量里，不经过对话、不写日志）：
+**为什么要备用**：周一 3 大节 × 2 阶段 = 6 条，Server酱免费只有 5 条。
+`build_sender()` 在主通道失败（含额度耗尽）时自动切备用，仍是 1:1 个人通知；
+绝不把两条提醒合并成一条，也不静默丢掉第 6 条。日志如实记 `channel` 与 `fallback_from`。
+
+**只想要一个通道、6 条全在微信服务号**：订阅 Server酱（官方页 8 元/1 月、39 元/12 月，1000 条/天），
+再把 `config.example.json` 的 `fallback_channel_enabled` 设为 `false`，代码一行不改。
+
+**其它候选（如实记录，未采用）**：PushPlus 是 1:1 微信服务号、实名后 200 条/天，
+但实名需填姓名 / 身份证 / 手机号并支付认证费（官方 `pushplus.plus/doc/function/verify.html` 原文
+`实名认证是付费的，且不支持退款`）；WxPusher 微信 ClawBot 通道激活后 24 小时内最多 10 条、
+用尽需手动回复重新激活，不适合 7 天无人值守，因此 WxPusher 只作备用而非主通道。
+
+### 用户侧准备（一次性）
+
+1. 微信扫码登录 `https://sct.ftqq.com` → 关注「方糖」服务号 → 复制 **SendKey**（`SCT...`）。
+2. 微信扫 `https://wxpusher.zjiecode.com/docs/#/?id=spt` 的 SPT 二维码 → 复制 **SPT**（`SPT_...`）；
+   装 WxPusher App，或在 App 内绑定微信 ClawBot 作为接收端。
+3. GitHub 仓库 → Settings → Secrets and variables → Actions → New repository secret：
+   - `PREBELL_SENDKEY` = Server酱 SendKey（**必填**）
+   - `PREBELL_WXPUSHER_SPT` = WxPusher SPT（**备用必填**；若已订阅 Server酱并关掉备用，可不填）
+4. **不要把 SendKey / SPT 发给我、贴进聊天、写进任何文件**。两者泄漏后任何人都能给你发消息，
+   而本仓库按官网要求必须公开。填完回一句「填好了」即可，我不需要看到值。
+
+### 本地连通性自测（凭据只留在本机环境变量，不经过对话、不写日志）
 
 ```bash
-curl -sS -X POST "$PREBELL_WECOM_WEBHOOK" \
+curl -sS -X POST "https://sctapi.ftqq.com/$PREBELL_SENDKEY.send" \
+  -d "title=PreBell 连通性测试" -d "desp=收到说明主通道已通"
+# 期望 {"code":0,...}
+
+curl -sS -X POST "https://wxpusher.zjiecode.com/api/send/message/simple-push" \
   -H 'Content-Type: application/json' \
-  -d '{"msgtype":"text","text":{"content":"PreBell 连通性测试"}}'
-# 期望 {"errcode":0,"errmsg":"ok"}
+  -d "{\"content\":\"PreBell 连通性测试\",\"contentType\":1,\"spt\":\"$PREBELL_WXPUSHER_SPT\"}"
+# 期望 {"code":1000,...}
 ```
 
-把返回的 `errcode` 告诉我就够了，不用把 URL 贴过来。
+把两个返回的 `code` 告诉我就够，不用贴凭据。注意自测会占用 Server酱当天免费额度。
 
 ## 3. 六个外部 cron job
 
@@ -95,10 +109,10 @@ Accept: application/vnd.github+json
 
 ## 4. 部署顺序
 
-1. 填好 2 个 Secrets（其中 `PREBELL_WECOM_WEBHOOK` 必填）。
+1. 填好 2 个 Secrets（`PREBELL_SENDKEY` 必填；`PREBELL_WXPUSHER_SPT` 备用，订阅 Server酱后可省）。
 2. 在 cron 服务建 6 个 job，时区 UTC；先各手动触发一次 `source=test` 验连通，日志会如实标 test。
 3. **停用既有 `.github/workflows/probe.yml` 的 `schedule: '17 */3 * * *'`**（保留文件、只去掉定时触发），避免废弃的旧雷达日志继续污染 `process_logs/` 的溯源链。
-4. 连推 6 条实测 `source=test`，确认 `actual_sent=6`、`error=null`（企业微信无日条数上限，Server酱免费 5 条/天只作备用）。
+4. 连推 6 条实测 `source=test`，确认 `actual_sent=6`、`error=null`；周一第 6 条预期记 `channel=wxpusher_spt` 与 `fallback_from`，属主通道额度耗尽后的正常兜底，不是失败。
 5. 观察首日日志 → 由真实发现驱动第 1 次 Git 迭代（不预写）。
 6. 每日 23:55 由 `prebell-daily.yml` 出汇总与验真公示。
 

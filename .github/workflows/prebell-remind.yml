@@ -50,8 +50,8 @@ jobs:
       - name: 执行一条提醒（成功失败都如实写日志）
         continue-on-error: true
         env:
-          PREBELL_WECOM_WEBHOOK: ${{ secrets.PREBELL_WECOM_WEBHOOK }}
           PREBELL_SENDKEY: ${{ secrets.PREBELL_SENDKEY }}
+          PREBELL_WXPUSHER_SPT: ${{ secrets.PREBELL_WXPUSHER_SPT }}
         working-directory: 02-20Days-Challenge/src
         run: |
           python prebell/run.py \

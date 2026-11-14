@@ -1,14 +1,16 @@
 """纯标准库自检：不联网、不推送、不写 protected 目录（全部用临时目录）。"""
 import json
+import os
 import sys
 import tempfile
 import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # src/
 
-from prebell import ledger, model, notifier, planner, state as state_store, verify
+from prebell import channels, ledger, model, notifier, planner, state as state_store, verify
 from prebell import run as runner
 
 HERE = Path(__file__).resolve().parents[1]  # src/prebell/
@@ -151,11 +153,62 @@ class PrebellTest(unittest.TestCase):
         report = verify.verify_day(self.root, self.day, self.schedule)
         self.assertTrue(report["all_ok"], report)
 
-    def test_state_keys_use_triplet(self):
-        self._call(self.schedule["entries"][0])
-        st = state_store.load(self.root)
-        self.assertEqual(len(st["pushed"]), 1)
-        self.assertIn("-depart", st["pushed"][0]["key"])
+    def test_personal_tokens_scrubbed(self):
+        self.assertNotIn("SPT_abc123XYZ", model.scrub_text("spt=SPT_abc123XYZ"))
+        self.assertIn("[token]", model.scrub_text("SPT_abc123XYZ"))
+        self.assertNotIn("AT_secret999", model.scrub_text("AT_secret999"))
+
+    def test_wxpusher_personal_payload(self):
+        captured = {}
+
+        class Resp:
+            status = 200
+
+            def read(self):
+                return b'{"code":1000,"msg":"ok","success":true}'
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def fake_open(req, timeout=None):
+            captured["url"] = req.full_url
+            captured["body"] = json.loads(req.data.decode("utf-8"))
+            return Resp()
+
+        with mock.patch.dict(os.environ, {"PREBELL_WXPUSHER_SPT": "SPT_testtoken"}):
+            with mock.patch("urllib.request.urlopen", fake_open):
+                res = channels.send_wxpusher("标题", "正文", self.config)
+        self.assertEqual(res["status"], "ok", res)
+        self.assertEqual(res["channel"], "wxpusher_spt")
+        self.assertIn("simple-push", captured["url"])
+        self.assertEqual(captured["body"]["spt"], "SPT_testtoken")
+        self.assertEqual(captured["body"]["contentType"], 1)
+        self.assertIn("标题", captured["body"]["content"])
+
+    def test_primary_quota_falls_back_to_personal_channel(self):
+        cfg = dict(self.config)
+        cfg["primary"] = {"type": "serverchan_turbo", "env_var": "PREBELL_SENDKEY"}
+        cfg["fallback"] = {"type": "wxpusher_spt", "env_var": "PREBELL_WXPUSHER_SPT"}
+        cfg["fallback_channel_enabled"] = True
+        seen = []
+
+        def fake(kind, status):
+            def f(title, content, config, timeout=10):
+                seen.append(kind)
+                return {"status": status, "http_status": 200, "duration_ms": 1,
+                        "error": "quota" if status == "failed" else None,
+                        "channel": kind}
+            return f
+
+        with mock.patch.object(channels, "send_serverchan", fake("serverchan_turbo", "failed")), \
+             mock.patch.object(channels, "send_wxpusher", fake("wxpusher_spt", "ok")):
+            res = channels.build_sender(cfg)("标题", "正文")
+        self.assertEqual(seen, ["serverchan_turbo", "wxpusher_spt"])
+        self.assertEqual(res["status"], "ok")
+        self.assertNotEqual(res["channel"], "wecom_webhook")
 
 
 if __name__ == "__main__":

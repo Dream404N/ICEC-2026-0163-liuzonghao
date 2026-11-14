@@ -2,18 +2,19 @@
 
 ## 1. 官方硬约束
 
-企业微信开发者中心原文（`https://developer.work.weixin.qq.com/document/path/91770`）：
+- 官网 Step 0 要求**公开仓库**（assessment.html L202）。
+- Server酱的 `SendKey` 是推送凭据，泄漏后他人可用它给你发消息。
+- WxPusher 官方文档原文：`请勿泄漏SPT，SPT泄漏后，任意用户都可以给你发送消息！！！`
 
-> 特别特别要注意：一定要**保护好消息推送的webhook地址**，避免泄漏！不要分享到 github、博客等可被公开查阅的地方，否则坏人就可以用你的消息推送来发垃圾消息了。
-
-而官网 Step 0 要求**公开仓库**（assessment.html L202）。因此本项目把「凭据不入库」当作硬性设计约束，不是可选项。
+因此本项目把「凭据不入库」当作硬性设计约束，不是可选项。
 
 ## 2. 凭据存放
 
 | 凭据 | 存放位置 | 是否入库 |
 |---|---|---|
-| `PREBELL_WECOM_WEBHOOK` | GitHub → Settings → Secrets and variables → Actions | ❌ 绝不入库 |
-| `PREBELL_SENDKEY`（可选） | 同上 | ❌ 绝不入库 |
+| `PREBELL_SENDKEY`（主通道，必填） | GitHub → Settings → Secrets and variables → Actions | ❌ 绝不入库 |
+| `PREBELL_WXPUSHER_SPT`（备用，默认必填） | 同上 | ❌ 绝不入库 |
+| `PREBELL_WECOM_WEBHOOK`（可选群回退，默认不用） | 同上 | ❌ 绝不入库 |
 | 触发 cron 的 PAT（Actions:write） | cron 服务端 + 本机 `.workbuddy/.gh_token` | ❌ 绝不入库 |
 
 - `config.example.json` 只存**环境变量名**，不存值。
@@ -23,12 +24,13 @@
 
 ## 3. 日志脱敏
 
-`model.scrub_text()` 对所有进入日志的外部文本做三层替换：
+`model.scrub_text()` 对所有进入日志的外部文本做替换：
 
 ```
-key=xxxxx            → key=[redacted]
-SCT/sctp 开头的密钥  → [sendkey]
-https?://...         → [url]
+key=xxxxx              → key=[redacted]
+SCT... / sctp...       → [sendkey]
+SPT_... / AT_...       → [token]
+https?://...           → [url]
 ```
 
 时间戳只保留**日期 + 分钟级**（`2026-11-16 08:35（脱敏·分钟级）`），不含账号、设备型号、IP、手机号。
@@ -44,15 +46,18 @@ https?://...         → [url]
 
 - 不读取微信 / 企业微信本地数据库、聊天记录、群消息。
 - 不逆向微信客户端、不模拟登录、不使用任何个人号协议库。
+- **默认不往群里推送**：主备两条通道都是 1:1 个人通知。
 - 不向任何第三方上传课表内容以外的个人信息（课表本身只含节次与占位课程名）。
 - 不把估算锚点、未核对课表格包装成已核实数据。
 - 不补推、不回填、不编造时间戳或日志。
 
-## 6. 通道额度口径（程序不硬编码）
+## 6. 通道额度口径（已核实官方页，程序不硬编码）
 
 | 通道 | 官方口径 | 出处 |
 |---|---|---|
-| 企业微信群机器人 | 免费；20 条/分钟；无每日条数上限 | 企业微信开发者文档 |
-| Server酱 Turbo | 免费 5 条/天；每分钟 50 条；订阅 1000 条/天 | `https://sct.ftqq.com/docs/getting-started/faq` |
+| Server酱 Turbo 主通道 | 免费 5 条/天、每分钟 50 条；订阅 1000 条/天（8 元/1 月、39 元/12 月） | `sct.ftqq.com/docs/getting-started/faq` |
+| WxPusher 极简推送备用 | 免费；接口默认约每 10 秒 20 次调用；App 渠道单日约 3000 条后不再提醒 | `wxpusher.zjiecode.com/docs/#/?id=limit` |
+| PushPlus（未采用） | 实名后微信渠道 200 次/天；实名付费且不支持退款 | `pushplus.plus/doc/guide/use.html`、`/doc/function/verify.html` |
+| 企业微信群机器人（不启用） | 20 条/分钟 | `developer.work.weixin.qq.com/document/path/91770` |
 
-程序侧只有 `max_push_per_day=6`（自身上限）以及日志里的 `actual_sent` / `error` 实测值。
+程序侧只有 `max_push_per_day=6`（自身上限）以及日志里的 `actual_sent` / `error` / `channel` 实测值。

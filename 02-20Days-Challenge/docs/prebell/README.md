@@ -1,7 +1,7 @@
 # 预备铃 · 课表微信提醒（从零重写版）
 
 上课前 **30 分钟**推「准备好东西、可以出发」，上课前 **5 分钟**推「进入教室」。
-按课表每天定时，消息经**企业微信群机器人 Webhook** 送达。纯 Python 标准库，零第三方依赖。
+按课表每天定时，消息经 **Server酱 Turbo 微信服务号 1:1 通知**送达，备用 **WxPusher SPT 1:1 通知**兜住周一第 6 条。两条都不是群消息。纯 Python 标准库，零第三方依赖。
 
 - 程序源码：`02-20Days-Challenge/src/prebell/`
 - 部署与排期：`docs/prebell/RUNBOOK.md`
@@ -35,8 +35,8 @@
 
 | 官网规则 | 工程自选（官网未提） |
 |---|---|
-| 公开仓库、命名格式、4 项标准目录、6 条 Git 命令 | 企业微信群机器人 Webhook、Server酱备用通道 |
-| 项目四三项必交、7 天日志、3 次迭代、8 位反馈 | 任何 token / Webhook URL / GitHub Secrets |
+| 公开仓库、命名格式、4 项标准目录、6 条 Git 命令 | Server酱 Turbo + WxPusher SPT 双 1:1 通道、GitHub Secrets |
+| 项目四三项必交、7 天日志、3 次迭代、8 位反馈 | 任何 token / SendKey / SPT / GitHub Secrets |
 | 面试溯源、品行底线 | 外部 cron、`workflow_dispatch`、30/5 分钟双时点 |
 | 「初定」时间节点 | `state/`、`public/`、哈希链、ICS/网页兜底、`max_push_per_day` |
 
