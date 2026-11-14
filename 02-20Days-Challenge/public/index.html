@@ -33,8 +33,9 @@ td.t{width:74px;color:#6b7280;font-size:12px;background:#fafbfc}
 .cell{font-weight:500;margin-bottom:2px}
 .room{color:#6b7280;font-size:12px}
 .none{color:#c9ced6}
-.ics{display:inline-block;background:#2f6feb;color:#fff;text-decoration:none;padding:9px 16px;border-radius:8px;font-size:14px;margin-top:6px}
+.ics{display:inline-block;background:#2f6feb;color:#fff;text-decoration:none;padding:9px 16px;border-radius:8px;font-size:14px;margin-top:6px;border:0;cursor:pointer;font-family:inherit}
 .ics:hover{background:#2559c4}
+.altlink{color:#6b7280;font-size:13px;margin-left:12px}
 .warn{background:#fff8e6;border:1px solid #f0dca8;color:#7a5b12;border-radius:9px;padding:12px 15px;font-size:13px;margin-bottom:16px}
 footer{color:#8b949e;font-size:12px;margin-top:24px;line-height:1.8}
 code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12px}
@@ -54,7 +55,8 @@ code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12px}
 <div class="card">
   <h2>不装 App，也能准时提醒</h2>
   <div>把整学期课表导入手机自带日历，由手机本地在课前 20 分钟提醒。<b>不需要网络、不需要 GitHub、不需要微信</b>，这是最可靠的一层。</div>
-  <a class="ics" href="prebell.ics" download="课表.ics">下载课表 .ics 导入手机日历</a>
+  <button class="ics" id="icsbtn" type="button">下载课表 .ics 导入手机日历</button>
+  <a class="altlink" href="prebell.ics" download="课表.ics">或取同目录的 prebell.ics</a>
   <div class="sub" style="margin-top:10px">微信服务号会在每个上课大节前 20 分钟另推一条「下一节 + 今天全部课程」，作为增强；GitHub 定时任务偶尔排队会晚到，晚到会如实标注。</div>
 </div>
 <footer>
@@ -117,6 +119,29 @@ const DATA = {"periods":[{"id":"P1","label":"第一大节","start":"08:40","end"
     });
     document.getElementById('weektable').innerHTML = h+'</table>';
   }
+
+  // 现场生成 ics：单个 index.html 独立可用，不依赖旁边有没有 prebell.ics
+  function icsEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+  function stamp(d,t){ return d.replace(/-/g,'')+'T'+t.replace(/:/g,'')+'00'; }
+  document.getElementById('icsbtn').onclick=function(){
+    var now = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+    var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PreBell//Course Schedule//CN',
+           'CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:课表 2026-2027 第1学期'];
+    E.forEach(function(e){
+      var names=e.courses.map(function(c){return c.name;}).join(' / ');
+      var rooms=e.courses.map(function(c){return c.room||'';}).filter(Boolean).join(' / ');
+      L.push('BEGIN:VEVENT','UID:prebell-'+e.key+'@icec','DTSTAMP:'+now,
+             'DTSTART:'+stamp(e.date,e.class_start),'DTEND:'+stamp(e.date,e.class_end),
+             'SUMMARY:'+icsEsc(names),'LOCATION:'+icsEsc(rooms),
+             'DESCRIPTION:'+icsEsc('第'+e.week+'周 · '+e.period_label),
+             'BEGIN:VALARM','TRIGGER:-PT20M','ACTION:DISPLAY','DESCRIPTION:预备铃：该去上课了','END:VALARM',
+             'END:VEVENT');
+    });
+    L.push('END:VCALENDAR');
+    var blob=new Blob([L.join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='课表.ics'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
 
   document.getElementById('prev').onclick=function(){cur=addDays(cur,-7);renderWeek();};
   document.getElementById('next').onclick=function(){cur=addDays(cur,7);renderWeek();};
