@@ -199,6 +199,14 @@ td.t{width:74px;color:#6b7280;font-size:12px;background:#fafbfc}
 .ics:hover{background:#2559c4}
 .altlink{color:#6b7280;font-size:13px;margin-left:12px}
 .warn{background:#fff8e6;border:1px solid #f0dca8;color:#7a5b12;border-radius:9px;padding:12px 15px;font-size:13px;margin-bottom:16px}
+.howto{background:#fff;border:1px solid #cfe0d3;border-left:4px solid #18a058}
+.howto h2{color:#136c3a}
+.step{padding:9px 0;border-top:1px solid #edf2ee;font-size:14px}
+.step:first-of-type{border-top:0;padding-top:2px}
+.step b{color:#136c3a}
+.note{background:#f4f8f5;border-radius:8px;padding:10px 12px;margin-top:10px;font-size:13px;color:#456154}
+.nextfire{background:#eef4ff;border-radius:8px;padding:9px 12px;margin:2px 0 12px;font-size:14px;color:#2f5fc0}
+.nextfire b{color:#1b47a8}
 footer{color:#8b949e;font-size:12px;margin-top:24px;line-height:1.8}
 code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12px}
 @media(max-width:640px){table{font-size:12px}th,td{padding:6px 4px}td.t{width:56px}.wrap{padding:16px 10px 40px}}
@@ -213,13 +221,23 @@ code{background:#f0f2f5;padding:1px 5px;border-radius:4px;font-size:12px}
 """
 
 
+HOWTO_CARD = """
+<div class="card howto">
+  <h2>上课提醒怎么到我微信上</h2>
+  <div class="step"><b>① 你只需要做一次</b>：微信扫码登录 <b>sct.ftqq.com</b> → 在「消息通道」里关注 <b>「方糖」服务号</b>并绑定微信。<b>没关注就没地方送，这一步不能省。</b></div>
+  <div class="step"><b>② 之后全自动</b>：云端在<b>周一到周五 08:20 / 10:00 / 13:10 / 15:10</b> 各查一次课表，那一大节有课就发一条「下一节上什么、在哪个教室」＋今天剩下的课；没课不发、周末不发。</div>
+  <div class="step"><b>③ 去哪看</b>：微信里「方糖」服务号的会话，跟普通微信消息一样弹出来。不用装 App、不用开电脑、不用打开这个网页、不用点任何按钮。</div>
+  <div class="note">不在上面四个时刻、或当天没课，本来就不会有消息 —— 这是正常的，不是坏了。想立刻验证，可在 Server酱后台点「发送测试」，或手工触发一次云端任务。<br>注意：接口返回成功只代表「服务端已受理」，微信能不能弹出取决于第 ① 步有没有完成绑定。</div>
+</div>
+"""
+
+
 HTML_TAIL = """
 <div class="card">
-  <h2>不装 App，也能准时提醒</h2>
-  <div>把整学期课表导入手机自带日历，由手机本地在课前 20 分钟提醒。<b>不需要网络、不需要 GitHub、不需要微信</b>，这是最可靠的一层。</div>
+  <h2>不装 App，也能准时提醒（最可靠的一层）</h2>
+  <div>把整学期课表导入手机自带日历，由手机本地在课前 20 分钟提醒。<b>不需要网络、不需要云端、不需要微信</b>。微信推送是增强，定时任务偶尔排队会晚到，日历不会。</div>
   <button class="ics" id="icsbtn" type="button">下载课表 .ics 导入手机日历</button>
   <a class="altlink" href="prebell.ics" download="课表.ics">或取同目录的 prebell.ics</a>
-  <div class="sub" style="margin-top:10px">微信服务号会在每个上课大节前 20 分钟另推一条「下一节 + 今天全部课程」，作为增强；GitHub 定时任务偶尔排队会晚到，晚到会如实标注。</div>
 </div>
 <footer>
   课表来自一张截图逐格转录，教师姓名辨读置信度低，故不展示。<br>
@@ -246,18 +264,47 @@ HTML_JS = """
     warn.innerHTML = '⚠ 课表尚未与教务校历核对：第 1 周按 <b>'+DATA.anchor.first_monday+'</b> 估算。若开学周不对，整张日期表会整体平移——请对照原图确认，确认后把 <code>anchor.verified</code> / <code>meta.proofread</code> 改为 true 并重跑 <code>planner.py</code>。';
   } else { warn.style.display='none'; }
 
+  function rows(list){
+    var s='';
+    list.forEach(function(e){
+      e.courses.forEach(function(c,i){
+        s += '<div class="ev"><div class="t">'+(i===0?e.class_start:'')+'</div><div class="n"><span class="badge">'+e.period_label+'</span>'+(c.name||'课程待核对')+
+             '<div class="r">'+(c.room||'教室待核对')+(c.form?' · '+c.form:'')+' · '+e.class_start+'–'+e.class_end+'</div></div></div>';
+      });
+    });
+    return s;
+  }
+  function dateCN(s){ var p=s.split('-'); return parseInt(p[1],10)+'月'+parseInt(p[2],10)+'日'; }
+  function nextFire(){
+    var n=new Date(), best=null;
+    E.forEach(function(e){
+      var t=new Date(e.date+'T'+e.remind_at+':00');
+      if(t>n && (!best||t<best.t)) best={t:t,e:e};
+    });
+    return best;
+  }
   function renderToday(){
     var key = iso(today), list = (byDate[key]||[]).slice().sort(function(a,b){return a.class_start<b.class_start?-1:1;});
     var w = list.length? list[0].week : Math.floor((today - new Date(DATA.anchor.first_monday+'T00:00:00'))/604800000)+1;
     var d = document.getElementById('todaybox');
+    var nf = nextFire();
     var h = '<div class="big">今天 · '+(today.getMonth()+1)+'月'+today.getDate()+'日 '+CN[(today.getDay()+6)%7]+' · 第 '+w+' 周</div>';
-    if (!list.length) h += '<div class="empty">今天没课，好好休息。</div>';
-    else list.forEach(function(e){
-      e.courses.forEach(function(c,i){
-        h += '<div class="ev"><div class="t">'+(i===0?e.class_start:'')+'</div><div class="n"><span class="badge">'+e.period_label+'</span>'+(c.name||'课程待核对')+
-             '<div class="r">'+(c.room||'教室待核对')+(c.form?' · '+c.form:'')+' · '+e.class_start+'–'+e.class_end+'</div></div></div>';
-      });
-    });
+    if (nf) {
+      h += '<div class="nextfire">下一次微信提醒：<b>'+dateCN(nf.e.date)+' '+CN[(nf.t.getDay()+6)%7]+' '+nf.e.remind_at+'</b> · '+((nf.e.courses[0]&&nf.e.courses[0].name)||'')+'</div>';
+    } else {
+      h += '<div class="nextfire">本学期提醒已全部结束。</div>';
+    }
+    if (!list.length) {
+      var next=null;
+      Object.keys(byDate).sort().some(function(k){ if(k>key){ next=k; return true; } return false; });
+      h += '<div class="empty">今天没课。</div>';
+      if (next) {
+        h += '<div class="big" style="font-size:15px;margin-top:8px">下一次上课 · '+dateCN(next)+' '+CN[(new Date(next+'T12:00:00').getDay()+6)%7]+'</div>';
+        h += rows(byDate[next].slice().sort(function(a,b){return a.class_start<b.class_start?-1:1;}));
+      }
+    } else {
+      h += rows(list);
+    }
     d.innerHTML = h;
   }
 
@@ -326,7 +373,8 @@ def render_html(data):
     js = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     body = (
         '<div class="warn" id="warn"></div>\n'
-        '<div class="card today"><h2>今天</h2><div id="todaybox"></div></div>\n'
+        '<div class="card today"><h2>今天 / 下一次上课</h2><div id="todaybox"></div></div>\n'
+        + HOWTO_CARD +
         '<div class="card"><h2>本周课表</h2>'
         '<div class="nav"><button id="prev">← 上一周</button>'
         '<span class="weeklabel" id="weeklabel"></span>'
