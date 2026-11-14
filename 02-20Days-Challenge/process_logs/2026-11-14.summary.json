@@ -1,10 +1,10 @@
 {
   "date": "2026-11-14",
-  "rounds": 7,
-  "source_calls": 49,
-  "source_ok": 42,
-  "source_failed": 7,
+  "rounds": 8,
+  "source_calls": 56,
+  "source_ok": 48,
+  "source_failed": 8,
   "new_items": 0,
-  "merkle_root": "03d501291502dd92354af2c14be8ff43e4ca1e8cc23dd5f7b17447a845be4ba6",
-  "generated_at": "2026-11-14 17:58"
+  "merkle_root": "e6d2f752b0f87b4085b56de9ccb77645c876d4f81b12f4204c0e9306ff65c032",
+  "generated_at": "2026-11-14 21:08"
 }
