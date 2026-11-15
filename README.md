@@ -57,6 +57,9 @@ PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增
 全部实证放 `tools/kexu/README.md`，日志口径放 `tools/kexu/usage_logs/README.md`；
 修过的坑（安装版 `userData` 实际叫 `classmate-reminder`、导致凭据找不到、自动提交静默失效）也写在里面。
 源码安全审计见 `tools/kexu/SECURITY-AUDIT.md`，源码快照说明见 `tools/kexu/app/SOURCE-SNAPSHOT.md`。
+**11-16 已把 0.1.3 安装包发布为 GitHub Release [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)**
+（附件 `Kexu-Setup-0.1.3.exe`，132,215,755 B，SHA-256 `cfb7d332…b582ce2`，可直接下载）；
+exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，转公开后链接才公开可访问。
 实证提交 `f0f707a`（链路验证）、`ff77158`（修好后 5 条真实事件）、`7334429`（定时器按真实时钟自行唤醒的 `scheduled` 提交），单测 7/7。
 **这套日志的 7 天连续窗口是 11-16 ～ 11-22；11-15 只是链路验证，不算窗口内日志，不会补写凑数。**
 

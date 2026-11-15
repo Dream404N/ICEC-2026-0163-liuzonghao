@@ -49,8 +49,11 @@ CI 见 `.github/workflows/check.yml`（Node 24，含 UI 测试、Windows 安装�
   `dist/`（构建产物）、`test-results/`、`.git/`、`tsconfig.tsbuildinfo`、
   `android/`（Capacitor 生成的壳 + 本机 Android SDK 构建中间产物，25 MB；
   本仓库 `tools/dingding/android/` 另有完整安卓源码）、根目录那份重复的 `log-sync.cjs` 副本。
-- **安装包 exe 不在仓库**：`课序 Setup 0.1.3.exe` 为 132,215,755 字节，超过 GitHub
-  单文件 100 MB 限制；其 SHA-256 与本机路径记在 [`../README.md`](../README.md)，可逐字节核对。
+- **安装包 exe 不进 git 树，但已作为 GitHub 发行版发布**：`课序 Setup 0.1.3.exe` 为
+  132,215,755 字节，超过仓库单文件 100 MB 限制；Release 附件上限 2 GB，故发布在
+  [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
+  （附件名 `Kexu-Setup-0.1.3.exe`，GitHub 会清洗中文与空格）。SHA-256 与本机路径记在
+  [`../README.md`](../README.md)，可逐字节核对。仓库仍 Private，下载需账户权限。
 - `docs/artifacts.json` 是工程自带的**历史**产物清单，停在 0.1.1；当前版本以上层 README 为准。
 - **不含任何 token / SendKey / 云数据库凭据**。日志提交所需凭据只在运行时从本机环境变量
   或本机文件读取，运行配置 `log-sync.json` 是应用自动生成的，不在源码里。

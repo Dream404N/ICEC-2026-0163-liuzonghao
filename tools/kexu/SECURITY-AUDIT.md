@@ -51,6 +51,8 @@ Get-Content dist\index.html                       # 可见 CSP 的 *.supabase.co
 本机路径 `release/课序 Setup 0.1.3.exe`（同等副本在 `release-013/`），
 132,215,755 字节，2026-11-15 22:48 生成，
 SHA-256 `cfb7d332683875d049361971cb0f2c40df0cfc999eeb074d6a5d2f429b582ce2`。
+这份文件同时是 GitHub Release [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
+的附件 `Kexu-Setup-0.1.3.exe`（132,215,755 B），上传后可用上面的 SHA-256 核对下载件是否被改动。
 
 包内核对：`app.asar` 内 `electron/main.cjs`、`electron/log-sync.cjs`、
 `electron/preload.cjs`、`electron/reminders.ps1` 与本机源码**逐字节一致**；

@@ -49,6 +49,26 @@
 不用再填一次。运行时是 Electron 45.3.2；该版本官方 dist 本身就不含
 `libEGL.dll` / `libGLESv2.dll`，便携目录里没有这两个文件属正常，不是打包缺失。
 
+## GitHub 发行版（可直接下载）
+
+11-16 00:5x 发布 Release **`kexu-0.1.3`**：
+<https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3>
+
+| 项 | 值 |
+| --- | --- |
+| 附件名 | `Kexu-Setup-0.1.3.exe`（显示标签「课序 Setup 0.1.3.exe · Windows 安装包（NSIS）」） |
+| 大小 / SHA-256 | 132,215,755 B · `cfb7d332683875d049361971cb0f2c40df0cfc999eeb074d6a5d2f429b582ce2` |
+| 下载直链 | <https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/download/kexu-0.1.3/Kexu-Setup-0.1.3.exe> |
+
+GitHub 会清洗 asset 名里的中文与空格（首次上传被改名成 `Setup.0.1.3.exe`），所以改用
+ASCII 文件名、中文放 label；**附件内容就是本机 `release/课序 Setup 0.1.3.exe`，哈希逐字节相同**。
+
+exe 不进 git 树（单文件 132 MB 超过仓库 100 MB 限制），但 Release 附件上限 2 GB，
+因此单独作为发行版发布，评审可直接下载，不必依赖本机路径。仓库目前仍为 **Private**，
+下载需要该账户权限；11-20 转公开后链接才对所有人可访问。
+
+0.1.0 / 0.1.1 / 0.1.2 **未作为发行版上传**，只在本机保留安装包与哈希，不冒充已发布。
+
 ## 它是怎么跑的
 
 - **只记真实事件**：启动、退出、提醒弹出、测试提醒、提醒计划变更、开机启动开关、休眠恢复、
