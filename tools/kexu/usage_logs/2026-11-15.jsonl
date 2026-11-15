@@ -1,2 +1,5 @@
 {"ts":"2026-11-15T13:28:29.309Z","date":"2026-11-15","local":"21:28:29","event":"验证","detail":"本机命令行验证日志自动提交链路（非模拟事件）","ok":true,"source":"kexu-desktop","app":"cli","platform":"win32"}
 {"ts":"2026-11-15T13:28:29.951Z","date":"2026-11-15","local":"21:28:29","event":"manual_sync","detail":"使用者手动触发日志同步","ok":true,"source":"kexu-desktop","app":"cli","platform":"win32"}
+{"ts":"2026-11-15T13:52:11.230Z","date":"2026-11-15","local":"21:52:11","event":"app_start","detail":"课序启动 | v0.1.2 | win32","ok":true,"source":"kexu-desktop","app":"0.1.2","platform":"win32"}
+{"ts":"2026-11-15T13:52:12.066Z","date":"2026-11-15","local":"21:52:12","event":"reminders_scheduled","detail":"已安排 0 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.2","platform":"win32"}
+{"ts":"2026-11-15T14:06:31.564Z","date":"2026-11-15","local":"22:06:31","event":"manual_sync","detail":"使用者手动触发日志同步","ok":true,"source":"kexu-desktop","app":"cli","platform":"win32"}
