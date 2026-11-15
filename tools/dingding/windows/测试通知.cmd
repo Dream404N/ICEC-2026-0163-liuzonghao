@@ -1,6 +1,11 @@
 @echo off
 chcp 65001 >nul 2>&1
 cd /d "%~dp0"
-set "PY=C:\Users\Administrator\.workbuddy\binaries\python\versions\3.13.12\python.exe"
-if not exist "%PY%" set "PY=python"
-"%PY%" dingding_win.py --test
+set "EXE="
+for %%F in ("%~dp0..\dist\*.exe") do set "EXE=%%~fF"
+if not defined EXE (
+  echo ERROR: dist\*.exe not found.
+  pause >nul
+  exit /b 1
+)
+"%EXE%" --test

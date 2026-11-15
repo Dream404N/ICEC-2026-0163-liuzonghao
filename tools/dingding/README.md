@@ -1,27 +1,62 @@
 # 叮叮课表 · 多终端本地版
 
-> **2026-11-15 需求变更**：使用者要求「做一个能开机自启、到点就弹的 Windows 程序」，
-> 并要求「日志每天自动 commit 到 GitHub」「能即时测试通知」。
-> 这推翻了 11-15 上午「不常驻、不自启、不产生日志」的旧口径。旧版文件仍保留，
-> 但**以本文件为准**；变更理由见
-`02-20Days-Challenge/iterations/008-开机自启多终端与客户端日志自动提交.md`。
+> **2026-11-15 第三次变更**：使用者指出「每 15 秒检测课表是什么鬼，病毒吗」，并要求
+> 「编译一个多功能的 EXE，能自己调节」。旧版 `while True / sleep(15)` 全表扫描**已删除**，
+> 现在交付单文件 `dist/叮叮课表.exe`，带图形设置面板，调度改成事件驱动。
+> 变更理由与勘误见 `02-20Days-Challenge/iterations/009-单文件EXE与零轮询调度.md`。
+
+## 先回答「是不是病毒」
+
+旧版每 15 秒把 140 条课表从头扫一遍，确实是不合理的忙等，这一版已经删掉了。
+现在的 EXE 是这样工作的：
+
+1. 启动时把课表读进内存**一次**；
+2. 算出「下一次要响的时刻」（提醒点、或每天一次的日志提交点）；
+3. 用一个**单次** `threading.Timer` 直接睡到那一刻，中途不查表、不读文件、不联网；
+4. 到点弹通知 → 再算下一次 → 再睡；
+5. 唯一的例外是**每 30 分钟一次校准唤醒**，防止系统休眠/改时间让长定时器失准；
+   校准只重算内存里的时间点，不弹窗、不写日志、无任何 I/O。
+
+界面底部实时显示「轮询 0 次 ｜ 到点唤醒 N 次 ｜ 30 分钟校准 M 次」，可以自己盯。
+倒计时每秒只做一次减法，同样不碰磁盘和网络。**没有 Service、没有后台扫描、没有开机偷偷联网**。
 
 ## 有哪些东西
 
 | 文件 | 用在哪 | 怎么用 |
 |---|---|---|
-| `windows/安装.cmd` | Windows | **双击安装**：复制程序、写开机自启、启动常驻、放桌面测试入口、当场弹一条测试通知 |
+| `dist/叮叮课表.exe` | Windows | **主程序**。单文件，双击打开设置面板；不需要装 Python |
+| `windows/安装.cmd` | Windows | 双击安装：复制 EXE、写开机自启、打开设置窗口、放两个桌面入口、当场弹一条测试通知 |
 | `windows/卸载.cmd` | Windows | 双击取消开机自启 |
-| `windows/dingding_win.py` | Windows | 安装版主程序（Python 3 标准库，零第三方依赖） |
-| `windows/测试通知.cmd` | Windows | 双击立即弹一条测试通知（不安装也能测）；安装后桌面会另外生成一个入口 |
+| `windows/测试通知.cmd` | Windows | 双击立即弹测试通知（冷启动需等几秒） |
 | `windows/叮叮课表.html` | Windows | 不安装也能双击看课表的单文件网页 |
 | `windows/叮叮课表.ics` | Windows | 双击导入「Windows 日历 / Outlook」，系统级兜底提醒 |
-| `windows/courses.json` | Windows | 140 条精简课表，由 `build_assets.py` 生成 |
+| `windows/dingding_win.py` | Windows | 命令行后备工具（旧自启项兼容），已改为同样的零轮询调度 |
+| `windows/dingding_exe.py` / `build_exe.py` | Windows | EXE 源码与本机打包脚本 |
+| `windows/courses_data.py` | Windows | 编译进 EXE 的 140 条课程，由 `build_assets.py` 生成 |
 | `dist/叮叮课表.apk` | 安卓 | 装完点「写入手机日历」+「开启后台提醒」 |
-| `commit_usage_logs.py` | 两端 | 把客户端真实使用日志提交到 GitHub |
-| `usage_logs/` | 两端 | 客户端真实事件日志（**不是**云端自动化运行日志） |
+| `commit_usage_logs.py` / `usage_logs/` | 两端 | 客户端真实使用日志与每日自动提交 |
+
+## EXE 里能自己调什么
+
+打开就是设置面板，改完点「保存并生效」立刻重排下一次提醒：
+
+- 提前几分钟提醒（0/5/10/15/20/30/45/60，默认 20）
+- 总开关、提示音、弹窗开关、只在工作日提醒
+- 开机自启（写 `HKCU\...\Run`）、启动时最小化
+- 静音时段（默认 22:00–07:00，这段时间不弹不响）
+- 每天自动提交日志的开关与时间（默认 23:50）
+- 自定义课表 JSON 文件（留空用 EXE 内嵌的 140 条）
+- 按钮：立即测试通知、立即同步日志、打开课表网页、导入系统日历、打开日志目录、最小化、退出程序
+- 首屏显示「下一次提醒是什么、还剩多久」和今天/下一个上课日的全部课程
+
+关窗口 = 最小化到任务栏，**要真正退出请点「退出程序」**，不留偷偷跑的黑框进程。
 
 ## 提醒到底怎么来（分设备说清）
+
+**Windows**：EXE 开机自启后常驻，按上面的事件驱动调度在课前弹置顶窗口 + 提示音。
+这一层依赖进程在，进程被结束就不弹；真正不依赖任何进程的一层是 `.ics`
+导入 Windows 日历后的系统提醒。本机 `schtasks.exe` 被安全策略禁用，所以**没有**
+注册系统计划任务，这一条如实写明。
 
 **安卓：不需要本 App 的后台进程。** 两层都由系统持有：
 
@@ -29,75 +64,70 @@
    系统提醒。App 卸载了都还在。
 2. **系统闹钟**：`RemindReceiver` 用 `AlarmManager` 注册未来 7 天的提醒点，到点由系统拉起
    广播发通知；`BOOT_COMPLETED` / 应用更新后会自动重排。没有 Service、没有轮询、没有常驻进程。
-   **实测入口**：点「测试 10 秒后闹钟」→ 退出 App → 10 秒后看通知栏，出来就说明链路通。
+   **实测入口**：点「测试 10 秒后闹钟」→ 退出 App → 10 秒后看通知栏。
 
-   可靠边界（不吹）：Android 12+ 用户可在设置里关掉「精确闹钟」（关了会退化成可能晚几分钟的
-   普通闹钟）、Android 13+ 需要通知运行时权限、部分国产 ROM 会冻结开机广播或在「强停」后不唤醒。
-   所以系统日历那层不能省。APK 仍然**没有 INTERNET 权限**。
-
-**Windows：靠开机自启的常驻小程序。** `dingding_win.py --daemon` 由
-`HKCU\Software\Microsoft\Windows\CurrentVersion\Run` 拉起，每 15 秒查一次表，到点用
-`MessageBoxW` 置顶弹窗 + 提示音。进程被结束就不会弹 —— 这一层**不是**「无进程也能响」；
-不依赖任何进程的那层是 `.ics` 导入 Windows 日历后的系统提醒。
-本机 `schtasks.exe` 被安全策略禁用，所以没有注册系统计划任务，这一条如实写明。
+可靠边界（不吹）：Android 12+ 关掉「精确闹钟」会退化成可能晚几分钟；Android 13+ 需要通知
+运行时权限；部分国产 ROM 会冻结开机广播或在「强停」后不唤醒。所以系统日历那层不能省。
+APK 仍然**没有 INTERNET 权限**。
 
 ## 即时测试通知
 
-- Windows：桌面「叮叮课表-测试通知.cmd」双击，或 `python dingding_win.py --test`。
-  弹窗 5 秒自动关闭，不会卡住安装流程。也可 `python dingding_win.py --selftest`
-  做不弹窗、不写注册表、不启动常驻的自检。
+- Windows：EXE 设置面板里点「立即测试通知」（**已启动时是即时的**）；或双击
+  `windows/测试通知.cmd` / 桌面入口（单文件 EXE 冷启动约需 5–7 秒解压）。
+  弹窗 5 秒自动关闭，不卡流程。`叮叮课表.exe --selftest` 做不弹窗、不写注册表的自检。
 - 安卓：App 里「立即测试通知」当场弹；「测试 10 秒后闹钟」验证退出 App 后还能不能弹。
 - 浏览器网页版：`叮叮课表.html` 的「立即测试通知」按钮（需先允许浏览器通知）。
 
 ## 客户端日志：每天自动 commit
 
-常驻程序每天 **23:50** 调 `commit_usage_logs.py`，把 `usage_logs/` 下的
-`YYYY-MM-DD.jsonl` 推到 GitHub。只记真实事件（安装、常驻启动、到点弹窗、手动测试、提交结果）；
-关机、没启动、断网那天就是空白，**不补写、不造空文件凑连续天数**。
+EXE 每天 **23:50**（时间可改）调 `commit_usage_logs.py` 的同一套逻辑，把
+`usage_logs/YYYY-MM-DD.jsonl` 推到 GitHub。只记真实事件（启动、安装、设置变更、
+到点弹窗、手动测试、退出）；关机、没启动、断网那天就是空白，**不补写、不造空文件凑天数**。
 
-凭据只从工作区外 `.workbuddy/.gh_token` 读，**不写进客户端、不进日志、不入库**；
+凭据只从工作区外 `.workbuddy/.gh_token` 读，**不写进 EXE、不进日志、不入库**；
 提交前机械扫描疑似密钥串；只增改、不删远端文件。
+已实测：`叮叮课表.exe --commit-logs` → 远端 `5aa06a2`（提交 1 个真实日志文件）。
 
 **关键区分**：`tools/dingding/usage_logs/` 是本机客户端使用记录，
 `02-20Days-Challenge/process_logs/` 是云端 Actions 产生的自动化运行日志证据，
-提交者分别是「本机推送」和 `prebell-bot`，**互不替代、互不冒充**。
-两个目录各自的 `README.md` 写了完整口径。
+两个目录各有 `README.md` 写口径，**互不替代、互不冒充**。
 
 ## 三步就能用
 
-1. **Windows**：双击 `windows/安装.cmd`（会当场弹一条测试通知）；再双击
-   `windows/叮叮课表.ics` 导入日历作为兜底。
+1. **Windows**：双击 `windows/安装.cmd`（当场弹测试通知并打开设置窗口）；
+   再双击 `windows/叮叮课表.ics` 导入日历作为兜底。
 2. **安卓**：装 `dist/叮叮课表.apk` → 打开 → 点「写入手机日历」→ 点「开启后台提醒」
    → 点「测试 10 秒后闹钟」验证一次。
 3. **之后什么都不用做**：课前 20 分钟各自弹；每天 23:50 客户端日志自动进 GitHub。
 
-## 数据从哪来
+## 数据从哪来 / 怎么重新构建
 
 唯一来源是 `02-20Days-Challenge/src/prebell/schedule.json` 的 **140 条真实有课提醒**，
-由 `planner.py` 按周次展开。本目录不手抄任何一格课程。
-
-改课表后重跑，五份产物一起更新：
+由 `planner.py` 按周次展开。本目录不手抄任何一格课程。改课表后重跑：
 
 ```
-python tools/dingding/build_assets.py     # 网页 + ics + courses.json（Win/安卓共用）
-python tools/dingding/build_apk.py        # 本机出 APK
+python tools/dingding/build_assets.py     # 网页 + ics + courses.json + courses_data.py
+python tools/dingding/build_exe.py        # 本机 PyInstaller 出单文件 EXE
+python tools/dingding/build_apk.py        # 本机 Android SDK 出 APK
 ```
 
-构建 APK 用本机 `ANDROID_HOME`（`I:\android-sdk-windows`）、`platforms/android-29`、
-`build-tools/29.0.3`、JDK 17，走 `aapt2 → javac → d8 → zipalign → apksigner`，
-**不需要 Gradle、不需要下载依赖、不需要 GitHub Actions、不需要网络**。
+EXE 用本机 Python 3.11 + PyInstaller 6.11.1 打包（`--onefile --noconsole`），
+图标是纯标准库现画的 32×32 ICO。APK 用本机 `I:\android-sdk-windows` +
+JDK 17 走 `aapt2 → javac → d8 → zipalign → apksigner`。
+**全程不下载依赖、不需要 GitHub Actions、不需要网络。**
 
 ## 如实边界
 
+- **这是 PyInstaller 打出来的单文件 EXE，不是原生 C++ 程序，也不是 Windows Installer
+  安装包（`.msi`）**。开机自启仍由 `安装.cmd` 写入注册表（需要本人双击才写，程序不擅自写）。
+  单文件 EXE 冷启动约 5–7 秒（要把运行时解压到临时目录），已在真机计时确认，不掩饰。
 - 课表第 1 周周一按 `2026-09-07` **估算，尚未与教务校历核对**；错一周整张日期表会整体平移。
   教师姓名辨读置信度低，故不展示。
-- **安装包是双击即装的 `.cmd` 安装器，不是 `.exe` 安装包**。本机没有可用的 exe 打包工具，
-  程序本体是标准库 Python + `pythonw.exe`（无黑框），安装动作是复制文件 + 写自启 +
-  启动常驻 + 建桌面入口。不冒充做了 Windows Installer 包。
-- APK 签名复用固定开发密钥（`tools/PowerProbe/signing/powerprobe.jks`），可直接覆盖安装。
-- 已在本机验证：签名可验、`classes.dex` / `resources.arsc` / `assets/index.html` /
-  `assets/courses.json` 齐全、内嵌 140 条课程、`RemindReceiver` 已编译进 DEX、
-  有开机广播权限、**没有 INTERNET 权限**；Windows 程序 140 条自检通过、
-  通知 API 可用、日志提交链路真实跑通（`1395795` / `5a50d2c`）。
-- **尚未验证**：真机装 APK、真机写入日历、退出 App 后系统闹钟是否真弹、Windows 常驻进程
-  到点是否真弹窗。这些只能真人装一次确认，不冒充已验证。
+- Windows 弹窗层依赖进程；进程被结束就不弹，`.ics` 系统日历层不受影响。
+- APK 签名复用固定开发密钥，可直接覆盖安装。
+- **已在本机验证**：EXE 11.0 MB 可启动、`--selftest` 显示 140 条内嵌课程与零轮询、
+  `--test` 弹窗并写真实日志、`--commit-logs` 真实推到远端、GUI 窗口创建成功且 4 项日志落盘、
+  密钥形态扫描零命中；APK 签名可验、`RemindReceiver` 在 DEX、有开机广播权限、无 INTERNET 权限；
+  PreBell 19 项单测仍全绿。
+- **尚未验证（不冒充）**：真机装 APK、真机写日历、退出 App 后系统闹钟是否真弹、
+  Windows 常驻到上课时刻是否真弹窗、8 位真人反馈。这些只能真人用一次确认。

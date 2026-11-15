@@ -1,11 +1,21 @@
 @echo off
 chcp 65001 >nul 2>&1
 cd /d "%~dp0"
-set "PY=C:\Users\Administrator\.workbuddy\binaries\python\versions\3.13.12\python.exe"
+rem 用通配符定位 EXE，避免 cmd 代码页把中文文件名读乱
+set "EXE="
+for %%F in ("%~dp0..\dist\*.exe") do set "EXE=%%~fF"
+if not defined EXE (
+  echo ERROR: dist\*.exe not found. Run: python tools\dingding\build_exe.py
+  pause >nul
+  exit /b 1
+)
+set "REPO=%~dp0..\..\.."
+set "WS=%~dp0..\..\..\.."
+set "PY=C:\Users\Administrator\AppData\Local\Programs\Python\Python311\python.exe"
 if not exist "%PY%" set "PY=python"
-echo Installing DingDing Timetable ...
-"%PY%" dingding_win.py --install
+"%EXE%" --install --repo-root "%REPO%" --workspace "%WS%" --python "%PY%"
 echo.
-echo Done. A test notification should have appeared (auto-closes in 5s).
-echo The desktop shortcut "DingDing - Test Notification" can test it any time.
+echo Installed. A test notification just popped up (auto-closes in 5 seconds).
+echo The settings window opens too. Desktop shortcuts: settings / test notification.
+echo First cold start of a single-file EXE takes about 5-7 seconds to unpack.
 pause >nul

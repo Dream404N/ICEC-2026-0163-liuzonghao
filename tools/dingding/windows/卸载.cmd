@@ -1,9 +1,15 @@
 @echo off
 chcp 65001 >nul 2>&1
 cd /d "%~dp0"
-set "PY=C:\Users\Administrator\.workbuddy\binaries\python\versions\3.13.12\python.exe"
-if not exist "%PY%" set "PY=python"
-"%PY%" dingding_win.py --uninstall
+set "EXE="
+for %%F in ("%LOCALAPPDATA%\DingDingTimetable\*.exe") do set "EXE=%%~fF"
+if not defined EXE for %%F in ("%~dp0..\dist\*.exe") do set "EXE=%%~fF"
+if not defined EXE (
+  echo ERROR: EXE not found.
+  pause >nul
+  exit /b 1
+)
+"%EXE%" --uninstall
 echo.
-echo Startup entry removed. Reboot (or end pythonw in Task Manager) to stop the resident process.
+echo Startup entry removed. Click "Exit" in the settings window, or reboot, to stop it.
 pause >nul

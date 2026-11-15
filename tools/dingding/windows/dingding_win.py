@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-"""叮叮课表 · Windows 安装版（只用 Python 标准库，不下载任何依赖）
+"""叮叮课表 · Windows 命令行后备工具（纯标准库，零第三方依赖）
 
-这一版按 2026-11-15 的新要求做：开机自启、常驻、到点弹窗、可即时测试通知、
-每天自动把真实使用日志 commit 到 GitHub。
+【2026-11-15 第三次变更】使用者指出「每 15 秒检测课表是什么鬼，病毒吗」，
+旧版的 `while True / time.sleep(15)` 全表扫描已彻底删除，改成单次 Timer 睡到
+下一个事件（见 daemon()）。同时正式交付单文件图形程序 `dist/叮叮课表.exe`：
+带设置面板，能自己调提前分钟数、开关、开机自启、静音时段、日志提交时间，
+并支持即时测试通知。这个文件不再是主程序，只作命令行后备与旧自启项兼容。
 
-  python dingding_win.py --install     安装（复制程序 + 写自启 + 建测试入口 + 弹一条测试通知）
-  python dingding_win.py --daemon      开机自启后常驻运行（pythonw 启动，无黑框）
   python dingding_win.py --test        立即弹一条测试通知（5 秒后自动关闭）
   python dingding_win.py --fire P1     手动触发某一大节的提醒
   python dingding_win.py --commit-logs 提交当天使用日志
   python dingding_win.py --selftest    不弹窗不写注册表的自检
-  python dingding_win.py --status      看当前状态
-  python dingding_win.py --uninstall   取消开机自启
+  python dingding_win.py --status / --daemon / --install / --uninstall  兼容保留
 
 诚实边界：
-  - Windows 这边靠「开机自启的常驻小程序」弹窗，进程被结束就不会弹；
+  - Windows 弹窗层依赖进程（EXE 或本脚本）在运行，进程被结束就不弹；
     真正不依赖任何进程的一层仍然是 叮叮课表.ics 导入 Windows 日历后的系统提醒。
   - 使用日志只记真实发生的事件；关机、没启动、断网的日子就是空白，不补写。
   - GitHub 凭据只在本机 .workbuddy/.gh_token，不写进本程序、不入库。
@@ -29,7 +29,7 @@ import sys
 import threading
 import time
 import winsound
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 # pythonw.exe 无控制台，sys.stdout / stderr 可能是 None；不重定向的话常驻状态下
@@ -239,27 +239,73 @@ def uninstall():
 # ---------- 常驻 ----------
 
 def daemon():
-    log("daemon_start", "开机自启常驻进程启动，pid=%d" % os.getpid())
-    fired = set()
-    committed = None
-    while True:
-        try:
-            now = datetime.now()
-            today = now.date().isoformat()
-            hhmm = now.strftime("%H:%M")
-            e = entry_for(today, remind_at=hhmm)
-            key = today + "-" + hhmm
-            if e and key not in fired:
-                fired.add(key)
-                t, x = render(e)
-                notify(t, x, blocking=False)
-                log("reminder_fired", "%s %s %s" % (today, hhmm, " / ".join(e["n"])))
-            if hhmm == COMMIT_HHMM and committed != today:
-                committed = today
-                threading.Thread(target=commit_logs, daemon=True).start()
-        except Exception as e:
-            log("daemon_error", "%s %s" % (type(e).__name__, e), ok=False)
-        time.sleep(15)
+    """事件驱动常驻：单次 Timer 睡到下一个事件，不再每 15 秒扫表。
+
+    旧版的 `while True: ... time.sleep(15)` 已被使用者指出「像病毒」，本版删除。
+    课表启动时读进内存一次；之后只在「到点」和「每 30 分钟校准」时醒来，
+    校准只重算内存时间点，不读文件、不查网络、不写日志、不弹窗。
+    新装的用户请用 叮叮课表.exe；这个函数只为兼容旧的自启项保留。
+    """
+    log("daemon_start", "事件驱动常驻启动（零轮询），pid=%d" % os.getpid())
+    cache = courses()          # 全学期课表只读这一次
+    fired, committed, timer = set(), set(), {"t": None}
+    calibrate = timedelta(minutes=30)
+    late_tolerance = timedelta(minutes=5)
+
+    def schedule():
+        now = datetime.now()
+        cands = []
+        for e in cache:
+            try:
+                at = (datetime.strptime(e["d"] + " " + e["s"], "%Y-%m-%d %H:%M")
+                      - timedelta(minutes=20))
+            except ValueError:
+                continue
+            if at >= now - late_tolerance:
+                cands.append((max(at, now + timedelta(seconds=1)), "remind", e))
+        for delta in (0, 1, 2):
+            day = (now + timedelta(days=delta)).date().isoformat()
+            at = datetime.strptime(day + " " + COMMIT_HHMM, "%Y-%m-%d %H:%M")
+            if at > now:
+                cands.append((at, "commit", None))
+                break
+        if not cands:
+            log("daemon_idle", "学期已结束，没有后续事件")
+            return
+        at, kind, payload = min(cands, key=lambda x: x[0])
+        wake_kind = kind
+        if now + calibrate < at:
+            at, wake_kind = now + calibrate, "calibrate"
+
+        def wake():
+            try:
+                if wake_kind != "calibrate":
+                    if datetime.now() - at > late_tolerance:
+                        log("missed_too_late", "%s 迟到过久，不补弹" % kind, ok=False)
+                    elif kind == "remind":
+                        key = payload["d"] + "-" + payload["p"]
+                        if key not in fired:
+                            fired.add(key)
+                            t, x = render(payload)
+                            notify(t, x, blocking=False)
+                            log("reminder_fired", "%s %s %s" % (
+                                payload["d"], payload["r"], " / ".join(payload["n"])))
+                    else:
+                        day = at.date().isoformat()
+                        if day not in committed:
+                            committed.add(day)
+                            threading.Thread(target=commit_logs, daemon=True).start()
+            except Exception as ex:
+                log("daemon_error", "%s %s" % (type(ex).__name__, ex), ok=False)
+            schedule()
+
+        t = threading.Timer((at - now).total_seconds(), wake)
+        t.daemon = True
+        timer["t"] = t
+        t.start()
+
+    schedule()
+    threading.Event().wait()   # 主线程不忙等；所有工作由单次 Timer 驱动
 
 
 def selftest():

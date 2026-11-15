@@ -116,11 +116,16 @@ def main():
                          separators=(",", ":"))
     (OUT_WIN / "courses.json").write_text(courses, encoding="utf-8")
     (OUT_AND / "courses.json").write_text(courses, encoding="utf-8")
+    # 编译进 EXE 的同一份数据：单文件 EXE 不依赖外部 json 也能跑。
+    (OUT_WIN / "courses_data.py").write_text(
+        '# -*- coding: utf-8 -*-\n'
+        '"""由 build_assets.py 生成，勿手改。课表唯一来源是 schedule.json。"""\n'
+        'DATA = ' + repr(courses) + '\n', encoding="utf-8")
     (OUT_WIN / "叮叮课表.ics").write_text(build_ics(data["entries"]), encoding="utf-8", newline="")
 
     print("叮叮课表：%d 条真实课程，覆盖 %s ~ %s"
           % (len(data["entries"]), data["entries"][0]["d"], data["entries"][-1]["d"]))
-    print("  windows/叮叮课表.html / 叮叮课表.ics / courses.json")
+    print("  windows/叮叮课表.html / 叮叮课表.ics / courses.json / courses_data.py")
     print("  android/assets/index.html / courses.json")
     print("  第 1 周锚点 %s，已核对=%s" % (data["anchor"], data["anchor_verified"]))
     return 0
