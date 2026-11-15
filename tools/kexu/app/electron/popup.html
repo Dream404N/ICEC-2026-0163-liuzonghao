@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+<title>课序 · 课程提醒</title><link rel="stylesheet" href="popup.css"></head>
+<body><article role="status" aria-label="课程提醒">
+  <header><span class="logo">课</span><span class="brand">课序 <small>课程提醒</small></span><button class="close" aria-label="关闭提醒" data-action="dismiss">×</button></header>
+  <button class="content" data-action="open" aria-label="打开课序"><strong id="title"></strong><span id="body"></span></button>
+  <footer><span>不打断，提醒一下</span><button data-action="snooze">5 分钟后提醒</button></footer>
+  <div class="progress"><i></i></div>
+</article><script src="popup.js"></script></body></html>

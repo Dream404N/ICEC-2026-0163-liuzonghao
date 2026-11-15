@@ -1,0 +1,53 @@
+import { _electron as electron } from 'playwright';
+import { strict as assert } from 'node:assert';
+import { mkdir, mkdtemp, readFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+const executablePath = process.env.KEXU_EXECUTABLE || (await import('electron')).default;
+const profile = await mkdtemp(path.join(os.tmpdir(), 'kexu-popup-smoke-'));
+const args = [...(process.env.KEXU_EXECUTABLE ? [] : ['.']), `--user-data-dir=${profile}`];
+const app = await electron.launch({ executablePath, args, timeout: 60000 });
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+async function popup() {
+  const page = await app.waitForEvent('window', { timeout: 12000 });
+  await page.waitForURL('**/popup.html');
+  await page.locator('#title').filter({ hasText: /课序/ }).waitFor();
+  return page;
+}
+try {
+  const page = await app.firstWindow();
+  await page.getByRole('heading', { name: /每一节课，都从容以赴/ }).waitFor();
+  await delay(1400);
+  const status = await page.evaluate(() => window.kexu.notificationStatus());
+  assert.equal(status.enabled, true, status.error);
+  await page.getByRole('button', { name: '课程管理', exact: true }).click();
+  await page.getByLabel('搜索课程').fill(''); await page.getByLabel('搜索课程').focus();
+  await app.evaluate(({ BrowserWindow }) => { const main = BrowserWindow.getAllWindows().find(w => !w.webContents.getURL().endsWith('/popup.html')); main.show(); main.focus(); });
+  const popupPromise = popup();
+  await page.evaluate(() => window.kexu.schedule([{ id: 1999999999, key: 'popup-smoke', title: '课序 · 右下角提醒测试', body: '08:40–10:00 · 实训楼 301 · 张老师', at: new Date(Date.now() + 1800).toISOString(), lessonAt: new Date(Date.now() + 3600000).toISOString() }], false));
+  const card = await popupPromise;
+  await card.waitForFunction(() => document.visibilityState === 'visible');
+  const windows = await app.evaluate(({ BrowserWindow, screen }) => ({ area: screen.getPrimaryDisplay().workArea, windows: BrowserWindow.getAllWindows().map(w => ({ popup: w.webContents.getURL().endsWith('/popup.html'), visible: w.isVisible(), focused: w.isFocused(), focusable: w.isFocusable(), top: w.isAlwaysOnTop(), bounds: w.getBounds() })) }));
+  const actual = windows.windows.find(w => w.popup);
+  assert.ok(actual.visible && actual.top); assert.equal(actual.focusable, false); assert.equal(actual.focused, false);
+  assert.ok(windows.windows.find(w => !w.popup).focused, 'main input retains native focus');
+  assert.ok(actual.bounds.x >= windows.area.x && actual.bounds.y >= windows.area.y);
+  assert.ok(Math.abs(actual.bounds.x + actual.bounds.width - (windows.area.x + windows.area.width - 8)) <= 1);
+  assert.ok(actual.bounds.y + actual.bounds.height <= windows.area.y + windows.area.height);
+  await page.keyboard.type('继续输入'); assert.equal(await page.getByLabel('搜索课程').inputValue(), '继续输入');
+  await mkdir('test-results', { recursive: true }); await card.screenshot({ path: 'test-results/windows-popup.png' });
+  const closed = card.waitForEvent('close'); await card.getByRole('button', { name: '5 分钟后提醒' }).click(); await closed;
+  const stored = JSON.parse(await readFile(path.join(profile, 'popup-reminders.json'), 'utf8'));
+  assert.ok(stored.items.some(r => r.key.startsWith('snooze:') && Date.parse(r.at) > Date.now() + 290000));
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().find(w => !w.webContents.getURL().endsWith('/popup.html')).hide());
+  const backgroundPromise = popup();
+  await page.evaluate(() => window.kexu.testNotification({ id: 1999999998, key: 'popup-background', title: '课序 · 后台提醒测试', body: '主窗口已关闭到托盘，提醒仍会显示', at: new Date(Date.now() + 1000).toISOString(), lessonAt: new Date(Date.now() + 3600000).toISOString() }, false));
+  const background = await backgroundPromise;
+  await background.waitForFunction(() => document.visibilityState === 'visible');
+  await background.locator('article').hover(); await delay(12500); assert.equal(background.isClosed(), false);
+  await background.mouse.move(0, 0); await background.waitForEvent('close', { timeout: 15000 });
+  await page.evaluate(() => window.kexu.schedule([], false));
+  assert.equal(JSON.parse(await readFile(path.join(profile, 'popup-reminders.json'), 'utf8')).items.length, 0);
+  console.log('PASS: Actual timed popup, bottom-right work area, no focus theft, continued typing, snooze, tray delivery, hover pause, auto-dismiss and cancellation.');
+  console.log('Isolated test profile:', profile);
+} finally { await app.close(); }

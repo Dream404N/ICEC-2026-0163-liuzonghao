@@ -11,7 +11,7 @@
 | 第一阶段 · 实地测评 | 20 | ✅ 已交 | 课题 02 `01-Field-Discovery/T02-Phone-Power-Thermal/analysis/summary.md`（录像工况仅 2 个采样点，按端点实测标注）；课题 09 `T09-Multimodal-Visual-Blindspot/`（18 图 / 4 模型 / 359 次有效调用） |
 | 项目四 · **连续 7 天运行日志** | 25 | ❌ 未起跑 | 窗口按 `process_logs/README.md` 定为 **11-16 ～ 11-22**；11-10～11-14 是已停用的旧雷达日志，不算数。今天只有课序客户端 1 天日志（`tools/kexu/usage_logs/2026-11-15.jsonl`） |
 | 项目四 · **基于日志 ≥3 次迭代** | 20 | ⚠️ 有 9 篇但不在窗口内 | `iterations/001-009` 覆盖 11-10～11-15 的真实改动与勘误；**11-16 起还需基于新日志再做 ≥3 次**，不能拿旧迭代凑 |
-| 项目四 · **完整源码 + 8 位真实反馈** | 15 | ⚠️ 源码齐、反馈 0 | 源码：`src/prebell/`、`tools/dingding/`、`tools/PowerProbe/`、`tools/kexu/source/`（课序仅本次新增模块快照，完整工程在本机、未入库）；反馈：`feedback/` 只有模板，**0 份真人填写** |
+| 项目四 · **完整源码 + 8 位真实反馈** | 15 | ⚠️ 源码齐、反馈 0 | 源码：`src/prebell/`、`tools/dingding/`、`tools/PowerProbe/`、`tools/kexu/app/`（**11-16 已补齐课序完整桌面工程 65 文件**，`tools/kexu/source/` 另留模块快照）；反馈：`feedback/` 只有模板，**0 份真人填写** |
 | 第三阶段 · 面试 | 20 | — | 不在仓库范围，本人现场 |
 
 ## 一票否决 / 硬性条件核对

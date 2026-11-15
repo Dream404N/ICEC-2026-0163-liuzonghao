@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-15",
+  "artifacts": [
+    {
+      "path": "release/课序 Setup 0.1.0.exe",
+      "bytes": 132205411,
+      "sha256": "8630f190190ae88bc7a6b0db75225aab94d98d385d00f21f4a8f8b3085a9cfb9"
+    },
+    {
+      "path": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "bytes": 4895279,
+      "sha256": "7ed201b5c1b6ba7ebb0807195ba06e2da243146e76d7f0cad980f067e9decebe"
+    },
+    {
+      "path": "release/课序 Setup 0.1.1.exe",
+      "bytes": 132208764,
+      "sha256": "589583e96c46b3807e9af752f39c0062e79f4c95d9ed6685b5be243d46a623d2"
+    }
+  ],
+  "windowsLatest": "0.1.1"
+}
