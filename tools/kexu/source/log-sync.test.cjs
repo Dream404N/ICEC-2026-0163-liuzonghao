@@ -12,6 +12,7 @@ const R = '/repos/acme/repo';
 // 测试用的假密钥在运行时拼出来：源码里不出现形似的完整密钥串，
 // 免得仓库同步脚本 / 密钥扫描把测试样本当成真凭据拦截（单测语义不变）。
 const DUMMY_KEY = 'sk-' + 'abcdefghij' + '1234567890';
+const DUMMY_GHP = 'ghp_' + 'abcdefghijklmnopqrstuvwxyz' + '123456';
 
 function fakeGitHub() {
   const state = { files: new Map(), head: 'base-sha', commits: [], calls: [] };
@@ -72,7 +73,7 @@ test('北京日期分片与单次定时计算', () => {
 
 test('日志脱敏、按北京日期落盘，字段完整', async t => {
   const { sync, dir } = await setup(t);
-  await sync.log('app_start', 'token ' + DUMMY_KEY + ' 与 ghp_abcdefghijklmnopqrstuvwxyz123456');
+  await sync.log('app_start', 'token ' + DUMMY_KEY + ' 与 ' + DUMMY_GHP);
   const file = path.join(dir, 'usage_logs', '2026-11-15.jsonl');
   const rec = JSON.parse((await fs.readFile(file, 'utf8')).trim());
   assert.equal(rec.date, '2026-11-15');
