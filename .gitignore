@@ -28,3 +28,6 @@ config.json
 
 # 项目四：本机调试状态不入库（云端 state/ 与 process_logs/ 必须入库）
 02-20Days-Challenge/.state/
+
+# 叮叮课表：APK 本机构建的中间产物不入库，最终 dist/*.apk 是交付物要入库
+tools/dingding/build/

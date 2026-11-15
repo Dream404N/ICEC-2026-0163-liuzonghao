@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>叮叮课表</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7fa;color:#1f2328;font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:22px 16px 60px}
+header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+h1{font-size:24px;margin:0;font-weight:700;letter-spacing:1px}
+.sub{color:#6b7280;font-size:13px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.card h2{font-size:15px;margin:0 0 12px;font-weight:600;color:#374151}
+.hero{border-left:4px solid #2f6feb}
+.date{font-size:18px;font-weight:650;margin-bottom:8px}
+.next{background:#eef4ff;color:#1b47a8;border-radius:8px;padding:10px 13px;font-size:15px;margin-bottom:12px;font-weight:600}
+.next small{font-weight:400;color:#4b6bb5}
+.ev{display:flex;gap:12px;padding:10px 0;border-top:1px solid #eef0f3}
+.ev:first-of-type{border-top:0}
+.ev .t{width:60px;flex:none;font-weight:600;color:#2f6feb;font-variant-numeric:tabular-nums}
+.ev .n{flex:1}
+.ev .r{color:#6b7280;font-size:13px;margin-top:2px}
+.badge{display:inline-block;background:#eef4ff;color:#2f6feb;border-radius:5px;padding:1px 7px;font-size:12px;margin-right:7px}
+.empty{color:#8b949e;padding:14px 0;text-align:center}
+.howto{border-left:4px solid #18a058}
+.howto h2{color:#136c3a}
+.step{padding:7px 0;font-size:14px}
+.step b{color:#136c3a}
+.note{background:#f4f8f5;border-radius:8px;padding:9px 12px;margin-top:10px;font-size:13px;color:#456154}
+button{font:inherit;border:1px solid #d0d7de;background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;color:#24292f;margin:6px 6px 0 0}
+button:hover{background:#f3f4f6}
+.primary{background:#2f6feb;color:#fff;border-color:#2f6feb;font-weight:600}
+.primary:hover{background:#2559c4}
+.nav{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+.weeklabel{font-weight:600;min-width:140px;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid #e5e7eb;padding:8px 7px;vertical-align:top;text-align:left}
+th{background:#fafbfc;font-weight:600;color:#374151}
+td.t{width:76px;color:#6b7280;font-size:12px;background:#fafbfc;white-space:nowrap}
+.cell{font-weight:500;margin-bottom:2px}
+.room{color:#6b7280;font-size:12px}
+.none{color:#c9ced6}
+.warn{background:#fff8e6;border:1px solid #f0dca8;color:#7a5b12;border-radius:9px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+footer{color:#8b949e;font-size:12px;margin-top:22px;line-height:1.9}
+.hide{display:none}
+@media(max-width:640px){table{font-size:12px}th,td{padding:6px 4px}td.t{width:56px}.wrap{padding:14px 10px 40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>叮叮课表</h1>
+  <div class="sub" id="modeLine">本地运行 · 不联网 · 不上传 · 不用登录</div>
+</header>
+
+<div class="warn" id="warn"></div>
+
+<div class="card hero">
+  <div class="date" id="todayLine"></div>
+  <div class="next" id="nextLine"></div>
+  <div id="todayList"></div>
+</div>
+
+<div class="card howto">
+  <h2>让它在上课前 20 分钟响（只做一次）</h2>
+  <div id="howtoWin">
+    <div class="step"><b>①</b> 点下面这个按钮，保存 <b>叮叮课表.ics</b></div>
+    <div class="step"><b>②</b> 双击那个文件，用 <b>Windows 日历 / Outlook</b> 打开并导入</div>
+    <div class="step"><b>③</b> 之后由 Windows 自己在课前 20 分钟弹通知：<b>不用开这个网页、不用常驻、不用联网</b></div>
+  </div>
+  <div id="howtoAnd" class="hide">
+    <div class="step"><b>①</b> 点「写入手机日历」，140 节课一次写进手机自带日历，每节自动提前 20 分钟提醒</div>
+    <div class="step"><b>②</b> 之后由手机系统在课前 20 分钟弹通知：<b>不用打开这个 App、不用常驻、不用联网</b></div>
+    <div class="step"><b>③</b> 想换手机或给电脑用，点「保存课表 .ics」导出同一份文件</div>
+  </div>
+  <button class="primary" id="btnIcs">下载 叮叮课表.ics</button>
+  <button class="primary hide" id="btnCal">写入手机日历</button>
+  <button class="hide" id="btnTest">试一条通知</button>
+  <button class="hide" id="btnPerm">开启桌面通知</button>
+  <div class="note" id="statusLine">提醒由系统日历负责，所以关机重启、清后台都不会漏。这个页面开着时，到点也会额外弹一次。</div>
+</div>
+
+<div class="card">
+  <h2>本周课表</h2>
+  <div class="nav">
+    <button id="prev">← 上一周</button><span class="weeklabel" id="weeklabel"></span>
+    <button id="next">下一周 →</button><button id="now">回到本周</button>
+  </div>
+  <div id="weektable"></div>
+</div>
+
+<footer>
+  课表数据内嵌在本文件里，改课表请重跑 <code>tools/dingding/build_assets.py</code>。<br>
+  时间均为北京时间；教师姓名辨读置信度低，故不展示。
+</footer>
+</div>
+<script>
+var DATA = {"name":"叮叮课表","anchor":"2026-09-07","anchor_verified":false,"periods":[{"id":"P1","label":"第一大节","start":"08:40","end":"10:00","remind_at":"08:20"},{"id":"P2","label":"第二大节","start":"10:20","end":"11:40","remind_at":"10:00"},{"id":"P3","label":"第三大节","start":"13:30","end":"14:50","remind_at":"13:10"},{"id":"P4","label":"第四大节","start":"15:10","end":"16:30","remind_at":"14:50"}],"entries":[{"d":"2026-09-21","w":3,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-09-21","w":3,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-09-21","w":3,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-09-22","w":3,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-09-22","w":3,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-09-23","w":3,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-09-23","w":3,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学生心理健康教育06"],"m":["教学楼917"]},{"d":"2026-09-24","w":3,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-09-24","w":3,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-09-25","w":3,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-09-25","w":3,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-09-28","w":4,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-09-28","w":4,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-09-28","w":4,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-09-29","w":4,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-09-29","w":4,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-09-30","w":4,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-10-01","w":4,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-10-01","w":4,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-02","w":4,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-02","w":4,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-10-05","w":5,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-10-05","w":5,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-05","w":5,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-10-06","w":5,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-10-06","w":5,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-07","w":5,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-10-08","w":5,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-10-08","w":5,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-09","w":5,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-09","w":5,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-10-12","w":6,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-10-12","w":6,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-12","w":6,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-10-13","w":6,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-10-13","w":6,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-14","w":6,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-10-14","w":6,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学生心理健康教育06"],"m":["教学楼917"]},{"d":"2026-10-15","w":6,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-10-15","w":6,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-16","w":6,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-16","w":6,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-10-19","w":7,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-10-19","w":7,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-19","w":7,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-10-20","w":7,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-10-20","w":7,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-21","w":7,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-10-22","w":7,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-10-22","w":7,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-23","w":7,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-23","w":7,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-10-26","w":8,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-10-26","w":8,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-26","w":8,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-10-27","w":8,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-10-27","w":8,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-28","w":8,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-10-29","w":8,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["形势与政策1.03"],"m":["教学楼东701"]},{"d":"2026-10-29","w":8,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-10-30","w":8,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-10-30","w":8,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-11-02","w":9,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-11-02","w":9,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-02","w":9,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-11-03","w":9,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-11-03","w":9,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-04","w":9,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-11-04","w":9,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学生心理健康教育06"],"m":["教学楼917"]},{"d":"2026-11-05","w":9,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["形势与政策1.03"],"m":["教学楼东701"]},{"d":"2026-11-05","w":9,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-06","w":9,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-06","w":9,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-11-09","w":10,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-11-09","w":10,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-09","w":10,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-11-10","w":10,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-11-10","w":10,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-11","w":10,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-11-12","w":10,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["形势与政策1.03"],"m":["教学楼东701"]},{"d":"2026-11-12","w":10,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-13","w":10,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-13","w":10,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-11-16","w":11,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-11-16","w":11,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-16","w":11,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-11-17","w":11,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["职业生涯规划04"],"m":["教学楼734"]},{"d":"2026-11-17","w":11,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-18","w":11,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-11-19","w":11,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["形势与政策1.03"],"m":["教学楼东701"]},{"d":"2026-11-19","w":11,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-20","w":11,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-20","w":11,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-11-23","w":12,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-11-23","w":12,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-23","w":12,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-11-24","w":12,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-25","w":12,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-11-25","w":12,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学生心理健康教育06"],"m":["教学楼917"]},{"d":"2026-11-26","w":12,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-11-26","w":12,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-11-27","w":12,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-27","w":12,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-11-30","w":13,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-11-30","w":13,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-11-30","w":13,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-12-01","w":13,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-12-02","w":13,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-12-03","w":13,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-12-03","w":13,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-12-04","w":13,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-12-04","w":13,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-12-21","w":16,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-12-21","w":16,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-12-21","w":16,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-12-22","w":16,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-12-23","w":16,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-12-24","w":16,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-12-24","w":16,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-12-25","w":16,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-12-25","w":16,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2026-12-28","w":17,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2026-12-28","w":17,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2026-12-28","w":17,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2026-12-29","w":17,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2026-12-30","w":17,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2026-12-30","w":17,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学生心理健康教育06"],"m":["教学楼917"]},{"d":"2026-12-31","w":17,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2026-12-31","w":17,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2027-01-01","w":17,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2027-01-01","w":17,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]},{"d":"2027-01-04","w":18,"p":"P1","pl":"第一大节","s":"08:40","e":"11:40","r":"08:20","n":["机械制图与计算机辅助设计02"],"m":["天工楼361"]},{"d":"2027-01-04","w":18,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["工程数学11"],"m":["教学楼525"]},{"d":"2027-01-04","w":18,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["思想道德与法治36"],"m":["教学楼东601"]},{"d":"2027-01-05","w":18,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2027-01-06","w":18,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["智能制造与数字化认知02"],"m":["天工楼375"]},{"d":"2027-01-07","w":18,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["思想道德与法治36"],"m":["教学楼东701"]},{"d":"2027-01-07","w":18,"p":"P4","pl":"第四大节","s":"15:10","e":"16:30","r":"14:50","n":["大学英语1 18"],"m":["教学楼621"]},{"d":"2027-01-08","w":18,"p":"P2","pl":"第二大节","s":"10:20","e":"11:40","r":"10:00","n":["工程数学11"],"m":["教学楼525"]},{"d":"2027-01-08","w":18,"p":"P3","pl":"第三大节","s":"13:30","e":"14:50","r":"13:10","n":["体育1 38"],"m":["文体中心204"]}]};
+(function(){
+  var IS_APP = (typeof window.DingDing !== 'undefined' && window.DingDing !== null);
+  var P = DATA.periods, E = DATA.entries;
+  var CN = ['周一','周二','周三','周四','周五','周六','周日'];
+  var byDate = {};
+  for (var i=0;i<E.length;i++){ var e=E[i]; if(!byDate[e.d]) byDate[e.d]=[]; byDate[e.d].push(e); }
+  function iso(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function monday(d){ var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+  function addDays(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
+  function dateCN(s){ var p=s.split('-'); return parseInt(p[1],10)+'月'+parseInt(p[2],10)+'日'; }
+  function two(n){ return ('0'+n).slice(-2); }
+  var today = new Date(), cur = monday(today);
+  var fired = {};
+
+  if(!DATA.anchor_verified){
+    document.getElementById('warn').innerHTML =
+      '⚠ 第 1 周周一按 <b>'+DATA.anchor+'</b> 估算，尚未与教务校历核对。若开学周不对，整张日期表会整体平移。';
+  } else { document.getElementById('warn').className='hide'; }
+
+  if(IS_APP){
+    document.getElementById('modeLine').textContent='安卓版 · 课表就在手机里，不联网、不上传';
+    document.getElementById('howtoWin').className='hide';
+    document.getElementById('howtoAnd').className='';
+    document.getElementById('btnCal').className='primary';
+    document.getElementById('btnTest').className='';
+    document.getElementById('btnIcs').textContent='保存课表 .ics';
+  } else {
+    document.getElementById('btnPerm').className='';
+  }
+
+  function rows(list){
+    var s='';
+    for(var i=0;i<list.length;i++){
+      var e=list[i];
+      for(var j=0;j<e.n.length;j++){
+        s += '<div class="ev"><div class="t">'+(j===0?e.s:'')+'</div><div class="n">'+
+             '<span class="badge">'+e.pl+'</span>'+e.n[j]+
+             '<div class="r">'+(e.m[j]||'教室待核对')+' · '+e.s+'–'+e.e+'</div></div></div>';
+      }
+    }
+    return s;
+  }
+  function fireDate(e){ return new Date(e.d+'T'+e.r+':00'); }
+  function nextFire(){
+    var n=new Date(), best=null;
+    for(var i=0;i<E.length;i++){
+      var t=fireDate(E[i]);
+      if(t>n && (!best||t<best.t)) best={t:t,e:E[i]};
+    }
+    return best;
+  }
+  function renderToday(){
+    var key=iso(today);
+    var list=(byDate[key]||[]).slice().sort(function(a,b){return a.s<b.s?-1:1;});
+    var w=list.length?list[0].w:Math.floor((today-new Date(DATA.anchor+'T00:00:00'))/604800000)+1;
+    var h='今天 · '+(today.getMonth()+1)+'月'+today.getDate()+'日 '+CN[(today.getDay()+6)%7]+' · 第 '+w+' 周';
+    document.getElementById('todayLine').textContent=h;
+    var nf=nextFire();
+    document.getElementById('nextLine').innerHTML = nf
+      ? '下一次提醒：<b>'+dateCN(nf.e.d)+' '+CN[(nf.t.getDay()+6)%7]+' '+nf.e.r+'</b> · '+nf.e.n[0]+' <small id="countdown"></small>'
+      : '本学期课程已全部结束。';
+    var box='';
+    if(!list.length){
+      var next=null, keys=Object.keys(byDate).sort();
+      for(var i=0;i<keys.length;i++){ if(keys[i]>key){ next=keys[i]; break; } }
+      box += '<div class="empty">今天没课。</div>';
+      if(next){
+        box += '<div class="date" style="font-size:15px;margin-top:6px">下一次上课 · '+dateCN(next)+' '+CN[(new Date(next+'T12:00:00').getDay()+6)%7]+'</div>';
+        box += rows(byDate[next].slice().sort(function(a,b){return a.s<b.s?-1:1;}));
+      }
+    } else { box += rows(list); }
+    document.getElementById('todayList').innerHTML=box;
+    tick();
+  }
+  function tick(){
+    var nf=nextFire(), el=document.getElementById('countdown');
+    if(nf&&el){
+      var ms=nf.t-new Date(), min=Math.max(0,Math.floor(ms/60000));
+      var d=Math.floor(min/1440), hh=Math.floor((min%1440)/60), mm=min%60;
+      el.textContent='（还有 '+(d?d+'天 ':'')+hh+' 小时 '+two(mm)+' 分）';
+    }
+    // 页面开着时，到点额外弹一次；真正的兜底是系统日历
+    for(var i=0;i<E.length;i++){
+      var e=E[i], t=fireDate(e), gap=new Date()-t;
+      if(gap>=0 && gap<60000 && !fired[e.d+e.r]){
+        fired[e.d+e.r]=1;
+        var title='叮叮课表 · 该去上课了', text=e.s+' '+e.n.join(' / ')+' · '+(e.m.join(' / ')||'');
+        if(IS_APP){ window.DingDing.notify(title,text); }
+        else if(typeof Notification!=='undefined' && Notification.permission==='granted'){
+          try{ new Notification(title,{body:text}); }catch(err){}
+        }
+      }
+    }
+  }
+  function renderWeek(){
+    var label=document.getElementById('weeklabel');
+    label.textContent=(cur.getMonth()+1)+'/'+cur.getDate()+' – '+(addDays(cur,4).getMonth()+1)+'/'+addDays(cur,4).getDate();
+    var h='<table><tr><th>时间</th>';
+    for(var i=0;i<5;i++){ var d=addDays(cur,i); h+='<th>'+CN[i]+'<br><span style="font-weight:400;color:#8b949e">'+(d.getMonth()+1)+'/'+d.getDate()+'</span></th>'; }
+    h+='</tr>';
+    for(var k=0;k<P.length;k++){
+      var p=P[k];
+      h+='<tr><td class="t">'+p.start+'<br>'+p.end+'</td>';
+      for(var j=0;j<5;j++){
+        var key=iso(addDays(cur,j)), found=null, arr=byDate[key]||[];
+        for(var m=0;m<arr.length;m++){ if(arr[m].p===p.id){ found=arr[m]; break; } }
+        if(!found){ h+='<td><span class="none">—</span></td>'; continue; }
+        h+='<td>';
+        for(var q=0;q<found.n.length;q++){
+          h+='<div class="cell">'+found.n[q]+'</div><div class="room">'+(found.m[q]||'')+'</div>';
+        }
+        h+='</td>';
+      }
+      h+='</tr>';
+    }
+    document.getElementById('weektable').innerHTML=h+'</table>';
+  }
+  function esc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+  function stamp(d,t){ return d.replace(/-/g,'')+'T'+t.replace(/:/g,'')+'00'; }
+  function buildIcs(){
+    var now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+    var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//DingDingTimetable//CN','CALSCALE:GREGORIAN',
+           'METHOD:PUBLISH','X-WR-CALNAME:叮叮课表','X-WR-TIMEZONE:Asia/Shanghai'];
+    for(var i=0;i<E.length;i++){
+      var e=E[i];
+      L.push('BEGIN:VEVENT','UID:dingding-'+e.d+'-'+e.p+'@icec','DTSTAMP:'+now,
+             'DTSTART:'+stamp(e.d,e.s),'DTEND:'+stamp(e.d,e.e),
+             'SUMMARY:'+esc(e.n.join(' / ')),'LOCATION:'+esc(e.m.join(' / ')),
+             'DESCRIPTION:'+esc('第'+e.w+'周 · '+e.pl),
+             'BEGIN:VALARM','TRIGGER:-PT20M','ACTION:DISPLAY','DESCRIPTION:叮叮课表：该去上课了','END:VALARM',
+             'END:VEVENT');
+    }
+    L.push('END:VCALENDAR');
+    return L.join('\r\n')+'\r\n';
+  }
+  function setStatus(s){ document.getElementById('statusLine').textContent=s; }
+
+  document.getElementById('btnIcs').onclick=function(){
+    var text=buildIcs();
+    if(IS_APP){ window.DingDing.saveIcs(text); setStatus('已保存到手机的 Download 目录。'); return; }
+    var blob=new Blob([text],{type:'text/calendar;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='叮叮课表.ics'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setStatus('已下载。双击 叮叮课表.ics 导入 Windows 日历 / Outlook，一次就好。');
+  };
+  document.getElementById('btnCal').onclick=function(){
+    var r=window.DingDing.writeCalendar(JSON.stringify(E));
+    setStatus(r);
+  };
+  document.getElementById('btnTest').onclick=function(){
+    window.DingDing.notify('叮叮课表 · 测试','这就是上课提醒长这样：课程名 + 教室 + 时间');
+    setStatus('已发一条测试通知，看手机通知栏。');
+  };
+  document.getElementById('btnPerm').onclick=function(){
+    if(typeof Notification==='undefined'){ setStatus('这个浏览器不支持桌面通知，用系统日历提醒即可。'); return; }
+    Notification.requestPermission().then(function(p){
+      setStatus(p==='granted'?'已开启：页面开着时到点会额外弹一次。':'没给权限也没关系，系统日历照样提醒。');
+    });
+  };
+  document.getElementById('prev').onclick=function(){ cur=addDays(cur,-7); renderWeek(); };
+  document.getElementById('next').onclick=function(){ cur=addDays(cur,7); renderWeek(); };
+  document.getElementById('now').onclick=function(){ cur=monday(new Date()); renderWeek(); };
+
+  renderToday(); renderWeek(); setInterval(tick,30000);
+})();
+</script>
+</body>
+</html>
