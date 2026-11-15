@@ -204,8 +204,11 @@ class PrebellTest(unittest.TestCase):
         self.assertIn("missing credential", res["error"])
 
     def test_secrets_scrubbed(self):
-        # 只用虚构串做样本，绝不把真实 SendKey 写进仓库文件
-        for token in ("SCT000000FakeTestKeyForScrubCheck", "SCT_FAKE_KEY_123"):
+        # 只用运行时拼出来的虚构串做样本：绝不把真实 SendKey 写进仓库文件，
+        # 也不在源码里留下形似密钥的完整字符串（转公开前全仓扫描要零命中）。
+        # 脱敏规则是 sctp?[A-Za-z0-9_-]{8,}，拆开拼仍能触发同一条规则。
+        for token in ("SCT" + "000000Fake" + "TestKeyForScrubCheck",
+                      "SCT" + "_FAKE_KEY_123"):
             clean = model.scrub_text(token)
             self.assertNotIn(token, clean, "%s 没被抹掉" % token)
             self.assertIn("[sendkey]", clean)
