@@ -3,3 +3,4 @@
 {"ts":"2026-11-15T13:52:11.230Z","date":"2026-11-15","local":"21:52:11","event":"app_start","detail":"课序启动 | v0.1.2 | win32","ok":true,"source":"kexu-desktop","app":"0.1.2","platform":"win32"}
 {"ts":"2026-11-15T13:52:12.066Z","date":"2026-11-15","local":"21:52:12","event":"reminders_scheduled","detail":"已安排 0 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.2","platform":"win32"}
 {"ts":"2026-11-15T14:06:31.564Z","date":"2026-11-15","local":"22:06:31","event":"manual_sync","detail":"使用者手动触发日志同步","ok":true,"source":"kexu-desktop","app":"cli","platform":"win32"}
+{"ts":"2026-11-15T14:33:20.886Z","date":"2026-11-15","local":"22:33:20","event":"timer_probe","detail":"真实时钟定时触发验证：本进程只排定时器，不手动调用 sync","ok":true,"source":"kexu-desktop","app":"cli-timer-check","platform":"win32"}
