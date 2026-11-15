@@ -40,23 +40,35 @@ import java.util.TimeZone;
 /**
  * 叮叮课表 · 安卓版。
  *
- * 刻意不做的事：不申请 INTERNET（课表全在本机）、不常驻服务、不开机自启、
- * 不建 AlarmManager 定时任务。提醒交给手机自带日历 —— 写入日历时每节课
- * 附一条「提前 20 分钟」的系统提醒，由系统负责弹出，清后台也不会漏。
+ * 提醒分两层，都不需要本 App 常驻进程：
+ *  ① 系统日历：writeCalendar() 把每节课写进日历并附「提前 20 分钟」提醒，最稳；
+ *  ② 系统闹钟：RemindReceiver 用 AlarmManager 持有未来 7 天的提醒点，
+ *     到点由系统拉起广播发通知，开机广播会重排。
+ * 仍然刻意不申请 INTERNET（课表全在本机）、不建常驻 Service、不轮询。
  *
- * 界面就是 assets/index.html（与 Windows 版同一个文件），这里只提供三个
- * 本机能力：写日历、发通知、导出 ics。
+ * 界面就是 assets/index.html（与 Windows 版同一个文件），这里提供本机能力：
+ * 写日历、排系统闹钟、即时通知、10 秒后台闹钟测试、导出 ics。
  */
 public class MainActivity extends Activity {
 
     private static final String CHANNEL = "dingding_class";
     private static final int REQ_CALENDAR = 1;
+    private static final int REQ_NOTIFICATION = 2;
     private WebView web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ensureChannel();
+        // Android 13+ 通知是运行时权限；用字符串声明，避免 android-29 编译期找不到常量。
+        if (Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission("android.permission.POST_NOTIFICATIONS")
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"},
+                    REQ_NOTIFICATION);
+        }
+        // 每次打开 App 都把未来 7 天的系统闹钟重排一遍；首次安装后不必手动点也能生效。
+        RemindReceiver.scheduleAll(this);
         web = new WebView(this);
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -191,6 +203,33 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 toast("通知没发出来：" + e.getClass().getSimpleName());
             }
+        }
+
+        /** 把未来 7 天的提醒点交给系统闹钟。不需要 App 常驻，也不需要再点第二次。 */
+        @JavascriptInterface
+        public String enableAlarms() {
+            int n = RemindReceiver.scheduleAll(MainActivity.this);
+            if (n <= 0) {
+                return "没排上闹钟（课表日期可能已过期或数据读不到）。系统日历提醒仍然有效。";
+            }
+            return "已交给系统 " + n + " 条闹钟（未来 7 天）。划掉 App、重启手机也能弹；"
+                    + "前提是没关掉「精确闹钟」和通知权限。最稳的一层仍是系统日历。";
+        }
+
+        /** 10 秒后由系统闹钟发一条：退出 App 后看通知栏，实测「无后台进程」这条链路。 */
+        @JavascriptInterface
+        public String testAlarm() {
+            RemindReceiver.scheduleTest(MainActivity.this, 10);
+            return "已排一条 10 秒后的系统闹钟。现在按 Home 退出 App（别点强停），"
+                    + "10 秒后看通知栏：弹出来就说明没有后台进程也能提醒。";
+        }
+
+        /** 立即弹一条，验证通知权限与通知渠道是否通。 */
+        @JavascriptInterface
+        public void testNow() {
+            RemindReceiver.show(MainActivity.this,
+                    "叮叮课表 · 测试通知",
+                    "上课提醒长这样：课程名 + 教室 + 时间", 900000);
         }
 
         /** 导出同一份 ics，方便给 Windows / 另一台手机用。 */

@@ -139,12 +139,14 @@ def main():
     run(["javac", "--release", "8", "-encoding", "UTF-8",
          "-classpath", platform,
          "-d", BUILD / "classes",
-         AND / "MainActivity.java"], "javac")
+         AND / "MainActivity.java", AND / "RemindReceiver.java"], "javac")
 
     classes = sorted((BUILD / "classes").rglob("*.class"))
     if not classes:
         raise SystemExit("javac 没有产出任何 class")
-    print("   class 文件 %d 个" % len(classes))
+    names = [p.name for p in classes]
+    assert "RemindReceiver.class" in names, "系统闹钟广播类没有编译进 DEX"
+    print("   class 文件 %d 个（含 RemindReceiver）" % len(classes))
 
     print("4/7 d8 → classes.dex")
     run(["java", "-cp", d8, "com.android.tools.r8.D8",
@@ -186,9 +188,18 @@ def main():
         for line in badging.splitlines():
             if line.startswith("package:") or "application-label" in line or "sdkVersion" in line:
                 print("  " + line[:300])
+    if aapt.exists():
+        perm = run([aapt, "dump", "permissions", BUILD / "check.apk"],
+                   "核对权限清单", optional=True)
+        if perm:
+            print("  INTERNET 权限        %s"
+                  % ("有（异常！）" if "android.permission.INTERNET" in perm else "无 ✓"))
+            print("  开机广播权限        %s"
+                  % ("有 ✓" if "RECEIVE_BOOT_COMPLETED" in perm else "缺失"))
     with zipfile.ZipFile(OUT_APK) as z:
         names = z.namelist()
-        need = ["AndroidManifest.xml", "classes.dex", "assets/index.html", "resources.arsc"]
+        need = ["AndroidManifest.xml", "classes.dex", "assets/index.html",
+                "assets/courses.json", "resources.arsc"]
         for n in need:
             print("  %-24s %s" % (n, "OK" if n in names else "缺失"))
         assert all(n in names for n in need), "APK 内容不完整"
@@ -196,6 +207,9 @@ def main():
         n = idx.count('"d":"')
         print("  内嵌课表条目数        %d" % n)
         assert n >= 140, "内嵌课表数量异常（应为 140）"
+        import json
+        cj = json.loads(z.read("assets/courses.json").decode("utf-8"))
+        assert len(cj["entries"]) == 140, "系统闹钟读的 courses.json 条数异常"
 
     print("\n成品：%s  (%.1f KB)" % (OUT_APK, OUT_APK.stat().st_size / 1024))
     print("安装：把 叮叮课表.apk 传到手机 → 允许安装未知来源 → 打开后点「写入手机日历」")

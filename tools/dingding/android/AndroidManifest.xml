@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.icec.dingding"
-    android:versionCode="1"
-    android:versionName="1.0.0">
+    android:versionCode="2"
+    android:versionName="1.1.0">
 
   <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="29" />
 
-  <!-- 日历读写：把课表写进系统日历，由系统负责课前 20 分钟提醒 -->
+  <!-- 日历读写：把课表写进系统日历，由系统负责课前 20 分钟提醒（最稳的一层） -->
   <uses-permission android:name="android.permission.READ_CALENDAR" />
   <uses-permission android:name="android.permission.WRITE_CALENDAR" />
   <!-- 仅 Android 9 及以下导出 ics 用；Android 10+ 走 MediaStore，不需要这个权限 -->
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
       android:maxSdkVersion="28" />
+
+  <!-- 系统闹钟提醒：闹钟由 AlarmManager 持有，不需要本 App 常驻进程 -->
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <!-- 下面两个是 Android 12/13 新增权限的名字；用字符串声明以兼容 android-29 编译 -->
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
   <!-- 刻意不申请 INTERNET：课表内嵌在 APK 里，装完完全离线可用 -->
 
@@ -30,5 +37,14 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <receiver android:name=".RemindReceiver" android:exported="false">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        <action android:name="com.icec.dingding.RESCHEDULE" />
+        <action android:name="com.icec.dingding.FIRE" />
+      </intent-filter>
+    </receiver>
   </application>
 </manifest>

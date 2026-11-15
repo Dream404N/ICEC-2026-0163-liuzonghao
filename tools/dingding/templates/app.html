@@ -71,15 +71,17 @@ footer{color:#8b949e;font-size:12px;margin-top:22px;line-height:1.9}
     <div class="step"><b>③</b> 之后由 Windows 自己在课前 20 分钟弹通知：<b>不用开这个网页、不用常驻、不用联网</b></div>
   </div>
   <div id="howtoAnd" class="hide">
-    <div class="step"><b>①</b> 点「写入手机日历」，140 节课一次写进手机自带日历，每节自动提前 20 分钟提醒</div>
-    <div class="step"><b>②</b> 之后由手机系统在课前 20 分钟弹通知：<b>不用打开这个 App、不用常驻、不用联网</b></div>
-    <div class="step"><b>③</b> 想换手机或给电脑用，点「保存课表 .ics」导出同一份文件</div>
+    <div class="step"><b>①</b> 点「写入手机日历」，140 节课一次写进手机自带日历，每节自动提前 20 分钟提醒（最稳）</div>
+    <div class="step"><b>②</b> 点一次「开启后台提醒」，把未来 7 天的提醒点交给<b>系统闹钟</b>：闹钟由系统持有，App 划掉、不开、重启都能弹</div>
+    <div class="step"><b>③</b> 点「测试 10 秒后闹钟」，退出 App 等 10 秒，亲眼确认没有后台进程也能收到通知</div>
   </div>
   <button class="primary" id="btnIcs">下载 叮叮课表.ics</button>
   <button class="primary hide" id="btnCal">写入手机日历</button>
-  <button class="hide" id="btnTest">试一条通知</button>
+  <button class="hide" id="btnAlarms">开启后台提醒</button>
+  <button id="btnTest">立即测试通知</button>
+  <button class="hide" id="btnTestAlarm">测试 10 秒后闹钟</button>
   <button class="hide" id="btnPerm">开启桌面通知</button>
-  <div class="note" id="statusLine">提醒由系统日历负责，所以关机重启、清后台都不会漏。这个页面开着时，到点也会额外弹一次。</div>
+  <div class="note" id="statusLine">提醒由系统日历 / 系统闹钟负责，清后台、重启都不会漏。这个页面开着时，到点也会额外弹一次。</div>
 </div>
 
 <div class="card">
@@ -122,7 +124,8 @@ var DATA = __DINGDING_DATA__;
     document.getElementById('howtoWin').className='hide';
     document.getElementById('howtoAnd').className='';
     document.getElementById('btnCal').className='primary';
-    document.getElementById('btnTest').className='';
+    document.getElementById('btnAlarms').className='';
+    document.getElementById('btnTestAlarm').className='';
     document.getElementById('btnIcs').textContent='保存课表 .ics';
   } else {
     document.getElementById('btnPerm').className='';
@@ -247,9 +250,23 @@ var DATA = __DINGDING_DATA__;
     var r=window.DingDing.writeCalendar(JSON.stringify(E));
     setStatus(r);
   };
+  document.getElementById('btnAlarms').onclick=function(){
+    setStatus(window.DingDing.enableAlarms());
+  };
+  document.getElementById('btnTestAlarm').onclick=function(){
+    setStatus(window.DingDing.testAlarm());
+  };
   document.getElementById('btnTest').onclick=function(){
-    window.DingDing.notify('叮叮课表 · 测试','这就是上课提醒长这样：课程名 + 教室 + 时间');
-    setStatus('已发一条测试通知，看手机通知栏。');
+    if(IS_APP){
+      window.DingDing.testNow();
+      setStatus('已发一条测试通知，看手机通知栏。想验证「退出 App 也能弹」，再点「测试 10 秒后闹钟」。');
+    } else if(typeof Notification!=='undefined' && Notification.permission==='granted'){
+      try{ new Notification('叮叮课表 · 测试通知',{body:'上课提醒长这样：课程名 + 教室 + 时间'});
+           setStatus('已发一条浏览器通知。Windows 想要开机自启 + 到点弹窗，请装「叮叮课表 安装版」。'); }
+      catch(err){ setStatus('浏览器通知没发出来：'+err); }
+    } else {
+      setStatus('先点「开启桌面通知」允许浏览器弹通知；或装「叮叮课表 安装版」由系统弹窗。');
+    }
   };
   document.getElementById('btnPerm').onclick=function(){
     if(typeof Notification==='undefined'){ setStatus('这个浏览器不支持桌面通知，用系统日历提醒即可。'); return; }

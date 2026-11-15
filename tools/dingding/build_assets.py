@@ -110,12 +110,18 @@ def main():
     OUT_AND.mkdir(parents=True, exist_ok=True)
     (OUT_WIN / "叮叮课表.html").write_text(html, encoding="utf-8")
     (OUT_AND / "index.html").write_text(html, encoding="utf-8")
+    # 同一份精简课表也以 JSON 落盘：Windows 常驻程序与安卓 AlarmReceiver 各读一份，
+    # 不解析 HTML、不各自手抄课程。
+    courses = json.dumps({"entries": data["entries"]}, ensure_ascii=False,
+                         separators=(",", ":"))
+    (OUT_WIN / "courses.json").write_text(courses, encoding="utf-8")
+    (OUT_AND / "courses.json").write_text(courses, encoding="utf-8")
     (OUT_WIN / "叮叮课表.ics").write_text(build_ics(data["entries"]), encoding="utf-8", newline="")
 
     print("叮叮课表：%d 条真实课程，覆盖 %s ~ %s"
           % (len(data["entries"]), data["entries"][0]["d"], data["entries"][-1]["d"]))
-    print("  windows/叮叮课表.html / 叮叮课表.ics")
-    print("  android/assets/index.html")
+    print("  windows/叮叮课表.html / 叮叮课表.ics / courses.json")
+    print("  android/assets/index.html / courses.json")
     print("  第 1 周锚点 %s，已核对=%s" % (data["anchor"], data["anchor_verified"]))
     return 0
 
