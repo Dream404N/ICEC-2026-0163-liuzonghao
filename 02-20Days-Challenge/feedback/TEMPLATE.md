@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | PreBell 3.0 | 课前 20 分钟推一条微信（须先关注并绑定「方糖」）；工作日 08:20 / 10:00 / 13:10 / 14:50 推 | `02-20Days-Challenge/public/index.html` |
 | 叮叮课表 v2.0 | Windows 单文件 EXE，开机自启，到点桌面弹窗；提前分钟数可在设置面板自己调 | `tools/dingding/dist/叮叮课表.exe` |
-| 课序 0.1.2 | Windows 安装包，托盘常驻，右下角轻提醒；每天 23:50 自动提交运行日志 | `tools/kexu/README.md` |
+| 课序 0.1.3 | Windows 安装包，托盘常驻，右下角轻提醒；每天 23:50 自动提交运行日志；设置面板可填凭据文件 | `tools/kexu/README.md` |
 | 兜底 | 全学期课表网页 + `.ics` 导入手机本地日历，不依赖任何推送 | `public/prebell.ics` |
 
 ---

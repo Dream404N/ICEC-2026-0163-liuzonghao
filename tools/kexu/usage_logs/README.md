@@ -1,7 +1,7 @@
 # 课序客户端运行日志 · 目录口径
 
 这个目录**不是人手写的过程记录**，也不是云端 Actions 的运行日志，
-而是 Windows 客户端「课序 0.1.2」把本机真实使用事件通过 GitHub Git Data API 直接提交的产物。
+而是 Windows 客户端「课序 0.1.3」（0.1.2 起提供该功能）把本机真实使用事件通过 GitHub Git Data API 直接提交的产物。
 
 - 文件名按北京时间日期分片：`YYYY-MM-DD.jsonl`，每行一条 JSON 事件。
 - 提交者就是客户端自己，commit message 形如

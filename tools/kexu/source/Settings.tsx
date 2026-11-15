@@ -1,0 +1,83 @@
+import { Capacitor } from '@capacitor/core';
+import { useEffect, useState } from 'react';
+import { Bell, Cloud, CalendarDays, Plus, Trash2, RefreshCw, CheckCircle2, LogIn, AlertTriangle } from 'lucide-react';
+import type { AppState, Semester } from '../domain/types';
+import { DEFAULT_PERIODS, uid } from '../domain/types';
+import { updateStore, getState } from '../data/store';
+import { applyEdits, resolveConflict } from '../data/state';
+import { validateEntity, validateState } from '../data/validation';
+import { checkPermissions, getNotificationStatus, watchNotifications, refreshReminders, requestExact, testNotification } from '../platform/notifications';
+import { authSnapshot, watchAuth, signIn, signUp, signOut, syncNow } from '../data/sync';
+import { Modal } from './common';
+import { saveFile } from '../platform/files';
+import type { LogSyncStatus } from '../platform/desktop';
+
+function LogSyncCard({ notify }: { notify: (s: string) => void }) {
+  const [st, setSt] = useState<LogSyncStatus | null>(null);
+  const [time, setTime] = useState('23:50');
+  const [tokenPath, setTokenPath] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  async function refresh() {
+    try {
+      const s = await window.kexu!.logSyncStatus();
+      setSt(s); setTime(s.time);
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  }
+  useEffect(() => { void refresh(); }, []);
+  async function run(action: () => Promise<unknown>, okMessage: string) {
+    setBusy(true); setError('');
+    try { await action(); await refresh(); notify(okMessage); }
+    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    finally { setBusy(false); }
+  }
+  return <section className="panel settings-card">
+    <div className="setting-heading"><span className="stat-icon sky"><Cloud size={21}/></span><div><h2>运行日志 · GitHub</h2><p>每天自动提交，只记真实事件</p></div></div>
+    <label className="toggle-row"><span><b>每天自动提交</b><small>关机、断网、没打开应用的那天就是没有日志，不补写</small></span><input type="checkbox" role="switch" checked={!!st?.enabled} disabled={!st || busy} onChange={e => { const enabled = e.target.checked; void run(() => window.kexu!.setLogSyncConfig({ enabled }), enabled ? '已开启日志自动提交' : '已关闭日志自动提交'); }}/></label>
+    <div className="inline-input"><label>每天提交时间（本机时间）<input value={time} disabled={!st} onChange={e => setTime(e.target.value)} placeholder="23:50"/></label><button className="secondary" disabled={busy || !st} onClick={() => void run(() => window.kexu!.setLogSyncConfig({ time }), '提交时间已保存')}>保存</button></div>
+    <div className="inline-input"><label>GitHub 凭据文件（本机绝对路径）<input value={tokenPath} disabled={!st} onChange={e => setTokenPath(e.target.value)} placeholder="C:/Users/.../.gh_token"/></label><button className="secondary" disabled={busy || !st || !tokenPath.trim()} onClick={() => void run(async () => { await window.kexu!.setLogSyncConfig({ tokenFile: tokenPath.trim() }); setTokenPath(''); }, '凭据路径已保存')}>保存</button><button className="text-button" disabled={busy || !st} onClick={() => void run(() => window.kexu!.setLogSyncConfig({ tokenFile: '' }), '已清除凭据路径')}>清除</button></div>
+    <div className="notification-status"><div><b>{st ? (st.tokenConfigured ? '凭据已配置' : '未配置凭据') : '读取中…'}</b><span>{st ? `${st.repo} · ${st.directory}` : '—'}</span></div><strong>{st?.todayCount ?? 0}<small> 条今日事件</small></strong></div>
+    <p className="helper">{st ? `本机日志 ${st.files} 个文件 · 下次提交 ${st.nextRunAt ? new Date(st.nextRunAt).toLocaleString('zh-CN') : '已关闭'} · 最近提交 ${st.lastCommit ? st.lastCommit.slice(0, 7) : '尚未提交'}` : '正在读取状态…'}</p>
+    {(st?.lastError || error) && <p className="error-box">{error || st?.lastError}</p>}
+    <div className="button-wrap"><button className="secondary" disabled={busy} onClick={() => void run(async () => { const r = await window.kexu!.syncLogsNow(); if (!r.ok) throw new Error(r.message || '同步未完成'); }, '运行日志已提交')}>立即同步</button><button className="secondary" disabled={busy} onClick={() => void window.kexu!.openLogsDir()}>打开日志目录</button></div>
+    <p className="helper">GitHub 凭据只从本机环境变量（KEXU_GH_TOKEN）或本机文件读取，界面只保存路径、不保存内容，不写进日志、不进仓库；当前来源：{st?.tokenFile ?? '读取中…'}。首次在新电脑安装后，在这里填一次 token 文件的绝对路径即可，不必再跑命令行。没凭据时日志只留本机，界面显示「未配置凭据」，不会伪装成成功。这里的客户端使用日志与云端自动化运行日志分目录存放，互不冒充。</p>
+  </section>;
+}
+
+export function Settings({ state, semester, notify }: { state: AppState; semester: Semester; notify: (s: string) => void }) {
+  const [draft, setDraft] = useState<Semester>(structuredClone(semester));
+  const [leadText, setLeadText] = useState(state.device.leads.join(','));
+  const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
+  const [notification, setNotification] = useState(getNotificationStatus()); const [auth, setAuth] = useState(authSnapshot());
+  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [newSemester, setNewSemester] = useState(false); const [reset, setReset] = useState(false);
+  useEffect(() => watchNotifications(() => setNotification({ ...getNotificationStatus() })), []);
+  useEffect(() => watchAuth(() => setAuth(authSnapshot())), []);
+  useEffect(() => { setDraft(structuredClone(semester)); }, [semester]);
+  async function run(action: () => Promise<void>) { setBusy(true); setError(''); try { await action(); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } }
+  function saveSemester() {
+    try {
+      validateEntity('semester', draft);
+      const candidate = applyEdits(getState(), 'semester', [draft]); validateState(candidate);
+      updateStore(s => applyEdits(s, 'semester', [draft])); notify('学期和作息时间已保存'); setError('');
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  }
+  function saveLeads() {
+    const values = leadText.split(/[,，]/).map(v => v.trim()); const nums = values.map(Number);
+    if (!leadText.trim() || values.some(v => !v) || nums.length > 10 || nums.some(n => !Number.isInteger(n) || n < 0 || n > 1440)) { setError('提醒时间必须是 0-1440 的整数，用逗号分隔，最多 10 个'); return; }
+    updateStore(s => ({ ...s, device: { ...s.device, leads: [...new Set(nums)].sort((a, b) => b - a) } })); setError(''); notify('默认提醒时间已保存');
+  }
+  const pending = Object.values(state.entries).filter(e => e.dirty).length; const clashes = Object.values(state.entries).filter(e => e.conflict);
+  return <><div className="page-heading"><div><div className="eyebrow">MAKE IT YOURS</div><h1>按照你的节奏<span className="heading-dot">.</span></h1><p>学期、提醒和同步，都在这里设置</p></div></div>{error && <p className="error-box" role="alert">{error}</p>}<div className="settings-layout"><div className="settings-main"><section className="panel settings-card"><div className="setting-heading"><span className="stat-icon mint"><CalendarDays size={21}/></span><div><h2>学期与作息</h2><p>从正确的第一周开始</p></div><button className="text-button" onClick={() => setNewSemester(true)}><Plus size={15}/>新学期</button></div><div className="form-grid"><label className="full">学期名称<input value={draft.name} onChange={e => setDraft({ ...draft, name: e.target.value })}/></label><label>第一周的周一<input type="date" value={draft.firstMonday} onChange={e => setDraft({ ...draft, firstMonday: e.target.value })}/></label><label>学期总周数<input type="number" min={1} max={60} value={draft.totalWeeks} onChange={e => setDraft({ ...draft, totalWeeks: Number(e.target.value) })}/></label></div><p className="helper">请依据学校校历填写，不能从课表图片确定开学日期。所有日期按北京时间计算。</p><label className="checkbox"><input type="checkbox" checked={draft.archived} onChange={e => setDraft({ ...draft, archived: e.target.checked })}/>归档此学期（保留历史数据，停止提醒）</label><div className="inline-heading"><h3>每日作息时间</h3><button className="text-button" onClick={() => setDraft({ ...draft, periods: [...draft.periods, { id: uid(), name: '晚间课程', start: '19:00', end: '20:20' }] })}><Plus size={15}/>添加时段</button></div><div className="period-labels"><span>时段名称</span><span>开始</span><span>结束</span><span/></div>{draft.periods.map((p, i) => <div className="period-row" key={p.id}><input aria-label={`时段 ${i + 1} 名称`} value={p.name} onChange={e => setDraft({ ...draft, periods: draft.periods.map(v => v.id === p.id ? { ...v, name: e.target.value } : v) })}/><input type="time" aria-label={`时段 ${i + 1} 开始`} value={p.start} onChange={e => setDraft({ ...draft, periods: draft.periods.map(v => v.id === p.id ? { ...v, start: e.target.value } : v) })}/><input type="time" aria-label={`时段 ${i + 1} 结束`} value={p.end} onChange={e => setDraft({ ...draft, periods: draft.periods.map(v => v.id === p.id ? { ...v, end: e.target.value } : v) })}/><button className="icon-button danger" aria-label={`删除时段 ${i + 1}`} disabled={draft.periods.length <= 1} onClick={() => setDraft({ ...draft, periods: draft.periods.filter(v => v.id !== p.id) })}><Trash2 size={15}/></button></div>)}<p className="helper">作息时间用于新课程预填和课表刻度；已有课程起止时间需在课程中修改。</p><button className="primary" onClick={saveSemester}>保存学期设置</button></section>
+      <section className="panel settings-card"><div className="setting-heading"><span className="stat-icon lavender"><Bell size={21}/></span><div><h2>本设备提醒</h2><p>每台设备独立设置，避免打扰</p></div></div><label className="toggle-row"><span><b>上课提醒</b><small>关闭时会取消本机已安排的所有课程提醒</small></span><input type="checkbox" role="switch" checked={state.device.remindersEnabled} onChange={e => updateStore(s => ({ ...s, device: { ...s.device, remindersEnabled: e.target.checked } }))}/></label><label className="toggle-row"><span><b>提示音</b><small>仍受系统音量和免打扰模式控制</small></span><input type="checkbox" role="switch" checked={state.device.sound} onChange={e => updateStore(s => ({ ...s, device: { ...s.device, sound: e.target.checked } }))}/></label><div className="inline-input"><label>默认提前提醒（分钟）<input value={leadText} onChange={e => setLeadText(e.target.value)} placeholder="15,5"/></label><button className="secondary" onClick={saveLeads}>保存</button></div>{window.kexu && <label className="toggle-row"><span><b>开机启动</b><small>Windows 登录后自动运行课序</small></span><input type="checkbox" role="switch" checked={state.device.autoStart} onChange={e => { const enabled = e.target.checked; void run(async () => { const actual = await window.kexu!.setAutoStart(enabled); updateStore(s => ({ ...s, device: { ...s.device, autoStart: actual } })); }); }}/></label>}<div className="notification-status"><div><b>{notification.platform}</b><span>{notification.permission} · {notification.exact}</span></div><strong>{notification.scheduled}<small> 条已安排</small></strong></div><p className="helper">{notification.message}</p><div className="button-wrap"><button className="secondary" disabled={busy} onClick={() => void run(async () => { await checkPermissions(true); await refreshReminders(getState()); notify('通知状态已刷新'); })}>检查 / 允许通知</button><button className="secondary" disabled={busy} onClick={() => void run(async () => { await testNotification(); notify('测试提醒已发送，原生应用约 5 秒后显示'); })}>发送测试提醒</button>{Capacitor.isNativePlatform() && <button className="text-button" onClick={() => void run(requestExact)}>安卓准时提醒权限</button>}</div></section></div>
+      <div className="settings-side"><section className="panel settings-card"><div className="setting-heading"><span className="stat-icon sky"><Cloud size={21}/></span><div><h2>账号与云同步</h2><p>课程随你，一处修改两端同步</p></div></div>{!auth.configured ? <div className="cloud-unconfigured"><Cloud size={32}/><h3>本地模式，已可使用</h3><p>云服务尚未配置。按 README 创建 Supabase 项目、执行数据库脚本并填写环境变量后，即可启用账号同步。</p><span className="pill">不影响离线课表和提醒</span></div> : auth.user ? <><div className="account-label"><CheckCircle2 size={19}/><span>{auth.user.email}</span></div><p className="helper">{navigator.onLine ? '网络已连接' : '当前离线，修改将在联网后上传'} · {pending} 条待同步</p><p className="helper">最近同步：{state.lastSync ? new Date(state.lastSync).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '尚未同步'}</p><button className="primary" disabled={busy || auth.running} onClick={() => void run(syncNow)}><RefreshCw size={16} className={auth.running ? 'spinning' : ''}/>{auth.running ? '同步中…' : '立即同步'}</button><button className="text-button" disabled={auth.running} onClick={() => void run(signOut)}>退出登录</button></> : <><label>邮箱<input type="email" value={email} autoComplete="email" onChange={e => setEmail(e.target.value)}/></label><label>密码<input type="password" minLength={8} value={password} autoComplete="current-password" onChange={e => setPassword(e.target.value)}/></label><div className="button-wrap"><button className="primary" disabled={busy} onClick={() => void run(async () => { await signIn(email, password); setPassword(''); })}><LogIn size={16}/>登录</button><button className="secondary" disabled={busy} onClick={() => void run(async () => { if (password.length < 8) throw new Error('密码至少 8 位'); const confirm = await signUp(email, password); notify(confirm ? '请查收确认邮件，再返回登录' : '注册成功'); setPassword(''); })}>注册账号</button></div><p className="helper">登录后将当前本地课表同步到该账号。</p></>}{(state.syncError || auth.error) && <p className="error-box">{state.syncError || auth.error}</p>}<p className="helper">退出登录后保留本地课程供离线使用，停止云同步；切换其他账号前需要备份并清空本地数据。</p><button className="text-button danger-text" disabled={auth.running} onClick={() => setReset(true)}>账号数据：备份并清空本地</button></section>
+      {!!clashes.length && <section className="panel settings-card"><div className="setting-heading"><AlertTriangle size={22}/><div><h2>同步冲突</h2><p>保留两个版本，选择后再同步；采用删除将一并删除关联规则与调整</p></div></div>{clashes.map(e => <div className="conflict-card" key={e.id}><b>{e.value && 'name' in e.value ? e.value.name : e.kind} · {e.id.slice(0, 8)}</b><div className="conflict-versions"><details><summary>本地版本 {e.value ? '' : '（已删除）'}</summary><pre>{JSON.stringify(e.value, null, 2)}</pre></details><details><summary>云端版本 {e.conflict?.payload ? '' : '（已删除）'}</summary><pre>{JSON.stringify(e.conflict?.payload, null, 2)}</pre></details></div><div className="button-wrap"><button className="secondary" onClick={() => updateStore(s => resolveConflict(s, e.id, 'local'))}>保留本地</button><button className="secondary" onClick={() => updateStore(s => resolveConflict(s, e.id, 'remote'))}>采用云端</button></div></div>)}</section>}
+      {window.kexu && <LogSyncCard notify={notify}/>}
+      <section className="settings-tip"><span>✦</span><h3>提醒，也需要一点准备</h3><p>Windows 使用右下角轻提醒，不抢焦点；关闭主窗口后保持托盘运行，彻底退出后停止提醒。安卓请允许通知和准时提醒，检查系统电池限制。</p></section></div></div>
+    {newSemester && <NewSemester onClose={() => setNewSemester(false)} notify={notify}/>}
+    {reset && <Modal title="备份并清空本地数据" onClose={() => setReset(false)}><div className="modal-body"><p>用于更换账号。先保存备份并退出登录，然后清空本机课表及账号归属。云端数据保留。</p>{error && <p className="error-box">{error}</p>}</div><footer><button className="secondary" onClick={() => setReset(false)}>取消</button><button className="danger-button" disabled={busy} onClick={() => void run(async () => { await saveFile(`清空前备份-${Date.now()}.json`, JSON.stringify(getState(), null, 2)); if (auth.user) await signOut(); const sem: Semester = { id: uid(), name: '我的新学期', firstMonday: '', totalWeeks: 18, archived: false, periods: DEFAULT_PERIODS }; const empty: AppState = { ...getState(), entries: {}, selectedSemesterId: sem.id, ownerId: null, lastSync: null, syncError: '' }; updateStore(() => applyEdits(empty, 'semester', [sem])); setReset(false); notify('本地数据已清空，可登录新账号'); })}>备份并清空</button></footer></Modal>}
+  </>;
+}
+function NewSemester({ onClose, notify }: { onClose: () => void; notify: (s: string) => void }) {
+  const [name, setName] = useState(''); const [date, setDate] = useState(''); const [total, setTotal] = useState(18); const [error, setError] = useState('');
+  return <Modal title="创建新学期" onClose={onClose}><div className="modal-body"><div className="form-grid"><label className="full">学期名称<input value={name} onChange={e => setName(e.target.value)}/></label><label>第一周周一<input type="date" value={date} onChange={e => setDate(e.target.value)}/></label><label>总周数<input type="number" min={1} max={60} value={total} onChange={e => setTotal(Number(e.target.value))}/></label></div>{error && <p className="error-box">{error}</p>}</div><footer><button className="secondary" onClick={onClose}>取消</button><button className="primary" onClick={() => { try { const sem: Semester = { id: uid(), name: name.trim(), firstMonday: date, totalWeeks: total, periods: structuredClone(DEFAULT_PERIODS), archived: false }; validateEntity('semester', sem); updateStore(s => ({ ...applyEdits(s, 'semester', [sem]), selectedSemesterId: sem.id })); notify('新学期已创建，旧学期完整保留'); onClose(); } catch (e) { setError(String(e)); } }}>创建学期</button></footer></Modal>;
+}

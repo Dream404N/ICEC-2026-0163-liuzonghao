@@ -48,7 +48,7 @@ APK 仍无 INTERNET 权限、没有发布公网；EXE 是单文件 PyInstaller �
 开机自启仍由 `安装.cmd` 双击写入，如实标注。
 PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增强，本地是兜底。
 
-**11-15 再追加 · 课序 0.1.2（使用者满意的 Codex 版本）**：使用者另有一套自己用 Codex 辅助写成、
+**11-15 再追加 · 课序 0.1.3（使用者满意的 Codex 版本）**：使用者另有一套自己用 Codex 辅助写成、
 界面和功能都满意的 Electron 课表应用「课序」（工程在本机 `F:/下载/课表提醒/课表提醒`，
 不在本仓库内）。按使用者要求，给它的 Windows 客户端补了「运行日志每天自动 commit 到 GitHub」：
 零依赖 Node 标准库、每天单次定时（默认 23:50）、只增改 `tools/kexu/usage_logs/`、
@@ -91,7 +91,7 @@ PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增
 03-AI-Collaboration/         AI 协作与排障记录（3 张真实排障截图 + 索引，见目录内 README）
 tools/PowerProbe/            课题 02 采集 App（Kotlin / Android）
 tools/dingding/              叮叮课表：Windows 单文件 EXE + 安卓 APK（均本机构建）
-tools/kexu/                  课序 0.1.2 日志自动提交：交付说明 + 新增模块源码快照
+tools/kexu/                  课序 0.1.3 日志自动提交：交付说明 + 源码快照 + 安全审计
   usage_logs/                  客户端直接提交的真实使用日志（保护目录，本地不可覆盖）
   source/                      本次新增的日志同步模块源码快照
 ```
