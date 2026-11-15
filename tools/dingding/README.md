@@ -47,3 +47,7 @@ python tools/dingding/build_apk.py        # 本机出 APK
   内嵌 140 条课程、权限只有日历与低版本存储、**没有 INTERNET 权限**。
   **尚未做真机安装与「写入日历」实测** —— 这一步要真人装一次才能确认，不冒充已验证。
 - Windows 版是单个 HTML 文件（双击即用），不是 `.exe`；没有做安装器，也没有发布到公网。
+- **本目录不产生运行日志，也不会自动 commit 到 GitHub**：不联网、无常驻、APK 没有
+  INTERNET 权限，更不会把 GitHub 凭据塞进手机。要它自动回传日志，就得加后台 + 联网 + 密钥，
+  等于把这一版刻意删掉的东西加回来。仓库里的自动运行日志只来自云端
+  `prebell-remind.yml` / `prebell-daily.yml`，口径见 `process_logs/README.md`。

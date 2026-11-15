@@ -72,6 +72,21 @@
 - 每轮日志带 `prev_hash`，`src/prebell/verify.py` 一键验真；被否掉的旧雷达
   `probe.yml` 已停掉定时，历史日志保留不删。
 
+## 运行日志会自动进 GitHub，不用手动 commit
+
+`prebell-remind.yml`（工作日四个提醒点）和 `prebell-daily.yml`（每天 23:55 汇总）
+在云端跑完后各自 `git commit + push` 回 `main`，提交者 `prebell-bot`，
+落盘位置 `process_logs/YYYY-MM-DD.jsonl` / `*.summary.json` / `public/prebell-verify.json`。
+本机同步脚本把 `process_logs/` 与 `state/` 设为保护目录，**本地写不了也删不了日志**——
+这样日志只可能来自云端真实运行，不是手搓出来的。远端已有实证提交
+`d7b2877 prebell-bot | 实测日志 2026-11-14 每日汇总与验真`。
+
+- 周末四个提醒不跑，就没有明细日志，**不补写、不拿心跳凑连续天数**。
+- 目录里 `11-10 ~ 11-14` 的日志属于已停用定时的旧「校园节点雷达」，
+  不是课表提醒证据；区分口径见 `process_logs/README.md`。
+- 本地部署的「叮叮课表」不产生运行日志：它不联网、无常驻、APK 没有 INTERNET 权限，
+  也不会把 GitHub 凭据放进手机。要留使用痕迹只能本人手动导出后提交，且只记真实发生的操作。
+
 ## 代码与复现
 
 | 文件 | 作用 |
