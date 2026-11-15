@@ -86,7 +86,7 @@
   不是课表提醒证据；区分口径见 `process_logs/README.md`。
 - **勘误（11-15）**：原先这里写的「本地部署的叮叮课表不产生运行日志」是上午 v1 的旧口径，
   已作废。下午 v1.1 / 傍晚 v2.0 的 Windows 客户端每天 23:50 会自动把真实使用事件
-  commit 到 `tools/dingding/usage_logs/`；后来加的「课序 0.1.3」客户端写到
+  commit 到 `tools/dingding/usage_logs/`；后来加的「课序 0.1.4」客户端写到
   `tools/kexu/usage_logs/`。三者分目录存放，**都不写进 `process_logs/`，互不冒充云端运行日志**。
   仍然成立的是：安卓 APK 无 INTERNET 权限、不放 GitHub 凭据；关机 / 断网 / 没打开应用的那天
   不补写、不造心跳；日志只记真实发生的操作。口径见 `tools/kexu/usage_logs/README.md`。

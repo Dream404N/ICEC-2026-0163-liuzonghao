@@ -48,7 +48,7 @@ APK 仍无 INTERNET 权限、没有发布公网；EXE 是单文件 PyInstaller �
 开机自启仍由 `安装.cmd` 双击写入，如实标注。
 PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增强，本地是兜底。
 
-**11-15 再追加 · 课序 0.1.3（使用者满意的 Codex 版本）**：使用者另有一套自己用 Codex 辅助写成、
+**11-15 再追加 · 课序 0.1.4（使用者满意的 Codex 版本，11-16 修复启动报错）**：使用者另有一套自己用 Codex 辅助写成、
 界面和功能都满意的 Electron 课表应用「课序」（原工程在本机 `F:/下载/课表提醒/课表提醒`；
 **11-16 已把完整桌面源码同步到 `tools/kexu/app/`，65 个文件 / 627 KB，可 `npm ci && npm run desktop:dist` 复现**）。
 按使用者要求，给它的 Windows 客户端补了「运行日志每天自动 commit 到 GitHub」：
@@ -57,9 +57,13 @@ PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增
 全部实证放 `tools/kexu/README.md`，日志口径放 `tools/kexu/usage_logs/README.md`；
 修过的坑（安装版 `userData` 实际叫 `classmate-reminder`、导致凭据找不到、自动提交静默失效）也写在里面。
 源码安全审计见 `tools/kexu/SECURITY-AUDIT.md`，源码快照说明见 `tools/kexu/app/SOURCE-SNAPSHOT.md`。
-**11-16 已把 0.1.3 安装包发布为 GitHub Release [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)**
-（附件 `Kexu-Setup-0.1.3.exe`，132,215,755 B，SHA-256 `cfb7d332…b582ce2`，可直接下载）；
+**11-16 已把安装包发布为 GitHub Release**：[`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
+（附件 `Kexu-Setup-0.1.3.exe`，132,215,755 B，SHA-256 `cfb7d332…b582ce2`）与修复版
+[`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.4)
+（附件 `Kexu-Setup-0.1.4.exe`，132,216,066 B，SHA-256 `33481015…bdf5`），均可直接下载。
 exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，转公开后链接才公开可访问。
+11-16 实机装到 I 盘曾打不开，原因是安装目录 ACL 缺 `S-1-15-2-1` 触发 Electron 45 沙箱 FATAL，
+与安装包内容无关；修法与实证见 `tools/kexu/README.md`。
 实证提交 `f0f707a`（链路验证）、`ff77158`（修好后 5 条真实事件）、`7334429`（定时器按真实时钟自行唤醒的 `scheduled` 提交），单测 7/7。
 **这套日志的 7 天连续窗口是 11-16 ～ 11-22；11-15 只是链路验证，不算窗口内日志，不会补写凑数。**
 
@@ -95,7 +99,7 @@ exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，�
 03-AI-Collaboration/         AI 协作与排障记录（3 张真实排障截图 + 索引，见目录内 README）
 tools/PowerProbe/            课题 02 采集 App（Kotlin / Android）
 tools/dingding/              叮叮课表：Windows 单文件 EXE + 安卓 APK（均本机构建）
-tools/kexu/                  课序 0.1.3：交付说明 + 完整工程源码 + 安全审计
+tools/kexu/                  课序 0.1.4：交付说明 + 完整工程源码 + 安全审计
   usage_logs/                  客户端直接提交的真实使用日志（保护目录，本地不可覆盖）
   source/                      本次新增的日志同步模块源码快照（审计用）
   app/                         完整桌面工程源码（65 文件，可复现构建；见 SOURCE-SNAPSHOT.md）

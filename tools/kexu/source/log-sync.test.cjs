@@ -143,3 +143,20 @@ test('配置校验与开关', async t => {
   const r = await sync.sync('manual');
   assert.equal(r.reason, 'disabled');
 });
+
+test('启动时 ISO 字符串 lastCommitAt 不抛 RangeError，今天已提交不再补传（回归）', async t => {
+  const { sync, gh } = await setup(t);
+  await sync.configure({ time: '20:00' }); // 测试时钟为北京 21:00，提交点已过
+  // writeState 落盘的是 ISO 字符串；旧实现把它当毫秒数传给 beijingDate，
+  // 会拼成非法日期抛 RangeError，连带让「今天已提交就不补传」失效。
+  await sync.writeState({
+    lastCommitSha: 'sha-regression',
+    lastCommitAt: '2026-11-15T13:00:00.000Z',
+    files: 1, reason: 'scheduled',
+  });
+  await assert.doesNotReject(sync.start());
+  assert.ok(sync.nextRunAt, '定时器仍应排上下一次提交');
+  await new Promise(r => setTimeout(r, 50));
+  assert.equal(gh.state.commits.length, 0, '今天已提交过，不应触发 catch-up 补传');
+  sync.stop();
+});

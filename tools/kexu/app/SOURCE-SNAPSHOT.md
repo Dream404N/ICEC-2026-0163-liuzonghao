@@ -1,11 +1,11 @@
-# 源码快照说明（课序 0.1.3）
+# 源码快照说明（课序 0.1.4）
 
 本目录是「课序」Windows 客户端**完整、可构建的桌面工程源码**，2026-11-16 00:20 从本机
 `F:/下载/课表提醒/课表提醒` 原样复制：**65 个文件 / 627 KB**。
 本目录的 `README.md` 是原工程自带的使用说明，未改动。
 
 原工程由使用者用 Codex 辅助写成，本人对其界面和功能满意；11-15 由本次选拔任务追加了
-「运行日志每天自动 commit 到 GitHub」链路（`electron/log-sync.cjs` 等）并升级到 0.1.3。
+「运行日志每天自动 commit 到 GitHub」链路（`electron/log-sync.cjs` 等）并升级到 0.1.4（0.1.4 修复 `log-sync.cjs` 启动时 ISO 字符串日期解析的 `RangeError`）。
 
 - 这是**静态源码快照**，不是那个工程的 git 仓库本体；本机 F 盘工程仍是活的开发副本。
 - 与上层 [`../source/`](../source/) 的关系：`source/` 只放本次新增/改动模块的逐字节快照，
@@ -19,7 +19,7 @@
 npm ci                    # 依赖由 package-lock.json 锁定
 npm run check             # tsc + vitest + node --test
 npm run build             # tsc -b && vite build → dist/
-npm run desktop:dist      # electron-builder --win nsis → release/课序 Setup 0.1.3.exe
+npm run desktop:dist      # electron-builder --win nsis → release/课序 Setup 0.1.4.exe
 ```
 
 CI 见 `.github/workflows/check.yml`（Node 24，含 UI 测试、Windows 安装包与安卓壳构建）。
@@ -49,10 +49,11 @@ CI 见 `.github/workflows/check.yml`（Node 24，含 UI 测试、Windows 安装�
   `dist/`（构建产物）、`test-results/`、`.git/`、`tsconfig.tsbuildinfo`、
   `android/`（Capacitor 生成的壳 + 本机 Android SDK 构建中间产物，25 MB；
   本仓库 `tools/dingding/android/` 另有完整安卓源码）、根目录那份重复的 `log-sync.cjs` 副本。
-- **安装包 exe 不进 git 树，但已作为 GitHub 发行版发布**：`课序 Setup 0.1.3.exe` 为
-  132,215,755 字节，超过仓库单文件 100 MB 限制；Release 附件上限 2 GB，故发布在
-  [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
-  （附件名 `Kexu-Setup-0.1.3.exe`，GitHub 会清洗中文与空格）。SHA-256 与本机路径记在
+- **安装包 exe 不进 git 树，但已作为 GitHub 发行版发布**：`课序 Setup 0.1.4.exe` 为
+  132,216,066 字节，超过仓库单文件 100 MB 限制；Release 附件上限 2 GB，故发布在
+  [`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.4)
+  （附件名 `Kexu-Setup-0.1.4.exe`，中文放 label）。0.1.3 的发行版见
+  [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)。SHA-256 与本机路径记在
   [`../README.md`](../README.md)，可逐字节核对。仓库仍 Private，下载需账户权限。
 - `docs/artifacts.json` 是工程自带的**历史**产物清单，停在 0.1.1；当前版本以上层 README 为准。
 - **不含任何 token / SendKey / 云数据库凭据**。日志提交所需凭据只在运行时从本机环境变量

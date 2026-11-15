@@ -1,7 +1,7 @@
 # 课序（Codex 版）源码安全审计 · 有没有远控/病毒
 
 > 审计时间：2026-11-15 22:4x（北京）
-> 对象：使用者本机 `F:/下载/课表提醒/课表提醒/`（Codex 写的「课序」Electron 工程，0.1.3）
+> 对象：使用者本机 `F:/下载/课表提醒/课表提醒/`（Codex 写的「课序」Electron 工程，0.1.4）
 > 范围：`electron/`、`src/`、`scripts/`、`tests/`、`index.html`、`vite.config.ts`、
 > `capacitor.config.ts`、`package.json`、`.env.example`、`package-lock.json`、
 > 以及已构建的 `dist/` 与 `app.asar`。
@@ -46,13 +46,20 @@ Select-String -Path dist\assets\*.js -Pattern 'createClient|VITE_SUPABASE|schedu
 Get-Content dist\index.html                       # 可见 CSP 的 *.supabase.co 是允许列表，不是请求
 ```
 
-## 本次重打包产物（0.1.3）
+## 本次打包产物（0.1.3 / 0.1.4）
 
-本机路径 `release/课序 Setup 0.1.3.exe`（同等副本在 `release-013/`），
+**0.1.4（当前）**：本机 `release/课序 Setup 0.1.4.exe`（构建原件 `release-014/`），
+132,216,066 字节，2026-11-16 01:03 生成，
+SHA-256 `334810153d34b15e54bcc96a3a1b6b071c6d9a6d6336234f4ca7dc2ea0e6bdf5`；
+同时是 GitHub Release [`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.4)
+的附件 `Kexu-Setup-0.1.4.exe`。该版本只改 `electron/log-sync.cjs` 的日期解析与对应单测，
+前端与网络相关代码未变，因此这份审计结论对 0.1.4 同样成立；11-16 已实机启动、主窗口可见。
+
+**0.1.3（旧）**：本机 `release/课序 Setup 0.1.3.exe`（同等副本在 `release-013/`），
 132,215,755 字节，2026-11-15 22:48 生成，
-SHA-256 `cfb7d332683875d049361971cb0f2c40df0cfc999eeb074d6a5d2f429b582ce2`。
-这份文件同时是 GitHub Release [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
-的附件 `Kexu-Setup-0.1.3.exe`（132,215,755 B），上传后可用上面的 SHA-256 核对下载件是否被改动。
+SHA-256 `cfb7d332683875d049361971cb0f2c40df0cfc999eeb074d6a5d2f429b582ce2`；
+对应 Release [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
+的附件 `Kexu-Setup-0.1.3.exe`。上传后可用上面的 SHA-256 核对下载件是否被改动。
 
 包内核对：`app.asar` 内 `electron/main.cjs`、`electron/log-sync.cjs`、
 `electron/preload.cjs`、`electron/reminders.ps1` 与本机源码**逐字节一致**；

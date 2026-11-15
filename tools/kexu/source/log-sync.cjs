@@ -291,7 +291,10 @@ class LogSync {
     if (!cfg.enabled || !readToken(cfg, this.env)) return;
     const state = await this.readState();
     const today = beijingDate(this.now());
-    const committedToday = state.lastCommitAt && beijingDate(state.lastCommitAt) === today;
+    // writeState 存的是 ISO 字符串，而 beijingDate 只接受毫秒数；直接传字符串会
+    // 拼成非法日期并抛 RangeError，使「今天已提交就不补传」的判断失效。
+    const lastCommitMs = state.lastCommitAt ? Date.parse(state.lastCommitAt) : NaN;
+    const committedToday = Number.isFinite(lastCommitMs) && beijingDate(lastCommitMs) === today;
     if (!committedToday && pastTodayTime(cfg.time, this.now())) {
       this.sync('catch-up').catch(e => { this.lastError = String(e.message || e); });
     }
