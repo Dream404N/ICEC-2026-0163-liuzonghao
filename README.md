@@ -73,13 +73,15 @@ PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增
   iterations/                  迭代记录
   feedback/                    用户反馈
   src/                         源码
-03-AI-Collaboration/         AI 协作与排障记录
+03-AI-Collaboration/         AI 协作与排障记录（3 张真实排障截图 + 索引，见目录内 README）
 tools/PowerProbe/            课题 02 采集 App（Kotlin / Android）
+tools/dingding/              叮叮课表：Windows 单文件 EXE + 安卓 APK（均本机构建）
 ```
 
 ## 工程
 
-`tools/PowerProbe/` 的 APK 由 GitHub Actions 云端构建（本地无 Android SDK）：
+`tools/PowerProbe/` 的 APK 由 GitHub Actions 云端构建；本机另有 Android SDK
+（`I:\android-sdk-windows`），用于 `tools/dingding/` 的 APK 本地构建：
 
 - 工作流 `.github/workflows/build-apk.yml`，JDK 17 / Gradle 8.7 / AGP 8.5.2 / Kotlin 1.9.24
 - 产物：Actions Artifacts `PowerProbe-debug-apk`，以及 Release `apk-latest` 下的 `app-debug.apk`
