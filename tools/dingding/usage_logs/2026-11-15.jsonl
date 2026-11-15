@@ -1,2 +1,3 @@
 {"date": "2026-11-15", "detail": "2026-11-15 P1 这一节没课，不弹窗", "event": "no_course", "ok": true, "source": "windows-client", "ts": "2026-11-15T14:09:12+08:00"}
 {"date": "2026-11-15", "detail": "exit=0 远端提交 5a50d2c · 已提交 1 个日志文件", "event": "commit_logs", "ok": true, "source": "windows-client", "ts": "2026-11-15T14:09:19+08:00"}
+{"date": "2026-11-15", "detail": "命令行 --test 触发", "event": "test_notification", "ok": true, "source": "windows-exe", "ts": "2026-11-15T15:04:03+08:00"}
