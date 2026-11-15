@@ -23,6 +23,28 @@
 | 窗口 API 声明与 preload 转发 | `src/platform/desktop.d.ts`、`electron/preload.cjs` | 不复制 |
 | 版本号 / 使用说明 | `package.json`、`README.md` | 不复制 |
 
+## 可执行文件在哪（哪个才带自动 commit）
+
+**带自动 commit 的只有 0.1.2 / 0.1.3** —— `log-sync.cjs` 是 11-15 21:24 才新增的，
+0.1.0（16:07 打包）、0.1.1（16:47 打包）里根本没有这个模块。
+
+| 用途 | 绝对路径（本机工程 `F:/下载/课表提醒/课表提醒/` 下） | 大小 / SHA-256 |
+| --- | --- | --- |
+| **推荐 · 0.1.3 安装包**（双击是「安装」，装完从开始菜单启动） | `release/课序 Setup 0.1.3.exe` | 132,215,755 B · `cfb7d332…b582ce2` |
+| 同上，构建输出原件 | `release-013/课序 Setup 0.1.3.exe` | 与上者**哈希完全相同**，是同一份 |
+| **推荐 · 0.1.3 免安装主程序**（直接双击运行，不改注册表、不写自启） | `release-013/win-unpacked/课序.exe` | 250,057,216 B · `536ba0aa…d0fe0` |
+| 0.1.2 旧安装包（有链路，但设置面板没有凭据入口） | `release/课序 Setup 0.1.2.exe` | 132,215,401 B · `4a13bf96…a54ec` |
+| 不带自动提交 | `release/课序 Setup 0.1.0.exe`、`…0.1.1.exe` | — |
+
+⚠️ 两个坑：① `release/win-unpacked/` 是 0.1.2 的残缺残留，**主程序 `课序.exe` 已不在**，只剩
+`locales/` 和 `resources/`，别去那里双击；② 便携版主程序**必须连同整个 `win-unpacked/` 目录**
+一起保留（依赖 `resources/app.asar`、dll、`locales/`），单独拷出 exe 跑不起来。
+
+`package.json` 的 `name` 仍是 `classmate-reminder`，所以装完 / 跑起来后 `userData` 还是
+`%APPDATA%\classmate-reminder`，**会直接继承现有 `log-sync.json`**（已开启、23:50、凭据路径有效），
+不用再填一次。运行时是 Electron 45.3.2；该版本官方 dist 本身就不含
+`libEGL.dll` / `libGLESv2.dll`，便携目录里没有这两个文件属正常，不是打包缺失。
+
 ## 它是怎么跑的
 
 - **只记真实事件**：启动、退出、提醒弹出、测试提醒、提醒计划变更、开机启动开关、休眠恢复、
