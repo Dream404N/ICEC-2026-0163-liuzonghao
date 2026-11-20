@@ -1,0 +1,11 @@
+{"ts":"2026-11-20T04:50:18.635Z","date":"2026-11-20","local":"12:50:18","event":"app_start","detail":"课序启动 | v0.1.4 | win32","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T04:50:20.580Z","date":"2026-11-20","local":"12:50:20","event":"reminders_scheduled","detail":"已安排 48 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T04:56:37.612Z","date":"2026-11-20","local":"12:56:37","event":"reminders_scheduled","detail":"已安排 48 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T04:56:41.059Z","date":"2026-11-20","local":"12:56:41","event":"reminders_scheduled","detail":"已安排 48 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T05:00:00.367Z","date":"2026-11-20","local":"13:00:00","event":"reminder_delivered","detail":"30 分钟后上课 · 体育 | 13:30–14:50 · 文体中心 204 · 查士君 | 2026-11-20T05:00:00.000Z","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T07:05:38.309Z","date":"2026-11-20","local":"15:05:38","event":"app_start","detail":"课序启动 | v0.1.4 | win32","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T07:05:43.138Z","date":"2026-11-20","local":"15:05:43","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T10:21:19.709Z","date":"2026-11-20","local":"18:21:19","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T10:21:22.407Z","date":"2026-11-20","local":"18:21:22","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T11:06:12.385Z","date":"2026-11-20","local":"19:06:12","event":"system_resume","detail":"系统从休眠恢复","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-20T11:58:39.218Z","date":"2026-11-20","local":"19:58:39","event":"system_resume","detail":"系统从休眠恢复","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
