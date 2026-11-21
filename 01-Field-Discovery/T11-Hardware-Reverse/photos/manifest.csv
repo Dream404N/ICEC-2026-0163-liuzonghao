@@ -1,0 +1,6 @@
+filename,bytes,sha256,note
+01-exploded-overview.jpg,716383,8d7b172d04a02dd098e9fb9c4d8a2568740d37578270e4244964113a83795763,整体爆炸图：上壳/内衬/主PCB/零件袋同框
+02-main-pcb-top.jpg,724781,66ee8fa0a66470fe63274288cf52e1d116cd3e9cc3d9a409920eb6c464d18926,主板正面：主控U1、晶振、CN1/CN2、微动阵列、L01
+03-main-pcb-bottom.jpg,718107,d21a398ff285ff9f1c92de71ca8f831a971da75342fd41a1b93f4b75df22da62,主板背面：U3/U4/U5/U6、Q1/Q4、R/C阵列、5pin排针
+04-button-board-kc.jpg,709664,9f554ffdc69dccbd58e936c8e3ab293da5aff61d0ce615def3fa26d4b0727b4d,按键子板：KAITH×2 + OMRON、SW4/SW11、U7/U8/U11/U12
+05-hero-sensor-board.jpg,697151,ef8358868829c37820afc5e8e1a480cc2562230e6aee15c5dc93130f12a5895a,HERO传感器小板：210-001929 Sensor Rev 003

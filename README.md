@@ -21,6 +21,7 @@
 | --- | --- | --- |
 | 第一阶段 · 实地测评（10 选 2 · 20 分） | **课题 02：个人手机多工况发热与掉电实测** | ✅ **已按现状如实定稿**。结论稿 `T02-Phone-Power-Thermal/analysis/summary.md`；相机录像工况仅 2 个采样点，按端点实测标注，不补采、不插值，口径见 `DATA_QUALITY.md` |
 | 第一阶段 · 第二项 | **课题 09：多模态大模型校园复杂视觉盲区实测** | ✅ 已完成实测与报告 |
+| 额外 · 第二阶段项目五同等要求 | **T11：二手游戏鼠标拆解逆向、BOM 成本还原与升级方案** | ✅ 已完成实物拆解与报告（**不计入 8 选 1**，第二阶段已交项目四）。含一处主动勘误：实物为跨代混装件，非原厂整机，见报告 §0 |
 | 第二阶段 · 开放式项目（8 选 1 · 60 分） | **预备铃 / PreBell：课表微信提醒** | 3.0 版（11-14）：真实课表数据 + 课前 20 分钟微信提醒 + 全学期课表网页与手机日历；定时直接用 GitHub Actions 的 4 条 cron，用户零配置。用法见 `02-20Days-Challenge/README.md` |
 | 第三阶段 · AI 协作 | WorkBuddy / Codex 辅助排障 | 已收 3 张真实排障截图并写索引；Codex 仅使用者自述、无截图证据，如实标注边界，见 `03-AI-Collaboration/README.md` |
 
@@ -91,6 +92,10 @@ exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，�
     photos/                      18 张 2048px 高清副本
     reports/                     自动生成的 md/html 报告、素材联系表
     tools/                       一键测试工具、报告生成器、图像处理（JDK）
+  T11-Hardware-Reverse/        实物逆向：二手游戏鼠标拆解 + BOM 还原 + 升级方案
+    photos/                      5 张分步拆解照 + manifest.csv（SHA-256 证据链）
+    data/                        bom.csv 批量成本核算表
+    report.html                  单页可视化报告
 02-20Days-Challenge/         第二阶段 · 工坊项目
   process_logs/                每日运行日志
   iterations/                  迭代记录
