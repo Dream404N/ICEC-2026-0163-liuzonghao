@@ -108,7 +108,7 @@ test('真实日志会产生一次提交，重复同步不重复提交', async t 
   assert.equal(first.ok, true);
   assert.equal(first.reason, 'committed');
   assert.equal(gh.state.commits.length, 1);
-  assert.match(gh.state.commits[0], /真实事件 1 条/);
+  assert.match(gh.state.commits[0], /当日 1 条 \/ 累计 1 条/);
   assert.equal(gh.state.files.size, 1);
   const second = await sync.sync('scheduled');
   assert.equal(second.reason, 'no_changes');
@@ -118,6 +118,21 @@ test('真实日志会产生一次提交，重复同步不重复提交', async t 
   const third = await sync.sync('scheduled');
   assert.equal(third.reason, 'committed');
   assert.equal(gh.state.commits.length, 2);
+});
+
+test('提交文案区分当日与累计，不把累计条数写成当日', async t => {
+  // 回归：0.1.4 的文案把所有分片行数累加后写成「真实事件 N 条」，
+  // 11-20 实际只有 11 条，commit 却写着 114 条，读起来像虚报。
+  const { sync, gh } = await setup(t);
+  await fs.mkdir(path.join(sync.logsDir), { recursive: true });
+  const line = d => JSON.stringify({ ts: new Date().toISOString(), event: 'app_start', detail: d }) + '\n';
+  await fs.writeFile(path.join(sync.logsDir, '2026-11-14.jsonl'),
+    line('前一天一') + line('前一天二'), 'utf8');
+  await fs.writeFile(path.join(sync.logsDir, '2026-11-15.jsonl'),
+    line('当天一') + line('当天二') + line('当天三'), 'utf8');
+  const r = await sync.sync('scheduled');
+  assert.equal(r.reason, 'committed');
+  assert.match(gh.state.commits[0], /当日 3 条 \/ 累计 5 条/);
 });
 
 test('日志里出现疑似密钥时拒绝提交', async t => {

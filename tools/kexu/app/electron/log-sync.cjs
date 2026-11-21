@@ -387,9 +387,18 @@ class LogSync {
       } else {
         const tr = await call('POST', R + '/git/trees', { base_tree: tree.json.sha, tree: entries });
         if (tr.status !== 200 && tr.status !== 201) throw new Error('创建文件树失败 HTTP ' + tr.status);
+        // 口径修正（0.1.5）：total 是所有分片的累计行数，不是当日条数。
+        // 旧文案「真实事件 N 条」会被读成当日 N 条（11-20 实际 11 条，却被写成 114 条），
+        // 虽然每个数字都是真实事件，但表述与文件对不上，属于口径错误，这里拆开写清。
+        const today = beijingDate(this.now());
         let total = 0;
-        for (const f of files) total += f.content.toString('utf8').split('\n').filter(Boolean).length;
-        const message = '课序运行日志 ' + beijingDate(this.now()) + '（真实事件 ' + total + ' 条，' + reason + '）';
+        let todayCount = 0;
+        for (const f of files) {
+          const lines = f.content.toString('utf8').split('\n').filter(Boolean).length;
+          total += lines;
+          if (f.name === today + '.jsonl') todayCount = lines;
+        }
+        const message = '课序运行日志 ' + today + '（当日 ' + todayCount + ' 条 / 累计 ' + total + ' 条，' + reason + '）';
         const cm = await call('POST', R + '/git/commits', { message, tree: tr.json.sha, parents: [head] });
         if (cm.status !== 200 && cm.status !== 201) throw new Error('创建提交失败 HTTP ' + cm.status);
         const ref = await call('PATCH', R + '/git/refs/heads/' + encodeURIComponent(branch), { sha: cm.json.sha });

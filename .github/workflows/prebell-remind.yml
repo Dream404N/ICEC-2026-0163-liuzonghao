@@ -67,14 +67,31 @@ jobs:
         run: |
           set -e
           SRC=cron
-          if [ "${{ github.event_name }}" != "schedule" ]; then SRC="${{ inputs.source }}"; fi
+          PERIOD="${{ inputs.period }}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            # 按「本次是哪条 cron 触发的」定大节，不再让脚本靠当前钟点猜。
+            # 背景：GitHub 免费 cron 高峰期排队 50~70 分钟是常态，原先不传 --period，
+            # 脚本的 pick_period() 只在 ±15 分钟内命中，晚到就直接 no_period_now 退出，
+            # 连一条日志都不写 —— 11-16~11-20 连续 5 天 attempted=0 就是这么来的。
+            # 现在照常传 --period，晚到由 run.py 判 skipped_late / skipped_after_class
+            # 并落盘，仍然不补推、不回填。
+            case "${{ github.event.schedule }}" in
+              "20 0 * * 1-5") PERIOD=P1 ;;
+              "0 2 * * 1-5")  PERIOD=P2 ;;
+              "10 5 * * 1-5") PERIOD=P3 ;;
+              "50 6 * * 1-5") PERIOD=P4 ;;
+            esac
+          else
+            SRC="${{ inputs.source }}"
+          fi
+          echo "触发=${{ github.event_name }} 大节=${PERIOD:-自动判定} 来源=$SRC 计划=${{ github.event.schedule }}"
           if [ -n "${{ inputs.preview_date }}" ]; then
             python prebell/run.py --preview "${{ inputs.preview_date }}"
             echo "手工预览完成，未写入自动运行日志"
+          elif [ -n "$PERIOD" ]; then
+            python prebell/run.py --period "$PERIOD" --source "$SRC"
           else
-            ARGS=""
-            if [ -n "${{ inputs.period }}" ]; then ARGS="--period ${{ inputs.period }}"; fi
-            python prebell/run.py $ARGS --source "$SRC"
+            python prebell/run.py --source "$SRC"
           fi
 
       - name: 提交当日日志与去重状态
