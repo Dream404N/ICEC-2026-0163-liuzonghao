@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T11 · 百元内旧鼠标拆解逆向、BOM 成本还原与智能化升级方案</title>
+<title>T11 · 旧鼠标拆解逆向、BOM 成本还原与智能化升级方案</title>
 <style>
   :root{
     --bg:#fbfbfa; --fg:#1f2328; --muted:#59636e; --line:#d8dee4;
@@ -49,63 +49,56 @@
 </head>
 <body>
 <div class="wrap">
-<h1>T11 · 百元内旧鼠标拆解逆向、BOM 成本还原与智能化升级方案</h1>
-<blockquote>对应官网题库 <strong>第二阶段 · 项目五</strong>（8 选 1 中的一项）的四项交付要求：<br>①《实物爆炸拆解图谱》与过程分步照片（15 分）；②主板芯片丝印溯源与供电/控制框图（15 分）；<br>③《批量 BOM 成本核算表》（10 分）；④《智能化升级改造方案》含原板取电与控制接入点标注图、<br>20 元内增量器件选型表与控制状态图（20 分）。<br><br><strong>计分归属不自我宣称</strong>：本人第二阶段已交项目四（课序课表提醒，含 7 天遥测日志），<br>8 选 1 只能选一项。本报告是<strong>按项目五同等要求额外完成的实物逆向</strong>，不计入已提交的项目四，<br>也不声称得分；用途是第三阶段面试里「动手能力 / 数据溯源」的实物证据。<br><br>对象：一台二手 <strong>Logitech G502 HERO</strong>（已拆散，含第三方替换外壳）<br>时间：2026-11-21 拆解并拍照 · 2026-11-22 成文<br>状态：<strong>已断电拆解、全程未通电、未做带电测量</strong>（下文所有电气结论均标注为「目视推断」）</blockquote>
+<h1>T11 · 旧鼠标拆解逆向、BOM 成本还原与智能化升级方案</h1>
+<blockquote>对应官网题库 <strong>第二阶段 · 项目五</strong>（8 选 1 中的一项）的四项交付要求：<br>①《实物爆炸拆解图谱》与过程分步照片（15 分）；②主板芯片丝印溯源与供电/控制框图（15 分）；<br>③《批量 BOM 成本核算表》（10 分）；④《智能化升级改造方案》含原板取电与控制接入点标注图、<br>20 元内增量器件选型表与控制状态图（20 分）。<br><br><strong>计分归属说明</strong>：本人第二阶段 8 选 1 已选项目四，本报告为按项目五同等要求额外完成的实物逆向，<br>不重复计分，亦不自我宣称得分。<br><br>对象：一台二手 <strong>Logitech G502 HERO</strong>（已拆散，含第三方替换外壳）<br>时间：2026-11-21 拆解并拍照 · 2026-11-22 成文<br>状态：<strong>已断电拆解、全程未通电、未做带电测量</strong>（下文所有电气结论均标注为「目视推断」）</blockquote>
 <hr>
-<h2>0. 摘要：三个结论，一个是坏消息</h2>
-<p><strong>① 这台机器不是原厂整机，是跨代拼装件。</strong> 这是本次拆解最重要的发现，也是必须写在最前面的。</p>
+<h2>0. 摘要与关键结论</h2>
+<p><strong>① 本机不是原厂整机，为跨代拼装件。</strong> 这是本次拆解最主要的发现。</p>
 <p>传感器小板明确属于 G502 HERO 世代：丝印 <code>HERO</code>、<code>210-001929</code>、<code>Sensor Rev 003</code>， 日期码 <code>2229</code>（2022 年第 29 周）。但主板三处丝印全部是 <code>2015.07.28</code>：</p>
 <div class="tw"><table><thead><tr><th>板</th><th>料号</th><th>日期码</th></tr></thead><tbody><tr><td>主控板（正面）</td><td><code>210-001620_003</code></td><td><code>2015.07.28</code></td></tr><tr><td>按键/侧键板</td><td><code>210-001625_003</code></td><td><code>2015.07.28</code></td></tr><tr><td>传感器板</td><td><code>210-001929</code> <code>Sensor Rev 003</code></td><td><code>2229</code>（2022 W29）</td></tr></tbody></table></div>
 <p><strong>相差约 7 年。</strong> G502 HERO 是 2018 年才发布的型号，2015 年的主板不可能随 HERO 出厂。 再叠加外壳丝印是 <code>MANBA B15</code>（第三方外壳品牌，非罗技原厂模具）， 结论是：<strong>这是一台用 2015 年 G502 主板 + 2022 年 HERO 传感器板 + 第三方外壳拼起来的机器</strong>， 典型成因是「主板/传感器任一侧损坏后换件维修」或「二手商混装出货」。</p>
-<blockquote><strong>对使用者的直接影响</strong>：如果要在任何材料里写「我拆的是 G502 HERO」，<br>主板日期会被评审一眼看出对不上。<strong>建议如实写「二手 G502 系列混装件」</strong>，<br>并在报告里主动指出这个矛盾——主动发现比被问出来强得多。</blockquote>
-<p><strong>② 主控型号读不到，这是硬边界。</strong> U1 被二维码标签整片覆盖（<code>EA033 /2E</code> 是标签内容，非芯片丝印）， 封装为方形无引脚（QFN 类）。同代 G502 主控为 <code>STM32L100R8T6</code>（LQFP-64，四边有引脚）， <strong>与本案封装形态不符</strong>，因此本报告<strong>不认定</strong>主控型号，也不去猜。 撕标签会破坏可能的保修/批次信息，且撕开后若无专业返修台难以复原，故不动。</p>
-<p><strong>③ 这块板有完整的「原板取电 + 高阻旁路采样」条件，20 元内能做出真正有用的东西。</strong> 板上有 5 个可见测试点（<code>TP5/TP6/TP12/TP18/TP19</code>）、一路经 <code>FB1</code> 磁珠滤波的 USB 5V 母线、 以及成组的高阻按键分压网络。这意味着<strong>不用割线、不用改固件</strong>就能旁路采集 「鼠标工况电流 + 按键事件」——和本人课题 02 的手机功耗实测是同一套方法论，换个被测对象而已。</p>
+<blockquote><strong>对报告口径的影响</strong>：主板日期码与「G502 HERO 于 2018 年发布」在时间上互斥，<br>若仍以「原厂 G502 HERO」表述，结论与证据将自相矛盾。<br>本报告因此统一采用「G502 系列混装件」这一表述，并把该矛盾作为发现列入第 0 节，<br>而非回避。</blockquote>
+<p><strong>② 主控型号不可读，作为边界如实标注。</strong> U1 被二维码标签整片覆盖（<code>EA033 /2E</code> 是标签内容，非芯片丝印）， 封装为方形无引脚（QFN 类）。同代 G502 主控为 <code>STM32L100R8T6</code>（LQFP-64，四边有引脚）， <strong>与本案封装形态不符</strong>，因此本报告<strong>不认定</strong>主控型号，也不去猜。 撕标签会破坏可能的保修/批次信息，且撕开后若无专业返修台难以复原，故不动。</p>
+<p><strong>③ 该板具备完整的「原板取电 + 高阻旁路采样」条件，20 元内可完成有效改造。</strong> 板上有 5 个可见测试点（<code>TP5/TP6/TP12/TP18/TP19</code>）、一路经 <code>FB1</code> 磁珠滤波的 USB 5V 母线、 以及成组的高阻按键分压网络。这意味着<strong>不用割线、不用改固件</strong>就能旁路采集 「鼠标工况电流 + 按键事件」——和本人课题 02 的手机功耗实测是同一套方法论，换个被测对象而已。</p>
 <hr>
 <h2>1. 对象与边界</h2>
 <h3>1.1 对象</h3>
-<div class="tw"><table><thead><tr><th>项</th><th>内容</th></tr></thead><tbody><tr><td>品名</td><td>Logitech G502 系列（传感器为 HERO 世代）</td></tr><tr><td>类型</td><td>有线游戏鼠标，USB 供电，<strong>无锂电池</strong>（这点让拆解风险显著低于无线鼠）</td></tr><tr><td>已知故障</td><td>未通电测试，<strong>电气功能状态未知</strong>（见 §7 未确认项）</td></tr><tr><td>外壳</td><td>第三方 <code>MANBA B15</code> 外壳（非原厂），带 XXX 涂装</td></tr><tr><td>购入价</td><td>______（待本人补填，本报告不编造）</td></tr><tr><td>拆解日期</td><td>2026-11-21</td></tr><tr><td>是否有同框认证照</td><td>❌ <strong>缺</strong> —— 见 §7</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>项</th><th>内容</th></tr></thead><tbody><tr><td>品名</td><td>Logitech G502 系列（传感器为 HERO 世代）</td></tr><tr><td>类型</td><td>有线游戏鼠标，USB 供电，<strong>无锂电池</strong>（这点让拆解风险显著低于无线鼠）</td></tr><tr><td>已知故障</td><td>未通电测试，<strong>电气功能状态未知</strong>（见 §7 未确认项）</td></tr><tr><td>外壳</td><td>第三方 <code>MANBA B15</code> 外壳（非原厂），带 XXX 涂装</td></tr><tr><td>购入渠道与价格</td><td>二手流通件；具体金额本人未留存凭证，<strong>本报告不对购入价作假设</strong>，标题亦不写「百元内」</td></tr><tr><td>拆解日期</td><td>2026-11-21</td></tr><tr><td>是否有同框认证照</td><td>✅ 有 —— <code>photos/00-on-site-with-teardown.jpg</code>（见 §2.0）</td></tr></tbody></table></div>
 <h3>1.2 安全边界（实际执行的）</h3>
 <ul><li>拆解前<strong>未通电</strong>，全程冷机操作，无带电插拔。</li><li>无锂电池，不存在短路起火与鼓包风险。</li><li>未使用热风枪、未拆焊任何贴片器件，<strong>所有芯片丝印均为光学读取（手机微距）</strong>，无化学助焊剂擦拭。</li><li>未撕除任何标签、未刮除三防漆。</li></ul>
 <h3>1.3 本报告的证据等级约定</h3>
 <div class="tw"><table><thead><tr><th>标记</th><th>含义</th></tr></thead><tbody><tr><td><strong>【读】</strong></td><td>照片上可直接读出的丝印文字，可被任何人复核</td></tr><tr><td><strong>【推】</strong></td><td>基于封装形态 / 位号命名惯例 / 电路拓扑的<strong>推断</strong>，未经测量验证</td></tr><tr><td><strong>【未】</strong></td><td>未能确认，且说明为什么不能确认</td></tr></tbody></table></div>
-<p><strong>全文不出现「实测」「测得」字样</strong>，因为本次<strong>没有做任何电气测量</strong>。 这是刻意的——把目视推断写成实测，是这类报告最常见的造假方式。</p>
+<p>正文不使用「实测」「测得」描述电气特性，因本次未进行电气测量。 将目视推断表述为测量结果，是逆向类报告中最常见的失真来源，本报告以显式标注规避。</p>
 <hr>
 <h2>2. 实物爆炸拆解图谱</h2>
+<h3>2.0 现场同框照（本人在场实证）</h3>
+<p><img src="photos/00-on-site-with-teardown.jpg" alt="现场同框" loading="lazy"></p>
+<p><strong>图 2-1</strong> · 拆解现场同框。人物手持鼠标上壳（<code>MANBA B15</code> 涂装壳）位于工作台前， 右手侧桌面可见拆散后的传感器小板（黑色圆形，已被拆下）、绿色按键/侧键板与零件散件； 背景为双屏工作台（笔记本 + 外接显示器）与机械键盘。<strong>面部已做遮挡处理</strong>， 遮挡不影响「人—拆解件—工作台」三者在同一画面内的对应关系。</p>
+<blockquote>该照片的证明对象是「拆解动作发生于本人工作台、拆下件与 §2.3 各图为同一批实物」，<br>而非人物身份；面部遮挡不削弱这一对应关系。<br>拍摄时刻需更强锚定时，可补拍一张令手机屏幕日期时间入镜的照片（本图经微信转发已剥离 EXIF，见 §7 第 4 条）。</blockquote>
 <h3>2.1 总览</h3>
-<pre class="code"><code>┌─────────────────────────────────────────────────────────────┐
-│  ① 上壳（第三方 MANBA B15 涂装壳）                          │
-│      └ 内衬黑色 ABS 支架 + 按键柱                            │
-├─────────────────────────────────────────────────────────────┤
-│  ② 底壳（黑色 ABS）                                          │
-│      └ 内嵌 ③ 传感器小板（2 颗十字螺丝 + 2 个尼龙垫片固定）  │
-├─────────────────────────────────────────────────────────────┤
-│  ④ 主控板 210-001620_003  ←→  ⑤ 按键/侧键板 210-001625_003  │
-│      两块板之间用 FPC 排线连接（CN1 / CN2 座）              │
-├─────────────────────────────────────────────────────────────┤
-│  ⑥ 滚轮组件（含 2 根极细回弹弹簧，拆装最易丢件）            │
-│  ⑦ 配重舱盖                                                │
-└─────────────────────────────────────────────────────────────┘</code></pre>
+<p><img src="figures/fig-01-exploded.svg" alt="整机拆解层次" loading="lazy"></p>
+<p><strong>图 2-2</strong> · 整机拆解层次结构。共 6 个可分离层次，拆解顺序自上而下（对应 §2.2 的 8 个操作步骤）。</p>
 <p><img src="photos/01-exploded-overview.jpg" alt="爆炸图总览" loading="lazy"></p>
-<p><strong>图 1</strong> · 全部零件同框。上方为上壳，中部黑色底壳内嵌传感器小板， 下方绿色板为按键/侧键板，底部密封袋为滚轮与弹簧散件。</p>
-<h3>2.2 拆解顺序（实测路径，非教程抄录）</h3>
+<p><strong>图 2-3</strong> · 实物爆炸图总览。全部零件同框：上方为上壳，中部黑色底壳内嵌传感器小板， 下方绿色板为按键/侧键板，底部密封袋为滚轮与弹簧散件。</p>
+<h3>2.2 拆解顺序（本机实际操作路径）</h3>
 <p>实际拆解按「外壳 → 分离板卡 → 取传感器」三段进行。参照 iFixit G502 HERO 官方拆解指南 （<code>zh.ifixit.com/Guide/Logitech+G502+Hero+Demontage/140809</code>，社区贡献，2026-08 最后修订） 交叉核对，路径一致，无一例外步骤。</p>
 <div class="tw"><table><thead><tr><th>步</th><th>操作</th><th>耗时</th><th>风险点</th></tr></thead><tbody><tr><td>1</td><td>取下底部配重舱盖</td><td>&lt;1 min</td><td>无</td></tr><tr><td>2</td><td>撕脚贴（本机脚贴已被前手撕过，无胶残留）</td><td>2 min</td><td>原厂脚贴撕后不可复用，需备新脚贴</td></tr><tr><td>3</td><td>拧下前后 4 颗十字螺丝，撬开上下壳</td><td>5 min</td><td>底部右侧暗扣较紧，用塑料撬片，勿用金属</td></tr><tr><td>4</td><td>断开 2 根 FPC 排线（传感器、侧键板）</td><td>3 min</td><td>排线座为翻盖式锁扣，<strong>先翻盖再拔线</strong>，硬拔会撕裂金手指</td></tr><tr><td>5</td><td>顶出滚轮固定杆，取滚轮组件</td><td>4 min</td><td><strong>2 根微型弹簧极易弹飞</strong>（本机已用密封袋单独收纳）</td></tr><tr><td>6</td><td>拧下滚轮支架 4 颗螺丝 + 传感器排线座旁 1 颗</td><td>3 min</td><td>螺丝长度不同，需按位归放</td></tr><tr><td>7</td><td>拔出 USB 线插头（撬棒从公头侧顶出）</td><td>2 min</td><td>插头为压接式，勿拉线身</td></tr><tr><td>8</td><td>拧下传感器板 2 颗螺丝，用镊子取下 2 个尼龙垫片</td><td>3 min</td><td>垫片直径约 2 mm，丢失会导致传感器光路高度改变</td></tr></tbody></table></div>
 <p><strong>总耗时约 25 分钟</strong>，与 iFixit 标注的「中等难度 / 1 小时」相当（本机已被拆过一次，故偏快）。</p>
 <h3>2.3 板卡分步照片</h3>
-<div class="tw"><table><thead><tr><th>图</th><th>文件</th><th>内容</th></tr></thead><tbody><tr><td>图 2</td><td><a href="photos/02-main-pcb-top.jpg" target="_blank" rel="noopener"><code>02-main-pcb-top.jpg</code></a></td><td>主控板正面：U1（标签覆盖）、晶振、CN1/CN2 排线座、红色主键微动、黑色滚轮微动、测试点阵列</td></tr><tr><td>图 3</td><td><a href="photos/03-main-pcb-bottom.jpg" target="_blank" rel="noopener"><code>03-main-pcb-bottom.jpg</code></a></td><td>主控板背面：U3/U4/U5/U6、Q1/Q4、R/C 阵列、5 pin 排针、<code>dynamic</code> 板厂丝印</td></tr><tr><td>图 4</td><td><a href="photos/04-button-board-kc.jpg" target="_blank" rel="noopener"><code>04-button-board-kc.jpg</code></a></td><td>按键/侧键板：<code>Kaith</code> ×2 + <code>Omron</code> ×1、U7/U8/U11/U12、SW4/SW11</td></tr><tr><td>图 5</td><td><a href="photos/05-hero-sensor-board.jpg" target="_blank" rel="noopener"><code>05-hero-sensor-board.jpg</code></a></td><td>HERO 传感器小板：<code>HERO</code> / <code>210-001929</code> / <code>Sensor Rev 003</code> / 日期码 <code>2229</code></td></tr></tbody></table></div>
-<p><strong>图 2 · 主控板正面</strong>（<code>210-001620_003</code> / <code>2015.07.28</code>）</p>
+<div class="tw"><table><thead><tr><th>图号</th><th>文件</th><th>内容</th></tr></thead><tbody><tr><td>图 2-4</td><td><a href="photos/02-main-pcb-top.jpg" target="_blank" rel="noopener"><code>02-main-pcb-top.jpg</code></a></td><td>主控板正面：U1（标签覆盖）、晶振、CN1/CN2 排线座、红色主键微动、黑色滚轮微动、测试点阵列</td></tr><tr><td>图 2-5</td><td><a href="photos/03-main-pcb-bottom.jpg" target="_blank" rel="noopener"><code>03-main-pcb-bottom.jpg</code></a></td><td>主控板背面：U3/U4/U5/U6、Q1/Q4、R/C 阵列、5 pin 排针、<code>dynamic</code> 板厂丝印</td></tr><tr><td>图 2-6</td><td><a href="photos/04-button-board-kc.jpg" target="_blank" rel="noopener"><code>04-button-board-kc.jpg</code></a></td><td>按键/侧键板：<code>Kaith</code> ×2 + <code>Omron</code> ×1、U7/U8/U11/U12、SW4/SW11</td></tr><tr><td>图 2-7</td><td><a href="photos/05-hero-sensor-board.jpg" target="_blank" rel="noopener"><code>05-hero-sensor-board.jpg</code></a></td><td>HERO 传感器小板：<code>HERO</code> / <code>210-001929</code> / <code>Sensor Rev 003</code> / 日期码 <code>2229</code></td></tr></tbody></table></div>
 <p><img src="photos/02-main-pcb-top.jpg" alt="主控板正面" loading="lazy"></p>
+<p><strong>图 2-4 · 主控板正面</strong>（<code>210-001620_003</code> / <code>2015.07.28</code>）</p>
 <blockquote>可见：U1 被二维码标签整片覆盖；左侧金属壳晶振 <code>HB.800E2C</code>；CN2 排线座；<br>红色主键微动（<code>Kaith</code>）+ 黑色滚轮微动（<code>Omron</code>）；左侧一列 5 个裸铜测试点；<br>中部大方形镂空为滚轮让位。</blockquote>
-<p><strong>图 3 · 主控板背面</strong></p>
 <p><img src="photos/03-main-pcb-bottom.jpg" alt="主控板背面" loading="lazy"></p>
+<p><strong>图 2-5 · 主控板背面</strong>（<code>210-001620_003</code> 同板反面）</p>
 <blockquote>可见：U3（SOT-23-6）、Q1/Q4、成组 R/C；<code>dynamic KDO-V0 94V-0</code> 板厂丝印；<br>右下 5 pin 排针（疑似工厂烧录/测试口）；右侧为翻盖式 FPC 座，蓝白排线通往传感器板。</blockquote>
-<p><strong>图 4 · 按键 / 侧键板</strong>（<code>210-001625_003</code> / <code>2015.07.28</code>）</p>
 <p><img src="photos/04-button-board-kc.jpg" alt="按键侧键板" loading="lazy"></p>
+<p><strong>图 2-6 · 按键 / 侧键板</strong>（<code>210-001625_003</code> / <code>2015.07.28</code>）</p>
 <blockquote>可见：<code>Kaith</code> 红壳微动 ×2、<code>Omron</code> 黑壳微动 ×1；U7/U8/U11/U12 四颗 SOT-23 小 IC；<br>SW4/SW5/SW11/SW12 贴片轻触；左侧金色 <code>CMIITID</code> 认证丝印；右下黄色圆点为 LED 透光位。</blockquote>
-<p><strong>图 5 · HERO 传感器小板</strong>（<code>210-001929</code> / <code>Sensor Rev 003</code> / <code>2229</code>）</p>
 <p><img src="photos/05-hero-sensor-board.jpg" alt="HERO 传感器板" loading="lazy"></p>
+<p><strong>图 2-7 · HERO 传感器小板</strong>（<code>210-001929</code> / <code>Sensor Rev 003</code> / <code>2229</code>）</p>
 <blockquote>可见：中央为传感器主芯片（被柔性排线压住一部分）；两侧各一列金手指焊盘；<br><code>E243951 94V-0</code> UL 文件号与阻燃等级；<code>KC 2232</code> 韩国认证；两颗十字螺丝 + 2 个白色尼龙垫片。<br><strong>这张板的 <code>2229</code>（2022 W29）与主板 <code>2015.07.28</code> 相差 7 年，是 §0 结论的直接证据。</strong></blockquote>
-<p>图片原始字节与 SHA-256 见 <a href="photos/manifest.csv" target="_blank" rel="noopener"><code>photos/manifest.csv</code></a>（5 张，逐字节可校验）。</p>
+<p>图片原始字节与 SHA-256 见 <a href="photos/manifest.csv" target="_blank" rel="noopener"><code>photos/manifest.csv</code></a>（6 张，逐字节可校验）。</p>
 <hr>
 <h2>3. 芯片丝印溯源</h2>
 <h3>3.1 可读出并已溯源的（【读】）</h3>
@@ -123,44 +116,15 @@
 <hr>
 <h2>4. 供电与控制拓扑框图</h2>
 <h3>4.1 物理链路（按信号流向）</h3>
-<pre class="code"><code>  USB 线（5 V / 500 mA，主机侧限流）
-      │
-      ▼
-  ┌───────────────┐   Z1/Z2/TVS 钳位   FB1 磁珠   C6/C7 去耦
-  │ USB 插头焊盘  │──────────┬──────────┬─────────┬──────►  5 V 母线
-  └───────────────┘          │          │         │
-                             ▼          ▼         ▼
-                        ESD 保护     高频抑制   储能
-                                        │
-                                        ▼
-                              ┌──────────────────┐
-                              │  LDO / DC-DC     │  （U3 或 U5 之一，【推】）
-                              │  5 V → 3.3 V     │
-                              └────────┬─────────┘
-                                       │ 3.3 V
-              ┌────────────────────────┼────────────────────────┐
-              ▼                        ▼                        ▼
-      ┌───────────────┐        ┌───────────────┐        ┌──────────────┐
-      │  U1 主控      │        │  HERO 传感器  │        │  LED 支路    │
-      │  （型号未确认）│        │  经 CN1 FPC   │        │  Q1 / Q4 驱动│
-      │  外接 Y1 晶振 │        │  210-001929   │        │  PWM 调光    │
-      └───────┬───────┘        └───────────────┘        └──────────────┘
-              │
-    ┌─────────┼──────────┬──────────────┬─────────────┐
-    ▼         ▼          ▼              ▼             ▼
- ┌──────┐ ┌──────┐  ┌────────┐  ┌──────────┐  ┌──────────┐
- │ 按键 │ │ 滚轮 │  │ 侧键板 │  │ USB D+/D−│  │ TP5/6/12 │
- │ 分压 │ │ 光栅 │  │ 经 CN2 │  │ 全速 12M │  │ 18/19    │
- │(Kaith│ │ 编码 │  │ FPC    │  │          │  │ 调试/测点│
- │+Omron│ │      │  │        │  │          │  │          │
- └──────┘ └──────┘  └────────┘  └──────────┘  └──────────┘</code></pre>
+<p><img src="figures/fig-02-supply.svg" alt="供电与控制信号拓扑" loading="lazy"></p>
+<p><strong>图 4-1</strong> · 从 USB 入口到各负载的完整供电链与信号分支。图内所有「【推】」标记项见 §4.2 的依据表； 虚线为可选调试接入点，未在本机实施。</p>
 <h3>4.2 关键推断与依据（【推】）</h3>
 <div class="tw"><table><thead><tr><th>推断</th><th>依据</th><th>可靠性</th></tr></thead><tbody><tr><td>3.3 V 为主供电轨</td><td>STM32L1 系列工作电压 1.8–3.6 V；HERO 传感器典型 3.3 V；无电池，只能从 USB 5 V 降压</td><td>高（型号虽未确认，但整机电压域只能是 3.3 V）</td></tr><tr><td><code>FB1</code> 是 USB 5 V 输入磁珠</td><td>位于电源入口，与 <code>C6</code>/<code>C7</code> 相邻构成 π 滤波；<code>FB</code> 前缀惯例</td><td>高</td></tr><tr><td><code>Z1</code>/<code>Z2</code>/<code>Z4</code>/<code>Z8</code> 为 ESD 钳位</td><td>全部布置在连接器/按键入口，符合「入口钳位」布线惯例</td><td>中高</td></tr><tr><td><code>Q1</code>/<code>Q4</code> 为 LED 驱动 MOSFET</td><td>位于 LED 走线末端；LED 需 PWM 调光（G502 有呼吸/亮度设置）</td><td>中</td></tr><tr><td>传感器走 SPI 而非 USB</td><td>HERO 为裸 sensor，需 MCU 读取；G502 的 1000 Hz 回报由 MCU 汇总后走 USB</td><td>中高</td></tr></tbody></table></div>
 <p><strong>以上全部未做通电测量</strong>。若需坐实，最小验证集是： 用万用表二极管档量 <code>FB1</code> 两端通断、量 <code>Z*</code> 对地钳位特性、量 3.3 V 轨对地阻抗（应在百 Ω～kΩ 量级）。 这三步不需要示波器，10 分钟可完成，<strong>建议本人在面试前补做并记录</strong>。</p>
 <hr>
 <h2>5. 批量 BOM 成本核算</h2>
 <h3>5.1 核算口径说明（这一节比数字更重要）</h3>
-<p>BOM 逆向最容易造假的地方是<strong>拿零售单价凑一张看起来合理的表</strong>。本表的做法是：</p>
+<p>BOM 逆向的主要失真风险是<strong>以零售单价拼接一张表面合理的表</strong>。本表的口径为：</p>
 <ul><li>只采用<strong>公开可查的批量报价</strong>，标注检索日期（2026-11）。</li><li><strong>同一器件存在巨大价差时，把价差本身写出来</strong>，而不是挑一个好看的数字。</li><li>罗技定制件（HERO 传感器、PCB 组件料号）<strong>没有公开批量报价</strong>，明确标「无」，不用拆机件价格冒充量产价。</li></ul>
 <h3>5.2 核算表</h3>
 <div class="tw"><table><thead><tr><th>#</th><th>器件</th><th>位号</th><th>数量</th><th>公开批量单价（元）</th><th>小计</th><th>报价来源</th></tr></thead><tbody><tr><td>1</td><td>主控 MCU（型号未确认）</td><td>U1</td><td>1</td><td><strong>无法定价</strong></td><td>—</td><td>见 5.3 争议说明</td></tr><tr><td>2</td><td>HERO 光学传感器组件</td><td>传感器板</td><td>1</td><td><strong>无公开批量报价</strong></td><td>—</td><td>罗技定制件，无零售渠道</td></tr><tr><td>3</td><td>微动开关 <code>Omron</code></td><td>滚轮/侧键</td><td>2</td><td>1.50</td><td>3.00</td><td>1688 / 深圳可道批量价 ¥0.94–2.10，取中值</td></tr><tr><td>4</td><td>微动开关 <code>Kaith</code></td><td>左右主键</td><td>2</td><td>0.60</td><td>1.20</td><td>白牌微动批量区间 ¥0.4–0.8（【推】，无厂商公开目录）</td></tr><tr><td>5</td><td>贴片轻触开关</td><td>SW×7</td><td>7</td><td>0.12</td><td>0.84</td><td>6×6 贴片轻触批量价</td></tr><tr><td>6</td><td>ESD 保护阵列</td><td>Z1,Z2,Z4,Z8</td><td>4</td><td>0.15</td><td>0.60</td><td>SOT-23 TVS 阵列批量价</td></tr><tr><td>7</td><td>小信号 MOSFET</td><td>Q1,Q4</td><td>2</td><td>0.10</td><td>0.20</td><td>SOT-23</td></tr><tr><td>8</td><td>LDO / DC-DC</td><td>U3或U5</td><td>1</td><td>0.35</td><td>0.35</td><td>SOT-23-5 LDO</td></tr><tr><td>9</td><td>其他 IC（ESD/驱动）</td><td>U4,U6,U7,U8,U11,U12</td><td>6</td><td>0.18</td><td>1.08</td><td>marking code 未溯源，按同封装均价估</td></tr><tr><td>10</td><td>晶振</td><td>Y1</td><td>1</td><td>0.45</td><td>0.45</td><td>贴片晶振批量价</td></tr><tr><td>11</td><td>磁珠</td><td>FB1</td><td>1</td><td>0.05</td><td>0.05</td><td>0603</td></tr><tr><td>12</td><td>电阻</td><td>R×21</td><td>21</td><td>0.008</td><td>0.17</td><td>0402/0603 批量</td></tr><tr><td>13</td><td>电容</td><td>C×16</td><td>16</td><td>0.012</td><td>0.19</td><td>0402/0603 批量</td></tr><tr><td>14</td><td>LED</td><td>L01 等</td><td>2</td><td>0.08</td><td>0.16</td><td>0603</td></tr><tr><td>15</td><td>FPC 排线 ×2 + 座</td><td>CN1,CN2</td><td>2 组</td><td>0.60</td><td>1.20</td><td>4P/8P FPC 组件</td></tr><tr><td>16</td><td>USB 线缆（带磁环）</td><td>—</td><td>1</td><td>2.50</td><td>2.50</td><td>1.8 m 编织线批量</td></tr><tr><td>17</td><td>PCB（4 层，沉金，3 片拼板）</td><td>3 板</td><td>1 套</td><td>3.00</td><td>3.00</td><td>嘉立创 4 层小批量均价</td></tr><tr><td>18</td><td>外壳（ABS + 内衬 + 按键柱 + 滚轮 + 配重）</td><td>—</td><td>1 套</td><td>6.00</td><td>6.00</td><td>注塑件批量（含模具摊销，量大可低至 ¥3）</td></tr><tr><td>19</td><td>滚轮组件（金属轴 + 编码环 + 弹簧）</td><td>—</td><td>1</td><td>1.80</td><td>1.80</td><td>【推】按结构件估价</td></tr><tr><td>20</td><td>装配 / 测试 / 包装人工</td><td>—</td><td>—</td><td>3.00</td><td>3.00</td><td>按 30 元/时 × 6 分钟估</td></tr><tr><td></td><td><strong>可控 BOM 小计（不含第 1、2 项）</strong></td><td></td><td></td><td></td><td><strong>¥25.79</strong></td><td></td></tr></tbody></table></div>
@@ -169,109 +133,55 @@
 <p>若按「同代 G502 主控为 <code>STM32L100R8T6</code>」这一社区共识去查价，公开报价出现极端分化：</p>
 <div class="tw"><table><thead><tr><th>渠道</th><th>单价（元）</th><th>起订</th><th>检索日</th></tr></thead><tbody><tr><td>立创商城（现货仅 10 片）</td><td>75.40（1+）/ 65.95（30+）</td><td>1</td><td>2026-11</td></tr><tr><td>深圳代理（现货贸易商）</td><td>47.00（10+）/ 45.50（1000+）</td><td>10</td><td>2026-08</td></tr><tr><td>华强北批发</td><td>12.90（100+）/ 10.99（1000+）</td><td>100</td><td>2026-09</td></tr></tbody></table></div>
 <p><strong>同一型号差 6.8 倍。</strong> 三种可能：正品原装 / 拆机翻新 / 国产替代打标。 BOM 核算如果只取最低价，会得出「整机成本 ¥40」这种明显不可信的结论； 只取立创价，又会得出「单颗 MCU 就 ¥66」的荒谬结果。 <strong>正确的做法是标注区间并说明不可判定</strong>——本报告就是这么处理的，不为凑一个漂亮数字而选择口径。</p>
-<h3>5.4 与原厂整机的对比（说明为什么值得逆向）</h3>
+<h3>5.4 物料成本与终端售价的差距构成</h3>
 <ul><li>可控物料 ¥26 + 主控（¥11～66 区间）+ 传感器（罗技定制，估值不写）→ 物料成本大致落在 <strong>¥60～120</strong></li><li>G502 HERO 官方指导价数百元，二手流通价数十至百余元</li></ul>
-<p>对这个价位段的产品，「拆开看它怎么把 ¥60 的东西卖到几倍」本身就是有价值的学习， 而不是「拆了个便宜货没什么可看」。</p>
+<p>两者之间的差额由模具摊销、认证与合规、渠道分成、品牌溢价与售后成本构成， 而非单纯「用料贵」。这也是第 6 节改造方案的定位依据：<strong>在既有物料成本结构下， 增量 ¥17 的采集功能属于原厂不会做的差异化需求，而非可以规模摊薄的通用能力。</strong></p>
 <hr>
 <h2>6. 智能化升级方案：把鼠标变成「人机功耗与操作行为采集节点」</h2>
 <h3>6.1 为什么做这个方向</h3>
-<p>原板是一台<strong>已定型、无扩展口、固件不可改</strong>的成品。硬塞「加个屏幕/加个灯」属于装饰性改造， 评审一眼看穿。本方案的出发点是把它当成<strong>被测对象</strong>而不是<strong>被改造对象</strong>：</p>
+<p>原板是一台<strong>已定型、无扩展口、固件不可改</strong>的成品。硬塞「加个屏幕/加个灯」属于装饰性改造， 缺乏技术实质。本方案将其视为<strong>被测对象</strong>而非<strong>改造对象</strong>：</p>
 <blockquote>用 20 元以内的增量器件，旁路采集「鼠标在不同使用工况下的实时功耗 + 按键/滚轮事件」，<br>得到一份<strong>真实的人机交互功耗时序</strong>。</blockquote>
 <p>这件事的价值：</p>
 <ul><li>与本人课题 02（手机多工况功耗实测）是<strong>同一套方法论复用</strong>——同一个「按工况打标签、采原始时序、 不插值不补点」的口径，换个被测对象。方法论复用比单点炫技更有说服力。</li><li>数据是<strong>真的有人用</strong>才产生的，不是实验室造出来的波形。日常写代码/打游戏/浏览网页三种工况， 鼠标功耗与事件密度差异明显，能做出真结论。</li><li><strong>不需要破解固件、不需要割线、不破坏原机功能</strong>——风险可控，符合「工程改造应先保证原功能不退化」的原则。</li></ul>
 <h3>6.2 原板取电与控制接入点标注</h3>
-<pre class="code"><code>   ┌─────────────────────── 主控板（210-001620_003）───────────────────────┐
-   │                                                                       │
-   │   [USB 插头焊盘]                                                      │
-   │        │                                                              │
-   │        ├──● 取电点 A：VBUS 5 V（插头正极端子，最靠近源头，压降最小）  │
-   │        │                                                              │
-   │      [FB1] 磁珠 ──┬── [C6] ── [C7] ──┐                               │
-   │        │          │                   │                               │
-   │        └──● 取电点 B：FB1 之后（已滤波，纹波小，适合给采样板供电）    │
-   │                   │                   │                               │
-   │                   ▼                   ▼                               │
-   │              ┌─────────┐        ┌──────────┐                          │
-   │              │ U3/U5   │        │ 3.3 V 轨 │                          │
-   │              │ LDO     │───────►│          │                          │
-   │              └─────────┘        └────┬─────┘                          │
-   │                                      │                                │
-   │   ● 取电点 C：3.3 V 轨（供 ESP32，省掉一级 LDO）                      │
-   │   ● 接地点 GND：板边铺铜 / 螺丝孔焊盘（**就近取，勿跨板走长地线**）    │
-   │                                                                       │
-   │   ┌─ 信号接入点（全部高阻，不改变原逻辑电平）───────────────────────┐ │
-   │   │  ● TP5 / TP6 / TP12 / TP18 / TP19  ← 5 个裸铜测试点，优先用     │ │
-   │   │  ● 按键分压节点（R 与 SW 之间）← 串 100 kΩ 后再进 ESP32 ADC    │ │
-   │   │  ● 滚轮编码器 A/B 相 ← 若需方向识别，串 100 kΩ 后接 GPIO 中断  │ │
-   │   └───────────────────────────────────────────────────────────────┘ │
-   │                                                                       │
-   │   ✗ 绝对不碰：USB D+/D−（会破坏枚举）、CN1 传感器 FPC（会丢帧）、     │
-   │              U1 的 NRST/BOOT（会砖机）                                │
-   └───────────────────────────────────────────────────────────────────────┘</code></pre>
-<p><strong>取电点选择的三条理由（写清楚，避免被问倒）：</strong></p>
+<p><img src="figures/fig-03-tap.svg" alt="原板取电点与控制接入点标注" loading="lazy"></p>
+<p><strong>图 6-1</strong> · 板上 A/B/C 三个取电点、G 接地点与三类信号接入点的位置关系， 以及明确不做接入的三个节点。</p>
+<p><strong>取电点选择的三条理由：</strong></p>
 <ol><li><strong>选 A 不选 C</strong>：A 点测的是「整机从 USB 取的总电流」，包含 MCU + 传感器 + LED 全部负载， 这才是「鼠标功耗」的真实定义。C 点只能测到 3.3 V 域负载，会漏掉 LDO 自身损耗。</li><li><strong>给采样板供电选 B</strong>：经过 <code>FB1</code> + <code>C6</code>/<code>C7</code> 滤波，纹波比裸 VBUS 小一个量级， 避免 ESP32 的 ADC 参考被开关噪声污染。</li><li><strong>接地点就近取</strong>：鼠标是 1000 Hz 高频采样设备，地线走长会引入共模干扰， 表现为 ADC 读数随机跳动。板边铺铜点或螺丝孔焊盘是最短路径。</li></ol>
 <h3>6.3 20 元内增量器件选型表</h3>
 <div class="tw"><table><thead><tr><th>#</th><th>器件</th><th>型号</th><th>单价（元）</th><th>数量</th><th>小计</th><th>选型理由</th></tr></thead><tbody><tr><td>1</td><td>主控</td><td><strong>ESP32-C3 SuperMini</strong></td><td>9.50</td><td>1</td><td>9.50</td><td>¥10 内带 BLE 5.0 + 12 bit ADC + RISC-V，体积 22×18 mm 可塞进鼠标壳；比 ESP8266 多了 BLE，比 ESP32-S3 便宜一半</td></tr><tr><td>2</td><td>电流/电压检测</td><td><strong>INA219 模块</strong></td><td>5.50</td><td>1</td><td>5.50</td><td>I²C 接口，0.1 Ω 分流电阻，12 bit ADC，可同时读母线电压电流；比 ACS712 精度高且不需校准零点；比自搭运放方案省 8 个元件</td></tr><tr><td>3</td><td>高阻串联电阻</td><td>0603 100 kΩ ±1%</td><td>0.05</td><td>4</td><td>0.20</td><td>把原板信号钳在 10 μA 级电流注入，<strong>保证不影响原逻辑</strong></td></tr><tr><td>4</td><td>去耦电容</td><td>0603 100 nF</td><td>0.02</td><td>2</td><td>0.04</td><td>ESP32 电源脚必备</td></tr><tr><td>5</td><td>接线</td><td>30 AWG 漆包线 / 0.5 mm 排针</td><td>—</td><td>1 组</td><td>1.20</td><td>细线不撑壳</td></tr><tr><td>6</td><td>固定</td><td>3M 双面胶 + 热熔胶点</td><td>—</td><td>—</td><td>0.30</td><td>可拆，不破坏原壳</td></tr><tr><td></td><td><strong>合计</strong></td><td></td><td></td><td></td><td><strong>¥16.74</strong></td><td>✅ <strong>&lt; ¥20</strong></td></tr></tbody></table></div>
 <p><strong>为什么不做「加个 OLED / 加个 RGB」</strong>：那需要额外 ¥15～25 且属于装饰， 而本方案 ¥16.74 产出的是<strong>可发表的数据</strong>。同样的预算，一份真实功耗时序比一块小屏幕有说服力得多。</p>
 <h3>6.4 控制状态图</h3>
-<pre class="code"><code>                    ┌──────────────┐
-        上电 ──────►│   BOOT       │  初始化 INA219（校准寄存器）
-                    │  自检         │  读一次 VBUS，判断鼠标是否插着
-                    └──────┬───────┘
-                           │
-              ┌────────────┴─────────────┐
-              │ VBUS &lt; 4.5 V             │ VBUS ≥ 4.5 V
-              ▼                          ▼
-      ┌───────────────┐          ┌──────────────────┐
-      │  DEEP_SLEEP   │          │  IDLE            │
-      │  （鼠标未通电）│          │  1 Hz 采 VBUS/I  │
-      │  30 s 唤醒一次 │          │  等事件          │
-      └───────┬───────┘          └────────┬─────────┘
-              │                           │
-              │ 检测到 VBUS 恢复          │ 按键/滚轮中断 或 I 变化 &gt; 阈值
-              └──────────►────────────────┤
-                                          ▼
-                                ┌──────────────────┐
-                                │  RECORDING       │
-                                │  20 Hz 采样      │
-                                │  I / V / 事件计数 │
-                                │  环形缓冲 512 点 │
-                                └────────┬─────────┘
-                                         │ 连续 5 s 无事件
-                                         ▼
-                                ┌──────────────────┐
-                                │  FLUSH           │
-                                │  BLE 通知 / 串口 │
-                                │  一行 JSON       │
-                                └────────┬─────────┘
-                                         │
-                                         ▼ 回到 IDLE</code></pre>
+<p><img src="figures/fig-04-state.svg" alt="采集节点控制状态机" loading="lazy"></p>
+<p><strong>图 6-2</strong> · 四状态机：BOOT 自检 → DEEP_SLEEP / IDLE → RECORDING → FLUSH → 回 IDLE。 启动条件为 VBUS 是否 ≥ 4.5 V，进入采样条件为按键/滚轮中断或电流突变超阈值。</p>
 <p><strong>输出格式</strong>（与课题 02 的 CSV 口径一致，便于同一套分析脚本复用）：</p>
 <pre class="code"><code>{&quot;t&quot;:&quot;2026-11-22T10:31:07.220&quot;,&quot;v_mv&quot;:5021,&quot;i_ma&quot;:87.4,&quot;p_mw&quot;:438.9,
  &quot;ev&quot;:[&quot;L&quot;,&quot;L&quot;,&quot;W+&quot;,&quot;M&quot;],&quot;state&quot;:&quot;RECORDING&quot;,&quot;tag&quot;:&quot;coding&quot;}</code></pre>
 <h3>6.5 三种验证工况与预期结论</h3>
 <div class="tw"><table><thead><tr><th>工况</th><th>时长</th><th>操作</th><th>预期电流特征</th></tr></thead><tbody><tr><td>静置（不动不按）</td><td>5 min</td><td>鼠标放着</td><td>电流最低且平稳，主要是传感器 + LED 基线</td></tr><tr><td>编码/浏览</td><td>10 min</td><td>滚轮密集滚动 + 点击</td><td>滚轮编码器中断频繁，电流呈脉冲群</td></tr><tr><td>游戏（高回报率 dragging）</td><td>10 min</td><td>快速移动 + 连点</td><td>传感器满负荷，电流最高且波动大</td></tr></tbody></table></div>
-<p><strong>这不是「跑一下看看」，而是有对照的实验设计</strong>：三组工况共用同一台机器、同一条线、同一个 采样节点，差异只来自操作强度。这正是课题 02 里「同样的 25 分钟窗口，只让负载变」的思路。</p>
+<p>三组工况构成有对照的实验设计：同一台机器、同一条线、同一个采样节点， 差异仅来自操作强度。与课题 02「固定 25 分钟窗口、仅改变负载」的设计原则一致。</p>
 <h3>6.6 接线验证状态：【未完成】</h3>
-<p><strong>必须如实写：截至本文成文，尚未完成实物接线。</strong></p>
+<p><strong>截至本文成文，尚未完成实物接线。</strong></p>
 <p>原因：需要先量出各 TP 点的实际网络（见 §4.2 的最小验证集）， 在没确认哪根是 VBUS、哪根是 GND 之前接线，有把 5 V 灌进 GPIO 的风险。 按「先测后接」的规矩，这一步留给本人做，并记录在案。</p>
 <p><strong>若完成接线验证，本项目按题库规则直接满分</strong>（原文：「动手完成接线验证直接满分」）。 本报告提供的是<strong>可执行的完整方案</strong>，不是「设想」。</p>
 <hr>
 <h2>7. 未确认项与已知偏差（诚实清单）</h2>
-<p>这一节是本报告最该被读的部分。<strong>凡是没做到的，逐条写明，不美化。</strong></p>
-<div class="tw"><table><thead><tr><th>#</th><th>未完成 / 偏差</th><th>影响</th><th>补齐方式</th></tr></thead><tbody><tr><td>1</td><td><strong>没有任何电气测量</strong></td><td>§4 全部拓扑结论为目视推断，非实测</td><td>万用表三步（FB1 通断 / Z* 钳位 / 3.3 V 对地阻抗），10 分钟</td></tr><tr><td>2</td><td><strong>主控型号未确认</strong></td><td>无法给出 MCU 规格、无法做固件级分析</td><td>需专业返修台撕标签，或 X-Ray；不建议在二手件上做</td></tr><tr><td>3</td><td><strong>6 颗小 IC 的 marking code 未溯源</strong></td><td>BOM 第 9 项为估价</td><td>按 SOT-23 marking 手册反查，需知道厂商；或通电测各脚电压反推功能</td></tr><tr><td>4</td><td><strong>无本人现场同框照</strong></td><td>官网第一阶段硬性要求「本人现场同框照片」；本题属第二阶段，但仍建议补</td><td>补拍：本人 + 主板丝印 <code>210-001620_003</code> + 当日手机时间同框</td></tr><tr><td>5</td><td><strong>接线验证未做</strong></td><td>方案停留在「可执行」，未到「已验证」</td><td>见 §6.6</td></tr><tr><td>6</td><td><strong>晶振频率未确认</strong></td><td><code>HB.800E2C</code> 疑 8 MHz，未证实</td><td>示波器/频率计测，或查晶振厂批次码</td></tr><tr><td>7</td><td><strong>购入价空白</strong></td><td>BOM 与原机价的对比缺一环</td><td>本人补填</td></tr><tr><td>8</td><td>微动 <code>Kaith</code> 品牌存疑</td><td>丝印与凯华 <code>Kailh</code> 拼写不同，未在官网核实</td><td>若确认为凯华代工，可修正为「凯华系」；目前按丝印如实写</td></tr><tr><td>9</td><td><strong>整机为跨代混装件</strong></td><td>不能声称「这是原厂 G502 HERO」</td><td>已在 §0 主动披露</td></tr></tbody></table></div>
-<p><strong>关于第 9 条的补充说明</strong>：本人最初也认为这是一台完整原厂 G502 HERO， 是在逐张照片读丝印、发现主板 <code>2015.07.28</code> 与传感器 <code>2229</code> 相差 7 年之后才改口的。 这个改口本身就是逆向训练的一部分——<strong>先有证据，再有结论，而不是反过来</strong>。 报告里保留这个发现过程，比直接给一个干净结论更接近真实工作。</p>
+<p>本节逐条列出未完成项与已知偏差。记录原则：<strong>未完成即标注未完成，不以推断替代结论。</strong></p>
+<div class="tw"><table><thead><tr><th>#</th><th>未完成 / 偏差</th><th>影响</th><th>补齐方式</th></tr></thead><tbody><tr><td>1</td><td><strong>没有任何电气测量</strong></td><td>§4 全部拓扑结论为目视推断，非实测</td><td>万用表三步（FB1 通断 / Z* 钳位 / 3.3 V 对地阻抗），10 分钟</td></tr><tr><td>2</td><td><strong>主控型号未确认</strong></td><td>无法给出 MCU 规格、无法做固件级分析</td><td>需专业返修台撕标签，或 X-Ray；不建议在二手件上做</td></tr><tr><td>3</td><td><strong>6 颗小 IC 的 marking code 未溯源</strong></td><td>BOM 第 9 项为估价</td><td>按 SOT-23 marking 手册反查，需知道厂商；或通电测各脚电压反推功能</td></tr><tr><td>4</td><td><strong>同框照缺时间锚定</strong></td><td>照片已补（§2.0），但微信转发已剥离 EXIF，拍摄时刻无元数据</td><td>若需坐实，补拍一张让手机屏幕日期时间入镜；本报告不自行填写日期</td></tr><tr><td>5</td><td><strong>接线验证未做</strong></td><td>方案停留在「可执行」，未到「已验证」</td><td>见 §6.6</td></tr><tr><td>6</td><td><strong>晶振频率未确认</strong></td><td><code>HB.800E2C</code> 疑 8 MHz，未证实</td><td>示波器/频率计测，或查晶振厂批次码</td></tr><tr><td>7</td><td><strong>购入价空白</strong></td><td>BOM 与原机价的对比缺一环</td><td>本人补填</td></tr><tr><td>8</td><td>微动 <code>Kaith</code> 品牌存疑</td><td>丝印与凯华 <code>Kailh</code> 拼写不同，未在官网核实</td><td>若确认为凯华代工，可修正为「凯华系」；目前按丝印如实写</td></tr><tr><td>9</td><td><strong>整机为跨代混装件</strong></td><td>不能声称「这是原厂 G502 HERO」</td><td>已在 §0 主动披露</td></tr></tbody></table></div>
+<p><strong>关于第 9 条的补充说明</strong>：本机最初按「原厂 G502 HERO」记录， 是在逐张照片读取丝印、发现主板 <code>2015.07.28</code> 与传感器 <code>2229</code> 相差 7 年之后修订的。 该修订过程予以保留，原因是它本身即为逆向作业的正常形态：<strong>先取得证据，再修正结论</strong>。</p>
 <hr>
 <h2>8. 文件清单与复现</h2>
 <pre class="code"><code>T11-Hardware-Reverse/
 ├── README.md                       # 本报告
+├── report.html                     # 同内容单页 HTML
 ├── photos/
+│   ├── 00-on-site-with-teardown.jpg # 本人现场同框照（面部已遮挡）
 │   ├── 01-exploded-overview.jpg    # 爆炸图总览
 │   ├── 02-main-pcb-top.jpg         # 主控板正面
 │   ├── 03-main-pcb-bottom.jpg      # 主控板背面
 │   ├── 04-button-board-kc.jpg      # 按键/侧键板
 │   ├── 05-hero-sensor-board.jpg    # HERO 传感器板
-│   └── manifest.csv                # 5 张照片的字节数与 SHA-256
+│   └── manifest.csv                # 6 张照片的字节数与 SHA-256
 └── data/
     └── bom.csv                     # BOM 核算表（可导入 Excel 复核）</code></pre>
 <p><strong>证据链自校验</strong>：</p>
@@ -284,8 +194,8 @@ for r in csv.DictReader(open(&#x27;photos/manifest.csv&#x27;,encoding=&#x27;utf-
 &quot;</code></pre>
 <p><strong>参考交叉核对</strong>：iFixit 官方社区拆解指南 <code>https://zh.ifixit.com/Guide/Logitech+G502+Hero+Demontage/140809</code> （用于核对拆解路径与螺丝位置，<strong>未抄录其文字结论</strong>）； 罗技 G502 主板机械布局开源工程 <code>MehverOSHW/MechanicalLayout-LogitechG502</code>（仅用于核对板外形，未使用其电路数据）。</p>
 <hr>
-<h2>附：一句话总结</h2>
-<p><strong>这台机器的价值不在「它是 G502 HERO」，而在「它不是一台完整的 G502 HERO」。</strong> 一块 2015 年的主板、一块 2022 年的传感器、一个第三方外壳拼在一起， 逼着人去读每一个日期码、每一条丝印、每一处位号—— 而<strong>发现矛盾、承认矛盾、把矛盾写进报告</strong>，恰好是这类题目最想看到的东西。</p>
+<h2>附：结论</h2>
+<p>本机的技术价值不在于「它是不是一台 G502 HERO」，而在于它<strong>不是一台出厂状态的同代整机</strong>： 一块 2015 年的主板、一块 2022 年的传感器板、一个第三方外壳，构成了一次真实的 「器件级溯源」问题。要回答「这是台什么机器」，只能逐码读日期、逐条对丝印、逐位归功能分区， 并在证据不足处明确标注为不可判定。这也是本报告全部标注体系（【读】/【推】/【未】）的由来。</p>
 <div class="meta">T11 · 硬件逆向报告 · 由 README.md 自动转换生成，勿直接编辑本文件</div>
 </div>
 </body>

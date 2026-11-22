@@ -93,9 +93,11 @@ exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，�
     reports/                     自动生成的 md/html 报告、素材联系表
     tools/                       一键测试工具、报告生成器、图像处理（JDK）
   T11-Hardware-Reverse/        实物逆向：二手游戏鼠标拆解 + BOM 还原 + 升级方案
-    photos/                      5 张分步拆解照 + manifest.csv（SHA-256 证据链）
+    photos/                      6 张照片（含本人现场同框）+ manifest.csv（SHA-256 证据链）
     data/                        bom.csv 批量成本核算表
-    report.html                  单页可视化报告
+    figures/                     4 张矢量框图（拆解层次 / 供电拓扑 / 取电点 / 状态机）
+    report.html                  单页可视化报告（浏览器直接打开）
+    report.pdf                   A4 打印版，21 页，含封面与页码
 02-20Days-Challenge/         第二阶段 · 工坊项目
   process_logs/                每日运行日志
   iterations/                  迭代记录

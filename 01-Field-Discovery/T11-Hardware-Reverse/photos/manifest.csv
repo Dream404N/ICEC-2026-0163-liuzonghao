@@ -1,4 +1,5 @@
 filename,bytes,sha256,note
+00-on-site-with-teardown.jpg,207480,72e5b267d104000588c6b4818a05d93c03fd4173716a08f2591811b03b0bd848,本人现场同框：拆解件散落于工作台，手持上壳；面部已遮挡处理
 01-exploded-overview.jpg,716383,8d7b172d04a02dd098e9fb9c4d8a2568740d37578270e4244964113a83795763,整体爆炸图：上壳/内衬/主PCB/零件袋同框
 02-main-pcb-top.jpg,724781,66ee8fa0a66470fe63274288cf52e1d116cd3e9cc3d9a409920eb6c464d18926,主板正面：主控U1、晶振、CN1/CN2、微动阵列、L01
 03-main-pcb-bottom.jpg,718107,d21a398ff285ff9f1c92de71ca8f831a971da75342fd41a1b93f4b75df22da62,主板背面：U3/U4/U5/U6、Q1/Q4、R/C阵列、5pin排针

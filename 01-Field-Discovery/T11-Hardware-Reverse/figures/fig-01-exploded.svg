@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="462" viewBox="0 38 900 462" font-family="'Songti SC','SimSun','Noto Serif CJK SC',serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a9199"/></marker></defs>
+<rect x="0" y="38" width="900" height="462" fill="#ffffff"/>
+<rect x="76" y="64" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="96.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">①</text>
+<text x="124.0" y="96.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">上壳</text>
+<path d="M288,89 L318,89" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="94.0" text-anchor="start" font-size="13.0" fill="#4b5563">第三方 MANBA B15 涂装壳 · 内衬黑色 ABS 支架 + 按键柱</text>
+<rect x="76" y="132" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="164.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">②</text>
+<text x="124.0" y="164.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">底壳</text>
+<path d="M288,157 L318,157" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="162.0" text-anchor="start" font-size="13.0" fill="#4b5563">黑色 ABS · 内嵌传感器小板，2 颗十字螺丝 + 2 个尼龙垫片</text>
+<rect x="76" y="200" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="232.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">③</text>
+<text x="124.0" y="232.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">主控板</text>
+<path d="M288,225 L318,225" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="230.0" text-anchor="start" font-size="13.0" fill="#4b5563">210-001620_003 · 2015.07.28 · 经 CN1/CN2 连接两块子板</text>
+<rect x="76" y="268" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="300.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">④</text>
+<text x="124.0" y="300.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">按键 / 侧键板</text>
+<path d="M288,293 L318,293" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="298.0" text-anchor="start" font-size="13.0" fill="#4b5563">210-001625_003 · 2015.07.28 · Kaith×2 + Omron×1</text>
+<rect x="76" y="336" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="368.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">⑤</text>
+<text x="124.0" y="368.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">传感器小板</text>
+<path d="M288,361 L318,361" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="366.0" text-anchor="start" font-size="13.0" fill="#4b5563">210-001929 · Sensor Rev 003 · 日期码 2229（2022 W29）</text>
+<rect x="76" y="404" width="212" height="50" rx="4" fill="#f3f4f5" stroke="#1a1d21" stroke-width="1.4"/>
+<text x="96.0" y="436.0" text-anchor="start" font-size="16.0" fill="#1a1d21" font-weight="700">⑥</text>
+<text x="124.0" y="436.0" text-anchor="start" font-size="15.0" fill="#1a1d21" font-weight="700">散件</text>
+<path d="M288,429 L318,429" fill="none" stroke="#8a9199" stroke-width="1.2"/>
+<text x="328.0" y="434.0" text-anchor="start" font-size="13.0" fill="#4b5563">滚轮组件（含 2 根微型弹簧）· 配重舱盖 · 4 颗十字螺丝</text>
+<path d="M44,89 L44,429" fill="none" stroke="#8a9199" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="34" y="272" text-anchor="middle" font-size="12" fill="#4b5563" transform="rotate(-90 34 272)">拆解方向</text>
+</svg>
