@@ -1,0 +1,9 @@
+{"ts":"2026-11-21T02:26:42.989Z","date":"2026-11-21","local":"10:26:42","event":"app_start","detail":"课序启动 | v0.1.4 | win32","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T02:26:46.108Z","date":"2026-11-21","local":"10:26:46","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T02:26:54.813Z","date":"2026-11-21","local":"10:26:54","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T03:23:33.911Z","date":"2026-11-21","local":"11:23:33","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T03:53:46.488Z","date":"2026-11-21","local":"11:53:46","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T03:57:27.114Z","date":"2026-11-21","local":"11:57:27","event":"system_resume","detail":"系统从休眠恢复","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T04:04:07.843Z","date":"2026-11-21","local":"12:04:07","event":"system_resume","detail":"系统从休眠恢复","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T07:08:59.393Z","date":"2026-11-21","local":"15:08:59","event":"reminders_scheduled","detail":"已安排 47 条提醒","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
+{"ts":"2026-11-21T09:53:00.675Z","date":"2026-11-21","local":"17:53:00","event":"app_exit","detail":"课序退出","ok":true,"source":"kexu-desktop","app":"0.1.4","platform":"win32"}
