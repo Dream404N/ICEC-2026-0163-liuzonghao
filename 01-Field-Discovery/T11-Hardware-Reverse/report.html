@@ -172,8 +172,9 @@
 <hr>
 <h2>8. 文件清单与复现</h2>
 <pre class="code"><code>T11-Hardware-Reverse/
-├── README.md                       # 本报告
-├── report.html                     # 同内容单页 HTML
+├── README.md                       # 本报告（Markdown 源）
+├── report.html                     # 同内容单页 HTML，浏览器直接打开
+├── report.pdf                      # A4 打印版，21 页，含封面与页码
 ├── photos/
 │   ├── 00-on-site-with-teardown.jpg # 本人现场同框照（面部已遮挡）
 │   ├── 01-exploded-overview.jpg    # 爆炸图总览
@@ -182,6 +183,11 @@
 │   ├── 04-button-board-kc.jpg      # 按键/侧键板
 │   ├── 05-hero-sensor-board.jpg    # HERO 传感器板
 │   └── manifest.csv                # 6 张照片的字节数与 SHA-256
+├── figures/
+│   ├── fig-01-exploded.svg         # 图 2-2 整机拆解层次
+│   ├── fig-02-supply.svg           # 图 4-1 供电与控制信号拓扑
+│   ├── fig-03-tap.svg              # 图 6-1 取电点与控制接入点标注
+│   └── fig-04-state.svg            # 图 6-2 采集节点控制状态机
 └── data/
     └── bom.csv                     # BOM 核算表（可导入 Excel 复核）</code></pre>
 <p><strong>证据链自校验</strong>：</p>
