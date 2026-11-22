@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-11-15T00:02:18+08:00",
+  "generated_at": "2026-11-23T00:22:08+08:00",
   "plan_from": "2026-09-07",
   "plan_to": "2027-01-10",
   "anchor": {
     "first_monday": "2026-09-07",
     "status": "estimated",
     "verified": false,
-    "note": "学期第 1 周周一为估算值，未与教务校历核对。若实际开学周不同，整张日期表整体平移，网页与 .ics 都会跟着错。"
+    "note": "学期第 1 周周一为推算值，未与教务校历核对；2026-11-23 已就此询问使用者本人，答复为「不知道」，故未能确认，保持 verified=false。若实际开学周不同，整张日期表整体平移，网页与 .ics 都会跟着错。"
   },
   "anchor_verified": false,
   "proofread": false,
