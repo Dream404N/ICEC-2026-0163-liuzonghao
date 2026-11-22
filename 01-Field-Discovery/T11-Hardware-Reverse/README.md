@@ -11,6 +11,7 @@
 > 对象：一台二手 **Logitech G502 HERO**（已拆散，含第三方替换外壳）
 > 时间：2026-11-21 拆解并拍照 · 2026-11-22 成文
 > 状态：**已断电拆解、全程未通电、未做带电测量**（下文所有电气结论均标注为「目视推断」）
+> 交付：主交付件为 [`report.pdf`](report.pdf)（21 页）；提交清单见 [`SUBMISSION.md`](SUBMISSION.md)
 
 ---
 
@@ -432,9 +433,10 @@ BOM 核算如果只取最低价，会得出「整机成本 ¥40」这种明显�
 
 ```
 T11-Hardware-Reverse/
-├── README.md                       # 本报告（Markdown 源）
+├── SUBMISSION.md                   # 提交清单：四项要求逐条对照 + 证据链验法
+├── report.pdf                      # ★ 主交付件：A4 打印版，21 页，含封面与页码
 ├── report.html                     # 同内容单页 HTML，浏览器直接打开
-├── report.pdf                      # A4 打印版，21 页，含封面与页码
+├── README.md                       # 本报告（Markdown 源，与上二者同源同内容）
 ├── photos/
 │   ├── 00-on-site-with-teardown.jpg # 本人现场同框照（面部已遮挡）
 │   ├── 01-exploded-overview.jpg    # 爆炸图总览
