@@ -66,9 +66,9 @@ CI 见 `.github/workflows/check.yml`（Node 24，含 UI 测试、Windows 安装�
   本仓库 `tools/dingding/android/` 另有完整安卓源码）、根目录那份重复的 `log-sync.cjs` 副本。
 - **安装包 exe 不进 git 树，但已作为 GitHub 发行版发布**：`课序 Setup 0.1.4.exe` 为
   132,216,066 字节，超过仓库单文件 100 MB 限制；Release 附件上限 2 GB，故发布在
-  [`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.4)
+  [`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-liuzonghao/releases/tag/kexu-0.1.4)
   （附件名 `Kexu-Setup-0.1.4.exe`，中文放 label）。0.1.3 的发行版见
-  [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)。SHA-256 与本机路径记在
+  [`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-liuzonghao/releases/tag/kexu-0.1.3)。SHA-256 与本机路径记在
   [`../README.md`](../README.md)，可逐字节核对。仓库仍 Private，下载需账户权限。
 - `docs/artifacts.json` 是工程自带的**历史**产物清单，停在 0.1.1；当前版本以上层 README 为准。
 - **不含任何 token / SendKey / 云数据库凭据**。日志提交所需凭据只在运行时从本机环境变量

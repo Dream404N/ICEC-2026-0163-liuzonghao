@@ -24,7 +24,7 @@ const crypto = require('node:crypto');
 const DEFAULT_CONFIG = Object.freeze({
   enabled: true,
   time: '23:50',                                  // 本机时间，HH:mm
-  repo: 'Dream404N/ICEC-2026-0163-LZH',
+  repo: 'Dream404N/ICEC-2026-0163-liuzonghao',
   branch: '',                                     // 空 = 使用仓库默认分支
   directory: 'tools/kexu/usage_logs',            // 远端目录，只碰这里
   tokenFile: '',                                  // 本机 token 文件绝对路径（可选）

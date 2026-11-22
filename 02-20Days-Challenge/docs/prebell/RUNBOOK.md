@@ -103,7 +103,7 @@ curl -sS -X POST "https://wxpusher.zjiecode.com/api/send/message/simple-push" \
 每个 job 的请求：
 
 ```
-POST https://api.github.com/repos/Dream404N/ICEC-2026-0163-LZH/actions/workflows/prebell-remind.yml/dispatches
+POST https://api.github.com/repos/Dream404N/ICEC-2026-0163-liuzonghao/actions/workflows/prebell-remind.yml/dispatches
 Authorization: Bearer <PAT，需 Actions:write>
 Accept: application/vnd.github+json
 {"ref":"main","inputs":{"period":"P1","stage":"depart","source":"cron"}}

@@ -17,7 +17,7 @@
 
 ```
 C:\Users\Administrator\WorkBuddy\2026-11-07-20-22-12\.workbuddy\.siliconflow_key
-                                              ↑ 仓库（ICEC-2026-0163-LZH）之外
+                                              ↑ 仓库（ICEC-2026-0163-liuzonghao）之外
 ```
 
 密钥没有写进任何源码、配置模板、报告、CSV、JSONL、提交信息或 commit body。

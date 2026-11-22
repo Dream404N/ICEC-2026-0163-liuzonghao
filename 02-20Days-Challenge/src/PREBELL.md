@@ -37,7 +37,7 @@ Server酱 → 微信
 
 ### 建 job 的参数（三个 job 除了 cron 和 period 号都一样）
 
-- `POST https://api.github.com/repos/Dream404N/ICEC-2026-0163-LZH/actions/workflows/prebell.yml/dispatches`
+- `POST https://api.github.com/repos/Dream404N/ICEC-2026-0163-liuzonghao/actions/workflows/prebell.yml/dispatches`
 - Headers：`Accept: application/vnd.github+json`、`Authorization: Bearer <token>`、`X-GitHub-Api-Version: 2022-11-28`
 - Body（JSON 类型）：`{"ref":"main","inputs":{"period":"3","source":"cronjob"}}`
   （分支必须是 **`main`**——仓库默认分支是 main，填 `master` 会直接 422 `No ref found`）

@@ -1,10 +1,11 @@
-# ICEC-2026-0163-LZH
+# ICEC-2026-0163-liuzonghao
 
 2026–2027 智能·创造者创新实验班（ICEC）选拔考核 · 过程仓库
 
 | 项目 | 信息 |
 | --- | --- |
-| 姓名拼音 | LZH |
+| 姓名 | 刘宗豪 |
+| 姓名拼音 | liuzonghao |
 | 学号后四位 | 0163 |
 | 平台 | GitHub |
 | 可见性 | Private |
@@ -58,9 +59,9 @@ PreBell 的微信链路与 4 条 cron 原样保留，两套并存：微信是增
 全部实证放 `tools/kexu/README.md`，日志口径放 `tools/kexu/usage_logs/README.md`；
 修过的坑（安装版 `userData` 实际叫 `classmate-reminder`、导致凭据找不到、自动提交静默失效）也写在里面。
 源码安全审计见 `tools/kexu/SECURITY-AUDIT.md`，源码快照说明见 `tools/kexu/app/SOURCE-SNAPSHOT.md`。
-**11-16 已把安装包发布为 GitHub Release**：[`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.3)
+**11-16 已把安装包发布为 GitHub Release**：[`kexu-0.1.3`](https://github.com/Dream404N/ICEC-2026-0163-liuzonghao/releases/tag/kexu-0.1.3)
 （附件 `Kexu-Setup-0.1.3.exe`，132,215,755 B，SHA-256 `cfb7d332…b582ce2`）与修复版
-[`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-LZH/releases/tag/kexu-0.1.4)
+[`kexu-0.1.4`](https://github.com/Dream404N/ICEC-2026-0163-liuzonghao/releases/tag/kexu-0.1.4)
 （附件 `Kexu-Setup-0.1.4.exe`，132,216,066 B，SHA-256 `33481015…bdf5`），均可直接下载。
 exe 超过仓库单文件 100 MB 限制，不进 git 树。仓库仍 Private，转公开后链接才公开可访问。
 11-16 实机装到 I 盘曾打不开，原因是安装目录 ACL 缺 `S-1-15-2-1` 触发 Electron 45 沙箱 FATAL，
