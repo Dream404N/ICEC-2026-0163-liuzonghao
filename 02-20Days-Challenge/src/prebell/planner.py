@@ -261,7 +261,7 @@ HTML_JS = """
   var CN=['周一','周二','周三','周四','周五','周六','周日'];
   var warn = document.getElementById('warn');
   if (!DATA.anchor_verified || !DATA.proofread) {
-    warn.innerHTML = '⚠ 课表尚未与教务校历核对：第 1 周按 <b>'+DATA.anchor.first_monday+'</b> 估算。若开学周不对，整张日期表会整体平移——请对照原图确认，确认后把 <code>anchor.verified</code> / <code>meta.proofread</code> 改为 true 并重跑 <code>planner.py</code>。';
+    warn.innerHTML = '⚠ 第 1 周周一按 <b>'+DATA.anchor.first_monday+'</b> 推算，<b>未与教务校历核对</b>（本人未取得官方周历，无法确认）。若实际开学周不同，整张日期表会整体平移。本条保留为已知前提，不隐藏。';
   } else { warn.style.display='none'; }
 
   function rows(list){
