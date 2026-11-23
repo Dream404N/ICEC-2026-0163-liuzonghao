@@ -1,41 +1,41 @@
 {
-  "date": "2026-11-22",
+  "date": "2026-11-23",
   "summary": {
-    "date": "2026-11-22",
+    "date": "2026-11-23",
     "timezone": "UTC+8",
     "heartbeat": true,
-    "expected": 0,
+    "expected": 3,
     "attempted": 0,
     "sent": 0,
     "failed": 0,
     "skipped_late": 0,
-    "skipped_after_class": 0,
+    "skipped_after_class": 3,
     "duplicate": 0,
     "skipped_early": 0,
     "throttled": 0,
-    "no_schedule": 0,
+    "no_schedule": 1,
     "per_period": {
-      "P1": 0,
-      "P2": 0,
-      "P3": 0,
-      "P4": 0
+      "P1": 1,
+      "P2": 1,
+      "P3": 1,
+      "P4": 1
     },
     "channels_used": [],
     "latency_ms": {
-      "max": 0,
-      "avg": 0
+      "max": 4938639,
+      "avg": 3159509
     },
-    "chain_head": "",
-    "chain_len": 0
+    "chain_head": "814a5ca7465d81db",
+    "chain_len": 4
   },
   "verify": {
-    "date": "2026-11-22",
-    "key_triplet_ok": true,
+    "date": "2026-11-23",
+    "key_triplet_ok": false,
     "chain_ok": true,
     "count_ok": true,
     "no_future_ts": true,
-    "records": 0,
-    "expected": 0,
-    "all_ok": true
+    "records": 4,
+    "expected": 3,
+    "all_ok": false
   }
 }
