@@ -1,19 +1,19 @@
 {
-  "date": "2026-11-23",
+  "date": "2026-11-24",
   "summary": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "timezone": "UTC+8",
     "heartbeat": true,
-    "expected": 3,
+    "expected": 1,
     "attempted": 0,
     "sent": 0,
     "failed": 0,
     "skipped_late": 0,
-    "skipped_after_class": 3,
+    "skipped_after_class": 1,
     "duplicate": 0,
     "skipped_early": 0,
     "throttled": 0,
-    "no_schedule": 1,
+    "no_schedule": 3,
     "per_period": {
       "P1": 1,
       "P2": 1,
@@ -22,20 +22,20 @@
     },
     "channels_used": [],
     "latency_ms": {
-      "max": 4938639,
-      "avg": 3159509
+      "max": 4604030,
+      "avg": 1151007
     },
-    "chain_head": "814a5ca7465d81db",
+    "chain_head": "7483a5ac38e91104",
     "chain_len": 4
   },
   "verify": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "key_triplet_ok": false,
     "chain_ok": true,
     "count_ok": true,
     "no_future_ts": true,
     "records": 4,
-    "expected": 3,
+    "expected": 1,
     "all_ok": false
   }
 }
