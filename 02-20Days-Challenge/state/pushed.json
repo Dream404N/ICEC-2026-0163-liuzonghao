@@ -34,7 +34,13 @@
       "channel": null,
       "key": "2026-11-24-P4",
       "status": "skipped_after_class"
+    },
+    {
+      "at_utc": "2026-11-25T06:05:05Z",
+      "channel": null,
+      "key": "2026-11-25-P3",
+      "status": "skipped_after_class"
     }
   ],
-  "updated_at_utc": "2026-11-24T08:06:44Z"
+  "updated_at_utc": "2026-11-25T06:05:05Z"
 }
