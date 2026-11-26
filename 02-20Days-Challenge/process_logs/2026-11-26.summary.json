@@ -1,0 +1,28 @@
+{
+  "attempted": 0,
+  "chain_head": "0cb83f4341fcfdeb",
+  "chain_len": 4,
+  "channels_used": [],
+  "date": "2026-11-26",
+  "duplicate": 0,
+  "expected": 2,
+  "failed": 0,
+  "heartbeat": true,
+  "latency_ms": {
+    "avg": 1950193,
+    "max": 4744721
+  },
+  "no_schedule": 2,
+  "per_period": {
+    "P1": 1,
+    "P2": 1,
+    "P3": 1,
+    "P4": 1
+  },
+  "sent": 0,
+  "skipped_after_class": 2,
+  "skipped_early": 0,
+  "skipped_late": 0,
+  "throttled": 0,
+  "timezone": "UTC+8"
+}

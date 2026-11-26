@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-25",
+  "date": "2026-11-26",
   "summary": {
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "timezone": "UTC+8",
     "heartbeat": true,
     "expected": 2,
@@ -22,14 +22,14 @@
     },
     "channels_used": [],
     "latency_ms": {
-      "max": 4879589,
-      "avg": 2046343
+      "max": 4744721,
+      "avg": 1950193
     },
-    "chain_head": "3217f4bf721a20ae",
+    "chain_head": "0cb83f4341fcfdeb",
     "chain_len": 4
   },
   "verify": {
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "key_triplet_ok": false,
     "chain_ok": true,
     "count_ok": true,
