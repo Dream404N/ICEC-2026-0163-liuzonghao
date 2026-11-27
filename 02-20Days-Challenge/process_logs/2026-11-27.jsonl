@@ -1,0 +1,1 @@
+{"action": "no_schedule", "channel": null, "date": "2026-11-27", "duration_ms": 0, "error": null, "fired_utc": "2026-11-27T01:32:06Z", "hash": "094e26513102e127", "http_status": 0, "key": "2026-11-27-P1", "late": false, "latency_ms": 0, "period": "P1", "prev_hash": "genesis", "result": "skipped", "scheduled_utc": null, "seq": 1, "source": "cron", "ts": "2026-11-27 09:32（脱敏·分钟级）"}
